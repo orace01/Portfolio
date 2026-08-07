@@ -79,14 +79,14 @@ const NAV_TONE_STYLES: Record<NavTone, { text: string; border: string; shadow: s
   cyan: {
     text: 'text-cyan-neon',
     border: 'border-cyan-neon',
-    shadow: 'shadow-[0_0_10px_rgba(0,243,255,0.7),0_0_35px_rgba(0,243,255,0.5),0_0_70px_rgba(0,243,255,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(0,243,255,0.9),0_0_55px_rgba(0,243,255,0.7),0_0_100px_rgba(0,243,255,0.4)]',
+    shadow: 'shadow-[0_0_10px_rgba(59,130,246,0.7),0_0_35px_rgba(59,130,246,0.5),0_0_70px_rgba(59,130,246,0.25)]',
+    hoverShadow: 'hover:shadow-[0_0_16px_rgba(59,130,246,0.9),0_0_55px_rgba(59,130,246,0.7),0_0_100px_rgba(59,130,246,0.4)]',
   },
   magenta: {
     text: 'text-magenta-neon',
     border: 'border-magenta-neon',
-    shadow: 'shadow-[0_0_10px_rgba(255,0,127,0.7),0_0_35px_rgba(255,0,127,0.5),0_0_70px_rgba(255,0,127,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(255,0,127,0.9),0_0_55px_rgba(255,0,127,0.7),0_0_100px_rgba(255,0,127,0.4)]',
+    shadow: 'shadow-[0_0_10px_rgba(96,165,250,0.7),0_0_35px_rgba(96,165,250,0.5),0_0_70px_rgba(96,165,250,0.25)]',
+    hoverShadow: 'hover:shadow-[0_0_16px_rgba(96,165,250,0.9),0_0_55px_rgba(96,165,250,0.7),0_0_100px_rgba(96,165,250,0.4)]',
   },
   blue: {
     text: 'text-neon-blue',
@@ -97,8 +97,8 @@ const NAV_TONE_STYLES: Record<NavTone, { text: string; border: string; shadow: s
   green: {
     text: 'text-neon-green',
     border: 'border-neon-green',
-    shadow: 'shadow-[0_0_10px_rgba(57,255,20,0.7),0_0_35px_rgba(57,255,20,0.5),0_0_70px_rgba(57,255,20,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(57,255,20,0.9),0_0_55px_rgba(57,255,20,0.7),0_0_100px_rgba(57,255,20,0.4)]',
+    shadow: 'shadow-[0_0_10px_rgba(37,99,235,0.7),0_0_35px_rgba(37,99,235,0.5),0_0_70px_rgba(37,99,235,0.25)]',
+    hoverShadow: 'hover:shadow-[0_0_16px_rgba(37,99,235,0.9),0_0_55px_rgba(37,99,235,0.7),0_0_100px_rgba(37,99,235,0.4)]',
   },
 }
 
@@ -140,7 +140,7 @@ function NavGridCard({ to, tone, label, icon, reactionKey }: (typeof NAV_CARDS)[
       onKeyDown={(e) => e.key === 'Enter' && navigate(to)}
       className={`relative flex cursor-pointer flex-col items-center gap-5 overflow-hidden rounded-3xl border-[3px] py-12 text-center backdrop-blur-[16px] transition-all duration-300 hover:scale-[1.03] ${styles.border} ${styles.shadow} ${styles.hoverShadow}`}
       style={{
-        background: 'linear-gradient(165deg, rgba(20,22,38,0.55), rgba(6,7,18,0.85))',
+        background: 'linear-gradient(165deg, rgba(15,23,42,0.55), rgba(6,9,19,0.85))',
       }}
       {...reaction}
     >

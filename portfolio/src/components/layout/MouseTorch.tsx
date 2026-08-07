@@ -35,7 +35,7 @@ export default function MouseTorch() {
       className="pointer-events-none fixed inset-0 z-[1] hidden sm:block"
       style={{
         background:
-          'radial-gradient(220px circle at var(--torch-x, 50%) var(--torch-y, 33%), rgba(0,243,255,0.22), rgba(255,0,127,0.13) 45%, transparent 70%)',
+          'radial-gradient(220px circle at var(--torch-x, 50%) var(--torch-y, 33%), rgba(59,130,246,0.22), rgba(96,165,250,0.13) 45%, transparent 70%)',
         mixBlendMode: 'screen',
       }}
     />

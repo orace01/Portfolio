@@ -60,20 +60,20 @@ export default function CircuitBackground() {
       </div>
 
       <CircuitCorner
-        className="absolute -left-4 -top-4 opacity-60 [filter:drop-shadow(0_0_6px_rgba(0,243,255,0.5))]"
-        color="#00f3ff"
+        className="absolute -left-4 -top-4 opacity-60 [filter:drop-shadow(0_0_6px_rgba(59,130,246,0.5))]"
+        color="#3B82F6"
       />
       <CircuitCorner
-        className="absolute -bottom-4 -left-4 rotate-180 opacity-40 [filter:drop-shadow(0_0_6px_rgba(0,243,255,0.4))]"
-        color="#00f3ff"
+        className="absolute -bottom-4 -left-4 rotate-180 opacity-40 [filter:drop-shadow(0_0_6px_rgba(59,130,246,0.4))]"
+        color="#3B82F6"
       />
       <CircuitCorner
-        className="absolute -right-4 -top-4 scale-x-[-1] opacity-60 [filter:drop-shadow(0_0_6px_rgba(255,0,127,0.5))]"
-        color="#ff007f"
+        className="absolute -right-4 -top-4 scale-x-[-1] opacity-60 [filter:drop-shadow(0_0_6px_rgba(96,165,250,0.5))]"
+        color="#60A5FA"
       />
       <CircuitCorner
-        className="absolute -bottom-4 -right-4 rotate-180 scale-x-[-1] opacity-40 [filter:drop-shadow(0_0_6px_rgba(255,0,127,0.4))]"
-        color="#ff007f"
+        className="absolute -bottom-4 -right-4 rotate-180 scale-x-[-1] opacity-40 [filter:drop-shadow(0_0_6px_rgba(96,165,250,0.4))]"
+        color="#60A5FA"
       />
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void" />

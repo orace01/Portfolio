@@ -50,18 +50,18 @@ export default function CaineMascot({ excited, talkKey }: CaineMascotProps) {
           <stop offset="100%" stopColor="#120c22" />
         </linearGradient>
         <radialGradient id="gum" cx="50%" cy="0%" r="100%">
-          <stop offset="0%" stopColor="#ff2e8f" />
-          <stop offset="100%" stopColor="#b8005c" />
+          <stop offset="0%" stopColor="#93C5FD" />
+          <stop offset="100%" stopColor="#60A5FA" />
         </radialGradient>
       </defs>
 
       {/* top hat */}
       <g data-intro="hat">
         <g transform="rotate(-7 150 60)">
-          <ellipse cx="150" cy="78" rx="58" ry="11" fill="url(#hatBody)" stroke="#00f3ff" strokeWidth="1.5" opacity="0.95" />
-          <rect x="120" y="18" width="60" height="62" rx="6" fill="url(#hatBody)" stroke="#00f3ff" strokeOpacity="0.5" strokeWidth="1" />
-          <rect x="120" y="60" width="60" height="9" fill="#ff007f" opacity="0.85" />
-          <ellipse cx="150" cy="18" rx="30" ry="9" fill="#1a1230" stroke="#00f3ff" strokeWidth="1.5" />
+          <ellipse cx="150" cy="78" rx="58" ry="11" fill="url(#hatBody)" stroke="#3B82F6" strokeWidth="1.5" opacity="0.95" />
+          <rect x="120" y="18" width="60" height="62" rx="6" fill="url(#hatBody)" stroke="#3B82F6" strokeOpacity="0.5" strokeWidth="1" />
+          <rect x="120" y="60" width="60" height="9" fill="#60A5FA" opacity="0.85" />
+          <ellipse cx="150" cy="18" rx="30" ry="9" fill="#1a1230" stroke="#3B82F6" strokeWidth="1.5" />
         </g>
       </g>
 
@@ -76,19 +76,19 @@ export default function CaineMascot({ excited, talkKey }: CaineMascotProps) {
         {TOOTH_X.map((x) => (
           <line key={x} x1={x} y1="88" x2={x} y2="118" stroke="#9fb0c0" strokeWidth="1" opacity="0.6" />
         ))}
-        <path d="M42,78 Q150,26 258,78" fill="none" stroke="#00f3ff" strokeWidth="1.5" opacity="0.55" />
+        <path d="M42,78 Q150,26 258,78" fill="none" stroke="#3B82F6" strokeWidth="1.5" opacity="0.55" />
       </g>
 
       {/* eyes, floating in the gap */}
       <g ref={pupilsRef} data-intro="eyes">
         <g>
-          <circle cx="118" cy="150" r={excited ? 26 : 23} fill="#f5faff" stroke="#00f3ff" strokeWidth="1.5" className="transition-all duration-200" />
-          <circle cx="118" cy="150" r={excited ? 8 : 11} fill="#0a0a1f" />
+          <circle cx="118" cy="150" r={excited ? 26 : 23} fill="#f5faff" stroke="#3B82F6" strokeWidth="1.5" className="transition-all duration-200" />
+          <circle cx="118" cy="150" r={excited ? 8 : 11} fill="#0F172A" />
           <circle cx="122" cy="145" r="3" fill="#fff" opacity="0.85" />
         </g>
         <g>
-          <circle cx="182" cy="150" r={excited ? 26 : 23} fill="#f5faff" stroke="#ff007f" strokeWidth="1.5" className="transition-all duration-200" />
-          <circle cx="182" cy="150" r={excited ? 8 : 11} fill="#0a0a1f" />
+          <circle cx="182" cy="150" r={excited ? 26 : 23} fill="#f5faff" stroke="#60A5FA" strokeWidth="1.5" className="transition-all duration-200" />
+          <circle cx="182" cy="150" r={excited ? 8 : 11} fill="#0F172A" />
           <circle cx="186" cy="145" r="3" fill="#fff" opacity="0.85" />
         </g>
       </g>
@@ -105,7 +105,7 @@ export default function CaineMascot({ excited, talkKey }: CaineMascotProps) {
         {TOOTH_X.map((x) => (
           <line key={x} x1={x} y1="186" x2={x} y2="218" stroke="#9fb0c0" strokeWidth="1" opacity="0.6" />
         ))}
-        <path d="M48,178 Q150,152 252,178" fill="none" stroke="#ff007f" strokeWidth="1.5" opacity="0.55" />
+        <path d="M48,178 Q150,152 252,178" fill="none" stroke="#60A5FA" strokeWidth="1.5" opacity="0.55" />
       </g>
     </svg>
   )

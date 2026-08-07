@@ -15,7 +15,7 @@ function createStars(count: number): Star[] {
     angle: Math.random() * Math.PI * 2,
     radius: Math.random() * 80,
     speed: 0.6 + Math.random() * 1.8,
-    color: Math.random() > 0.5 ? '0,243,255' : '255,0,127',
+    color: Math.random() > 0.5 ? '59,130,246' : '96,165,250',
   }))
 }
 
@@ -48,7 +48,7 @@ export default function HyperspaceWarp({ onDone }: HyperspaceWarpProps) {
       const cx = canvas.width / 2
       const cy = canvas.height / 2
 
-      ctx.fillStyle = `rgba(5,6,20,${0.12 + t * 0.55})`
+      ctx.fillStyle = `rgba(6,9,19,${0.12 + t * 0.55})`
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       const accel = 1 + t * t * 26
@@ -77,7 +77,7 @@ export default function HyperspaceWarp({ onDone }: HyperspaceWarpProps) {
       if (elapsed < DURATION) {
         frame = requestAnimationFrame(tick)
       } else {
-        ctx.fillStyle = '#000000'
+        ctx.fillStyle = '#060913'
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         onDone()
       }

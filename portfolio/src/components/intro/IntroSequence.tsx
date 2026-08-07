@@ -137,14 +137,14 @@ export default function IntroSequence() {
         ref={blackoutRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 z-[5]"
-        style={{ backgroundColor: '#000000' }}
+        style={{ backgroundColor: '#060913' }}
       />
 
       <div
         ref={titleGroupRef}
         className="pointer-events-none fixed left-1/2 top-1/2 z-[92] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-6"
       >
-        <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(0,243,255,0.9),0_0_40px_rgba(0,243,255,0.6),0_0_80px_rgba(255,0,127,0.4)]">
+        <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(59,130,246,0.9),0_0_40px_rgba(59,130,246,0.6),0_0_80px_rgba(96,165,250,0.4)]">
           Honfin Orace
         </h1>
         <div className="h-1.5 w-64 overflow-hidden rounded-full bg-white/10 sm:w-80">
@@ -159,7 +159,7 @@ export default function IntroSequence() {
         ref={welcomeRef}
         className="pointer-events-none fixed left-1/2 top-[42%] z-[92] w-[90vw] max-w-xl -translate-x-1/2 text-center"
       >
-        <p className="text-xl font-bold uppercase tracking-[0.1em] text-cyan-neon [text-shadow:0_0_10px_rgba(0,243,255,0.85),0_0_30px_rgba(255,0,127,0.4)] sm:text-2xl">
+        <p className="text-xl font-bold uppercase tracking-[0.1em] text-cyan-neon [text-shadow:0_0_10px_rgba(59,130,246,0.85),0_0_30px_rgba(96,165,250,0.4)] sm:text-2xl">
           Welcome to the Digital Circus... Let's begin the tour!
         </p>
       </div>
@@ -169,7 +169,7 @@ export default function IntroSequence() {
         aria-hidden="true"
         className="pointer-events-none fixed left-1/2 top-[12%] z-[90] h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(0,243,255,0.9), rgba(255,0,127,0.5) 55%, transparent 75%)',
+          background: 'radial-gradient(circle, rgba(59,130,246,0.9), rgba(96,165,250,0.5) 55%, transparent 75%)',
         }}
       />
 

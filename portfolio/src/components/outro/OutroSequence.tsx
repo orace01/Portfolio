@@ -98,7 +98,7 @@ export default function OutroSequence() {
       {stage === 'warp' && <HyperspaceWarp onDone={handleWarpDone} />}
 
       {(stage === 'void' || stage === 'reset') && (
-        <div className="fixed inset-0 z-[150]" style={{ backgroundColor: '#000000' }}>
+        <div className="fixed inset-0 z-[150]" style={{ backgroundColor: '#060913' }}>
           {stage === 'void' && (
             <div className="pointer-events-none flex h-full w-full flex-col items-center justify-center gap-8">
               <div ref={caineWrapRef} className="relative h-[280px] w-[280px]">
@@ -109,8 +109,8 @@ export default function OutroSequence() {
                       key={i}
                       className="absolute -ml-[3px] -mt-[3px] h-1.5 w-1.5 rounded-full"
                       style={{
-                        backgroundColor: i % 2 ? '#ff007f' : '#00f3ff',
-                        boxShadow: `0 0 8px ${i % 2 ? '#ff007f' : '#00f3ff'}`,
+                        backgroundColor: i % 2 ? '#60A5FA' : '#3B82F6',
+                        boxShadow: `0 0 8px ${i % 2 ? '#60A5FA' : '#3B82F6'}`,
                       }}
                     />
                   ))}
@@ -118,7 +118,7 @@ export default function OutroSequence() {
               </div>
               <p
                 ref={farewellRef}
-                className="w-[90vw] max-w-xl text-center text-xl font-bold uppercase tracking-[0.08em] text-cyan-neon [text-shadow:0_0_10px_rgba(0,243,255,0.85),0_0_30px_rgba(255,0,127,0.4)] sm:text-2xl"
+                className="w-[90vw] max-w-xl text-center text-xl font-bold uppercase tracking-[0.08em] text-cyan-neon [text-shadow:0_0_10px_rgba(59,130,246,0.85),0_0_30px_rgba(96,165,250,0.4)] sm:text-2xl"
               >
                 Thank you for visiting the Digital Circus... Until next time!
               </p>
@@ -127,7 +127,7 @@ export default function OutroSequence() {
 
           {stage === 'reset' && (
             <div className="flex h-full w-full flex-col items-center justify-center gap-8">
-              <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(0,243,255,0.9),0_0_40px_rgba(0,243,255,0.6),0_0_80px_rgba(255,0,127,0.4)]">
+              <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(59,130,246,0.9),0_0_40px_rgba(59,130,246,0.6),0_0_80px_rgba(96,165,250,0.4)]">
                 Honfin Orace
               </h1>
               <button

@@ -6,20 +6,20 @@ export default {
     extend: {
       colors: {
         void: {
-          DEFAULT: '#050515',
-          deep: '#03030c',
-          panel: '#0a0a1f',
+          DEFAULT: '#060913',
+          deep: '#060913',
+          panel: '#0F172A',
         },
         cyan: {
-          neon: '#00f3ff',
+          neon: '#3B82F6',
         },
         magenta: {
-          neon: '#ff007f',
+          neon: '#60A5FA',
         },
         neon: {
-          green: '#39ff14',
-          purple: '#8b2fff',
-          blue: '#3b82f6',
+          green: '#2563EB',
+          purple: '#93C5FD',
+          blue: '#3B82F6',
         },
       },
       fontFamily: {
@@ -27,13 +27,13 @@ export default {
         mono: ['"Fira Code"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        'glow-cyan': '0 0 10px rgba(0,243,255,0.75), 0 0 34px rgba(0,243,255,0.5), 0 0 64px rgba(0,243,255,0.25)',
-        'glow-magenta': '0 0 10px rgba(255,0,127,0.75), 0 0 34px rgba(255,0,127,0.5), 0 0 64px rgba(255,0,127,0.25)',
-        'glow-green': '0 0 10px rgba(57,255,20,0.75), 0 0 34px rgba(57,255,20,0.5), 0 0 64px rgba(57,255,20,0.25)',
-        'glow-purple': '0 0 10px rgba(139,47,255,0.75), 0 0 34px rgba(139,47,255,0.5), 0 0 64px rgba(139,47,255,0.25)',
+        'glow-cyan': '0 0 10px rgba(59,130,246,0.75), 0 0 34px rgba(59,130,246,0.5), 0 0 64px rgba(59,130,246,0.25)',
+        'glow-magenta': '0 0 10px rgba(96,165,250,0.75), 0 0 34px rgba(96,165,250,0.5), 0 0 64px rgba(96,165,250,0.25)',
+        'glow-green': '0 0 10px rgba(37,99,235,0.75), 0 0 34px rgba(37,99,235,0.5), 0 0 64px rgba(37,99,235,0.25)',
+        'glow-purple': '0 0 10px rgba(147,197,253,0.75), 0 0 34px rgba(147,197,253,0.5), 0 0 64px rgba(147,197,253,0.25)',
       },
       backgroundImage: {
-        'radial-fade': 'radial-gradient(circle at 50% 20%, rgba(139,47,255,0.4), transparent 60%)',
+        'radial-fade': 'radial-gradient(circle at 50% 20%, rgba(147,197,253,0.4), transparent 60%)',
       },
       animation: {
         flicker: 'flicker 3.5s infinite',
