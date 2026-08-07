@@ -1,9 +1,9 @@
 type Status = 'ONLINE' | 'BETA' | 'ARCHIVED'
 
 const STATUS_STYLE: Record<Status, string> = {
-  ONLINE: 'bg-neon-green shadow-glow-green',
-  BETA: 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.7)]',
-  ARCHIVED: 'bg-slate-500 shadow-none',
+  ONLINE: 'bg-neon-green',
+  BETA: 'bg-amber-400',
+  ARCHIVED: 'bg-slate-500',
 }
 
 export default function StatusBadge({ status }: { status: Status }) {

@@ -1,4 +1,4 @@
-import { type CSSProperties, type FormEvent, type MouseEvent, useRef, useState } from 'react'
+import { type FormEvent, type MouseEvent, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import IntroSequence from '@/components/intro/IntroSequence'
 import OutroSequence from '@/components/outro/OutroSequence'
@@ -11,18 +11,11 @@ import { HOVER_LINES } from '@/lib/caine-lines'
 import { PROJECTS, type ProjectTone } from '@/data/projects'
 import { SKILL_CATEGORIES, type SkillTone } from '@/data/skills'
 
-const TONE_RGB: Record<ProjectTone | SkillTone, string> = {
-  cyan: '0,243,255',
-  magenta: '255,0,127',
-  purple: '139,47,255',
-  green: '57,255,20',
-}
-
 const TAG_HOVER: Record<ProjectTone | SkillTone, string> = {
-  cyan: 'hover:border-cyan-neon hover:text-cyan-neon hover:shadow-glow-cyan',
-  magenta: 'hover:border-magenta-neon hover:text-magenta-neon hover:shadow-glow-magenta',
-  purple: 'hover:border-neon-purple hover:text-neon-purple hover:shadow-glow-purple',
-  green: 'hover:border-neon-green hover:text-neon-green hover:shadow-glow-green',
+  cyan: 'hover:border-cyan-neon hover:text-cyan-neon',
+  magenta: 'hover:border-magenta-neon hover:text-magenta-neon',
+  purple: 'hover:border-neon-purple hover:text-neon-purple',
+  green: 'hover:border-neon-green hover:text-neon-green',
 }
 
 const NAV_CARDS = [
@@ -75,30 +68,22 @@ const NAV_CARDS = [
 
 type NavTone = (typeof NAV_CARDS)[number]['tone']
 
-const NAV_TONE_STYLES: Record<NavTone, { text: string; border: string; shadow: string; hoverShadow: string }> = {
+const NAV_TONE_STYLES: Record<NavTone, { text: string; border: string }> = {
   cyan: {
     text: 'text-cyan-neon',
     border: 'border-cyan-neon',
-    shadow: 'shadow-[0_0_10px_rgba(59,130,246,0.7),0_0_35px_rgba(59,130,246,0.5),0_0_70px_rgba(59,130,246,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(59,130,246,0.9),0_0_55px_rgba(59,130,246,0.7),0_0_100px_rgba(59,130,246,0.4)]',
   },
   magenta: {
     text: 'text-magenta-neon',
     border: 'border-magenta-neon',
-    shadow: 'shadow-[0_0_10px_rgba(96,165,250,0.7),0_0_35px_rgba(96,165,250,0.5),0_0_70px_rgba(96,165,250,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(96,165,250,0.9),0_0_55px_rgba(96,165,250,0.7),0_0_100px_rgba(96,165,250,0.4)]',
   },
   blue: {
     text: 'text-neon-blue',
     border: 'border-neon-blue',
-    shadow: 'shadow-[0_0_10px_rgba(59,130,246,0.7),0_0_35px_rgba(59,130,246,0.5),0_0_70px_rgba(59,130,246,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(59,130,246,0.9),0_0_55px_rgba(59,130,246,0.7),0_0_100px_rgba(59,130,246,0.4)]',
   },
   green: {
     text: 'text-neon-green',
     border: 'border-neon-green',
-    shadow: 'shadow-[0_0_10px_rgba(37,99,235,0.7),0_0_35px_rgba(37,99,235,0.5),0_0_70px_rgba(37,99,235,0.25)]',
-    hoverShadow: 'hover:shadow-[0_0_16px_rgba(37,99,235,0.9),0_0_55px_rgba(37,99,235,0.7),0_0_100px_rgba(37,99,235,0.4)]',
   },
 }
 
@@ -138,7 +123,7 @@ function NavGridCard({ to, tone, label, icon, reactionKey }: (typeof NAV_CARDS)[
       data-intro="navcard"
       onClick={() => navigate(to)}
       onKeyDown={(e) => e.key === 'Enter' && navigate(to)}
-      className={`relative flex cursor-pointer flex-col items-center gap-5 overflow-hidden rounded-3xl border-[3px] py-12 text-center backdrop-blur-[16px] transition-all duration-300 hover:scale-[1.03] ${styles.border} ${styles.shadow} ${styles.hoverShadow}`}
+      className={`relative flex cursor-pointer flex-col items-center gap-5 overflow-hidden rounded-3xl border-[3px] py-12 text-center backdrop-blur-[16px] transition-all duration-300 hover:scale-[1.03] ${styles.border}`}
       style={{
         background: 'linear-gradient(165deg, rgba(15,23,42,0.55), rgba(6,9,19,0.85))',
       }}
@@ -148,10 +133,8 @@ function NavGridCard({ to, tone, label, icon, reactionKey }: (typeof NAV_CARDS)[
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 via-white/[0.04] to-transparent"
       />
-      <span className={`relative drop-shadow-[0_0_14px_currentColor] ${styles.text}`}>{icon}</span>
-      <span
-        className={`relative text-xl font-bold uppercase tracking-[0.15em] drop-shadow-[0_0_12px_currentColor] ${styles.text}`}
-      >
+      <span className={`relative ${styles.text}`}>{icon}</span>
+      <span className={`relative text-xl font-bold uppercase tracking-[0.15em] ${styles.text}`}>
         {label}
       </span>
     </div>
@@ -199,11 +182,7 @@ function FeaturedProjectCard({ project }: { project: (typeof PROJECTS)[number] }
         transition: 'transform 0.2s ease-out',
       }}
     >
-      <GlowCard
-        tone={project.tone}
-        className="relative flex flex-col gap-4 overflow-hidden group-hover:[animation:border-glow-pulse_1.4s_ease-in-out_infinite]"
-        style={{ '--glow-rgb': TONE_RGB[project.tone] } as CSSProperties}
-      >
+      <GlowCard tone={project.tone} className="relative flex flex-col gap-4 overflow-hidden">
         <span aria-hidden="true" className="glass-shimmer" />
         <div className="relative flex items-start justify-between gap-3">
           <h3 className={`text-lg font-bold tracking-wide ${TONE_TEXT[project.tone]}`}>{project.name}</h3>
@@ -227,7 +206,6 @@ function FeaturedProjectCard({ project }: { project: (typeof PROJECTS)[number] }
 
 function FeaturedSkillCard({ category }: { category: (typeof SKILL_CATEGORIES)[number] }) {
   const reaction = useCaineReaction(HOVER_LINES[category.hoverKey])
-  const rgb = TONE_RGB[category.tone]
   return (
     <GlowCard tone={category.tone} className="flex flex-col gap-4" {...reaction}>
       <h3 className={`text-lg font-bold tracking-wide ${TONE_TEXT[category.tone]}`}>{category.title}</h3>
@@ -235,8 +213,7 @@ function FeaturedSkillCard({ category }: { category: (typeof SKILL_CATEGORIES)[n
         {category.skills.slice(0, 4).map((skill) => (
           <span
             key={skill.name}
-            className={`chip-pill cursor-default rounded-md border border-white/15 bg-white/[0.03] px-3.5 py-1.5 font-mono text-xs text-slate-300 transition-transform duration-200 hover:scale-105 hover:text-white hover:[animation:border-glow-pulse_0.8s_ease-in-out_infinite]`}
-            style={{ '--glow-rgb': rgb } as CSSProperties}
+            className="chip-pill cursor-default rounded-md border border-white/15 bg-white/[0.03] px-3.5 py-1.5 font-mono text-xs text-slate-300 transition-transform duration-200 hover:scale-105 hover:text-white"
           >
             {skill.name}
           </span>
@@ -288,7 +265,7 @@ export default function Home() {
         <button
           type="submit"
           aria-label="Ask"
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-magenta-neon/20 text-magenta-neon shadow-glow-magenta transition-transform hover:scale-110"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-magenta-neon/20 text-magenta-neon transition-transform hover:scale-110"
         >
           →
         </button>
@@ -345,14 +322,13 @@ export default function Home() {
         <SectionHeading eyebrow="Direct Line" title="Get In Touch" tone="green" />
         <GlowCard
           tone="green"
-          className="relative flex flex-col items-center gap-5 overflow-hidden text-center [animation:border-glow-pulse_3.5s_ease-in-out_infinite]"
-          style={{ '--glow-rgb': TONE_RGB.green } as CSSProperties}
+          className="relative flex flex-col items-center gap-5 overflow-hidden text-center"
           {...contactReaction}
         >
           <div className="mb-1 flex w-full items-center gap-2 border-b border-white/10 pb-4 font-mono text-xs uppercase tracking-[0.2em] text-slate-500">
-            <span className="h-2.5 w-2.5 rounded-full bg-cyan-neon/70 shadow-glow-cyan" />
-            <span className="h-2.5 w-2.5 rounded-full bg-magenta-neon/70 shadow-glow-magenta" />
-            <span className="h-2.5 w-2.5 rounded-full bg-neon-green/70 shadow-glow-green" />
+            <span className="h-2.5 w-2.5 rounded-full bg-cyan-neon/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-magenta-neon/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-neon-green/70" />
             <span className="ml-2">Caine Terminal — Live</span>
           </div>
           <p className="text-base text-slate-300">
@@ -361,13 +337,7 @@ export default function Home() {
           <a href="mailto:orace.honfin@epitech.eu" className="neon-text-magenta text-xl font-semibold break-all">
             orace.honfin@epitech.eu
           </a>
-          <NeonButton
-            type="button"
-            tone="green"
-            onClick={() => navigate('/contact')}
-            className="[animation:border-glow-pulse_1.8s_ease-in-out_infinite]"
-            style={{ '--glow-rgb': TONE_RGB.green } as CSSProperties}
-          >
+          <NeonButton type="button" tone="green" onClick={() => navigate('/contact')}>
             [ Send A Message ]
           </NeonButton>
         </GlowCard>

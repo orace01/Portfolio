@@ -85,7 +85,7 @@ export default function OutroSequence() {
         <button
           type="button"
           onClick={handleTrigger}
-          className="group flex items-center gap-2 rounded-full border border-cyan-neon/50 bg-white/[0.02] px-8 py-4 font-mono text-sm uppercase tracking-[0.25em] text-cyan-neon shadow-glow-cyan transition-all hover:scale-105 hover:bg-cyan-neon/10"
+          className="group flex items-center gap-2 rounded-full border border-cyan-neon/50 bg-white/[0.02] px-8 py-4 font-mono text-sm uppercase tracking-[0.25em] text-cyan-neon transition-all hover:scale-105 hover:bg-cyan-neon/10"
         >
           [ <span className="inline-block animate-pulse">↓</span> End Show ]
         </button>
@@ -118,7 +118,7 @@ export default function OutroSequence() {
               </div>
               <p
                 ref={farewellRef}
-                className="w-[90vw] max-w-xl text-center text-xl font-bold uppercase tracking-[0.08em] text-cyan-neon [text-shadow:0_0_10px_rgba(59,130,246,0.85),0_0_30px_rgba(96,165,250,0.4)] sm:text-2xl"
+                className="w-[90vw] max-w-xl text-center text-xl font-bold uppercase tracking-[0.08em] text-cyan-neon sm:text-2xl"
               >
                 Thank you for visiting the Digital Circus... Until next time!
               </p>
@@ -127,13 +127,13 @@ export default function OutroSequence() {
 
           {stage === 'reset' && (
             <div className="flex h-full w-full flex-col items-center justify-center gap-8">
-              <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(59,130,246,0.9),0_0_40px_rgba(59,130,246,0.6),0_0_80px_rgba(96,165,250,0.4)]">
+              <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl">
                 Honfin Orace
               </h1>
               <button
                 type="button"
                 onClick={handleRestart}
-                className="rounded-full border border-magenta-neon/60 bg-magenta-neon/10 px-10 py-4 font-mono text-lg uppercase tracking-[0.25em] text-magenta-neon shadow-glow-magenta transition-all hover:scale-105 hover:bg-magenta-neon/20"
+                className="rounded-full border border-magenta-neon/60 bg-magenta-neon/10 px-10 py-4 font-mono text-lg uppercase tracking-[0.25em] text-magenta-neon transition-all hover:scale-105 hover:bg-magenta-neon/20"
               >
                 [ Start ]
               </button>

@@ -26,12 +26,6 @@ export default {
         sans: ['"Space Grotesk"', '"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"Fira Code"', 'ui-monospace', 'monospace'],
       },
-      boxShadow: {
-        'glow-cyan': '0 0 10px rgba(59,130,246,0.75), 0 0 34px rgba(59,130,246,0.5), 0 0 64px rgba(59,130,246,0.25)',
-        'glow-magenta': '0 0 10px rgba(96,165,250,0.75), 0 0 34px rgba(96,165,250,0.5), 0 0 64px rgba(96,165,250,0.25)',
-        'glow-green': '0 0 10px rgba(37,99,235,0.75), 0 0 34px rgba(37,99,235,0.5), 0 0 64px rgba(37,99,235,0.25)',
-        'glow-purple': '0 0 10px rgba(147,197,253,0.75), 0 0 34px rgba(147,197,253,0.5), 0 0 64px rgba(147,197,253,0.25)',
-      },
       backgroundImage: {
         'radial-fade': 'radial-gradient(circle at 50% 20%, rgba(147,197,253,0.4), transparent 60%)',
       },

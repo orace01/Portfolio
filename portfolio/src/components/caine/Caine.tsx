@@ -107,7 +107,7 @@ export default function Caine() {
         className={`pointer-events-none left-0 top-0 z-40 ${isHome ? 'absolute' : 'fixed'}`}
         style={{ width: BASE_SIZE, height: BASE_SIZE }}
       >
-        <div className="h-full w-full animate-float drop-shadow-[0_0_35px_rgba(147,197,253,0.35)]">
+        <div className="h-full w-full animate-float">
           <CaineMascot excited={excited} talkKey={bump} />
         </div>
       </div>

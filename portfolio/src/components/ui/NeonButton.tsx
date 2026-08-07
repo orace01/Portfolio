@@ -3,10 +3,10 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'reac
 type Tone = 'cyan' | 'magenta' | 'green' | 'purple'
 
 const TONE_CLASSES: Record<Tone, string> = {
-  cyan: 'border-cyan-neon/50 text-cyan-neon hover:bg-cyan-neon/10 hover:shadow-glow-cyan',
-  magenta: 'border-magenta-neon/50 text-magenta-neon hover:bg-magenta-neon/10 hover:shadow-glow-magenta',
-  green: 'border-neon-green/50 text-neon-green hover:bg-neon-green/10 hover:shadow-glow-green',
-  purple: 'border-neon-purple/50 text-neon-purple hover:bg-neon-purple/10 hover:shadow-glow-purple',
+  cyan: 'border-cyan-neon/50 text-cyan-neon hover:bg-cyan-neon/10',
+  magenta: 'border-magenta-neon/50 text-magenta-neon hover:bg-magenta-neon/10',
+  green: 'border-neon-green/50 text-neon-green hover:bg-neon-green/10',
+  purple: 'border-neon-purple/50 text-neon-purple hover:bg-neon-purple/10',
 }
 
 const base =

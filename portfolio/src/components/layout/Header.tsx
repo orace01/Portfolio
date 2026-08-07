@@ -30,7 +30,7 @@ export default function Header() {
     <header data-intro="interface" className="sticky top-0 z-30 border-b border-white/10 bg-void/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-5 sm:px-8">
         <NavLink to="/" className="flex items-center gap-2 text-2xl font-bold">
-          <span className="neon-text-cyan flex h-9 w-9 items-center justify-center rounded border border-cyan-neon/60 font-mono text-lg shadow-glow-cyan">
+          <span className="neon-text-cyan flex h-9 w-9 items-center justify-center rounded border border-cyan-neon/60 font-mono text-lg">
             H
           </span>
           <span className="neon-text-cyan tracking-wide">-jaw</span>

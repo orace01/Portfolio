@@ -43,25 +43,22 @@ body {
 
   .neon-text-cyan {
     @apply text-cyan-neon;
-    text-shadow: 0 0 6px rgba(59, 130, 246, 0.85), 0 0 22px rgba(59, 130, 246, 0.45);
   }
 
   .neon-text-magenta {
     @apply text-magenta-neon;
-    text-shadow: 0 0 6px rgba(96, 165, 250, 0.85), 0 0 22px rgba(96, 165, 250, 0.45);
   }
 
   .neon-heading {
     @apply text-cyan-neon tracking-[0.15em];
-    text-shadow: 0 0 10px rgba(59, 130, 246, 0.9), 0 0 32px rgba(59, 130, 246, 0.5), 0 0 64px rgba(147, 197, 253, 0.35);
   }
 
   .neon-border-cyan {
-    @apply border border-cyan-neon/60 shadow-glow-cyan;
+    @apply border border-cyan-neon/60;
   }
 
   .neon-border-magenta {
-    @apply border border-magenta-neon/60 shadow-glow-magenta;
+    @apply border border-magenta-neon/60;
   }
 
   .bracket-btn {
@@ -181,10 +178,4 @@ body {
 @keyframes nebula-pulse {
   0%, 100% { opacity: 0.75; transform: translate(-50%, 0) scale(1); }
   50% { opacity: 1; transform: translate(-50%, 0) scale(1.08); }
-}
-
-/* Reusable glow pulse: set --glow-rgb (e.g. "0,243,255") on the element to tint it */
-@keyframes border-glow-pulse {
-  0%, 100% { box-shadow: 0 0 14px rgba(var(--glow-rgb), 0.45), 0 0 30px rgba(var(--glow-rgb), 0.2); }
-  50% { box-shadow: 0 0 28px rgba(var(--glow-rgb), 0.8), 0 0 64px rgba(var(--glow-rgb), 0.45); }
 }

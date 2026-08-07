@@ -144,13 +144,13 @@ export default function IntroSequence() {
         ref={titleGroupRef}
         className="pointer-events-none fixed left-1/2 top-1/2 z-[92] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-6"
       >
-        <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl [text-shadow:0_0_12px_rgba(59,130,246,0.9),0_0_40px_rgba(59,130,246,0.6),0_0_80px_rgba(96,165,250,0.4)]">
+        <h1 className="text-center text-5xl font-black uppercase tracking-[0.15em] text-cyan-neon sm:text-6xl md:text-7xl">
           Honfin Orace
         </h1>
         <div className="h-1.5 w-64 overflow-hidden rounded-full bg-white/10 sm:w-80">
           <div
             ref={barFillRef}
-            className="h-full rounded-full bg-gradient-to-r from-cyan-neon to-magenta-neon shadow-glow-cyan"
+            className="h-full rounded-full bg-gradient-to-r from-cyan-neon to-magenta-neon"
           />
         </div>
       </div>
@@ -159,7 +159,7 @@ export default function IntroSequence() {
         ref={welcomeRef}
         className="pointer-events-none fixed left-1/2 top-[42%] z-[92] w-[90vw] max-w-xl -translate-x-1/2 text-center"
       >
-        <p className="text-xl font-bold uppercase tracking-[0.1em] text-cyan-neon [text-shadow:0_0_10px_rgba(59,130,246,0.85),0_0_30px_rgba(96,165,250,0.4)] sm:text-2xl">
+        <p className="text-xl font-bold uppercase tracking-[0.1em] text-cyan-neon sm:text-2xl">
           Welcome to the Digital Circus... Let's begin the tour!
         </p>
       </div>
@@ -176,7 +176,7 @@ export default function IntroSequence() {
       <button
         type="button"
         onClick={handleSkip}
-        className="fixed right-6 top-24 z-[100] rounded-full border border-cyan-neon/60 bg-void/70 px-5 py-2 font-mono text-xs uppercase tracking-[0.25em] text-cyan-neon shadow-glow-cyan backdrop-blur-md transition-all hover:scale-105 hover:bg-cyan-neon/10"
+        className="fixed right-6 top-24 z-[100] rounded-full border border-cyan-neon/60 bg-void/70 px-5 py-2 font-mono text-xs uppercase tracking-[0.25em] text-cyan-neon backdrop-blur-md transition-all hover:scale-105 hover:bg-cyan-neon/10"
       >
         Skip
       </button>
