@@ -98,7 +98,7 @@ export default function OutroSequence() {
       {stage === 'warp' && <HyperspaceWarp onDone={handleWarpDone} />}
 
       {(stage === 'void' || stage === 'reset') && (
-        <div className="fixed inset-0 z-[150]" style={{ backgroundColor: '#060913' }}>
+        <div className="fixed inset-0 z-[150]" style={{ backgroundColor: '#030303' }}>
           {stage === 'void' && (
             <div className="pointer-events-none flex h-full w-full flex-col items-center justify-center gap-8">
               <div ref={caineWrapRef} className="relative h-[280px] w-[280px]">
@@ -109,8 +109,8 @@ export default function OutroSequence() {
                       key={i}
                       className="absolute -ml-[3px] -mt-[3px] h-1.5 w-1.5 rounded-full"
                       style={{
-                        backgroundColor: i % 2 ? '#60A5FA' : '#3B82F6',
-                        boxShadow: `0 0 8px ${i % 2 ? '#60A5FA' : '#3B82F6'}`,
+                        backgroundColor: i % 2 ? '#A1A1AA' : '#FFFFFF',
+                        boxShadow: `0 0 8px ${i % 2 ? '#A1A1AA' : '#FFFFFF'}`,
                       }}
                     />
                   ))}

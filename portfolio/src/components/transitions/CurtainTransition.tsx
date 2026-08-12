@@ -29,13 +29,13 @@ export default function CurtainTransition({ children }: { children: ReactNode })
         ref={leftRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-y-0 left-0 z-50 w-1/2 bg-gradient-to-r from-void via-void to-cyan-neon/25"
-        style={{ boxShadow: '10px 0 50px rgba(59,130,246,0.35)' }}
+        style={{ boxShadow: '10px 0 50px rgba(228,228,231,0.35)' }}
       />
       <div
         ref={rightRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-y-0 right-0 z-50 w-1/2 bg-gradient-to-l from-void via-void to-magenta-neon/25"
-        style={{ boxShadow: '-10px 0 50px rgba(96,165,250,0.35)' }}
+        style={{ boxShadow: '-10px 0 50px rgba(228,228,231,0.35)' }}
       />
       {children}
     </>

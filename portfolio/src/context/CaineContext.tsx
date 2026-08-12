@@ -1,4 +1,14 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 import { pickIdleLine, HOVER_LINES } from '@/lib/caine-lines'
 
@@ -9,6 +19,8 @@ interface CaineState {
   sayFor: (key: keyof typeof HOVER_LINES | string) => void
   reset: () => void
   bump: number
+  /** Right-column hero placeholder that Caine docks himself onto on the home page. */
+  heroAnchorRef: RefObject<HTMLDivElement>
 }
 
 const CaineContext = createContext<CaineState | null>(null)
@@ -19,6 +31,7 @@ export function CaineProvider({ children }: { children: ReactNode }) {
   const [excited, setExcited] = useState(false)
   const [bump, setBump] = useState(0)
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const heroAnchorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMessage(pickIdleLine(pathname))
@@ -56,7 +69,7 @@ export function CaineProvider({ children }: { children: ReactNode }) {
   }, [pathname])
 
   const value = useMemo(
-    () => ({ message, excited, say, sayFor, reset, bump }),
+    () => ({ message, excited, say, sayFor, reset, bump, heroAnchorRef }),
     [message, excited, say, sayFor, reset, bump],
   )
 

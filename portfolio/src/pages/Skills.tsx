@@ -82,7 +82,7 @@ function CategoryCard({ category }: { category: SkillCategory }) {
       <ul className="flex flex-col gap-2">
         {category.skills.map((skill) => (
           <li key={skill.name} className="flex items-center justify-between gap-3">
-            <span className="rounded-full border border-white/10 px-3 py-1 font-mono text-xs text-slate-300">
+            <span className="rounded-full border border-white/10 px-3 py-1 font-mono text-xs text-neutral-300">
               {skill.name}
             </span>
             <LevelDots level={skill.level} tone={category.tone} />

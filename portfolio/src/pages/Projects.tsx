@@ -29,18 +29,18 @@ function ProjectCard({ project }: { project: Project }) {
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[11px] text-slate-400"
+            className="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[11px] text-neutral-400"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <p className="text-sm text-slate-300">{project.summary}</p>
+      <p className="text-sm text-neutral-300">{project.summary}</p>
 
       <div className="grid transition-[grid-template-rows] duration-300 ease-in-out" style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}>
         <div className="overflow-hidden">
-          <p className={`border-t border-white/10 pt-3 text-sm text-slate-400 transition-opacity duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>
+          <p className={`border-t border-white/10 pt-3 text-sm text-neutral-400 transition-opacity duration-300 ${expanded ? 'opacity-100' : 'opacity-0'}`}>
             {project.detail}
           </p>
         </div>

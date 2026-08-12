@@ -6,28 +6,25 @@ export default {
     extend: {
       colors: {
         void: {
-          DEFAULT: '#060913',
-          deep: '#060913',
-          panel: '#0F172A',
+          DEFAULT: '#030303',
+          deep: '#000000',
+          panel: '#0a0a0c',
         },
         cyan: {
-          neon: '#3B82F6',
+          neon: '#00F0FF',
         },
         magenta: {
-          neon: '#60A5FA',
+          neon: '#7000FF',
         },
         neon: {
-          green: '#2563EB',
-          purple: '#93C5FD',
-          blue: '#3B82F6',
+          green: '#00F0FF',
+          purple: '#7000FF',
+          blue: '#00F0FF',
         },
       },
       fontFamily: {
         sans: ['"Space Grotesk"', '"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"Fira Code"', 'ui-monospace', 'monospace'],
-      },
-      backgroundImage: {
-        'radial-fade': 'radial-gradient(circle at 50% 20%, rgba(147,197,253,0.4), transparent 60%)',
       },
       animation: {
         flicker: 'flicker 3.5s infinite',

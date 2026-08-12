@@ -1,4 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import SpotlightOverlay from './SpotlightOverlay'
+import { handleSpotlightMove } from '@/lib/spotlight'
 
 type Tone = 'cyan' | 'magenta' | 'purple' | 'green'
 
@@ -17,7 +19,12 @@ interface GlowCardProps extends HTMLAttributes<HTMLDivElement> {
 
 export default function GlowCard({ tone = 'cyan', children, className = '', ...props }: GlowCardProps) {
   return (
-    <div className={`glass-panel p-7 transition-all duration-300 ${TONE_CLASSES[tone]} ${className}`} {...props}>
+    <div
+      onMouseMove={handleSpotlightMove}
+      className={`glass-panel group p-7 transition-all duration-300 ${TONE_CLASSES[tone]} ${className}`}
+      {...props}
+    >
+      <SpotlightOverlay />
       {children}
     </div>
   )

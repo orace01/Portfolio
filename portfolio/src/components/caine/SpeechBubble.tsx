@@ -7,7 +7,7 @@ export default function SpeechBubble({ message, compact }: SpeechBubbleProps) {
   return (
     <div
       data-intro="bubble"
-      className={`glass-panel neon-border-cyan px-4 py-2.5 text-slate-100 ${
+      className={`glass-panel neon-border-cyan px-4 py-2.5 text-neutral-100 ${
         compact ? 'max-w-[220px] text-xs' : 'max-w-sm text-sm'
       }`}
     >

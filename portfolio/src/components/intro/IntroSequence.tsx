@@ -137,7 +137,7 @@ export default function IntroSequence() {
         ref={blackoutRef}
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 z-[5]"
-        style={{ backgroundColor: '#060913' }}
+        style={{ backgroundColor: '#030303' }}
       />
 
       <div
@@ -169,7 +169,7 @@ export default function IntroSequence() {
         aria-hidden="true"
         className="pointer-events-none fixed left-1/2 top-[12%] z-[90] h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(59,130,246,0.9), rgba(96,165,250,0.5) 55%, transparent 75%)',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.9), rgba(161,161,170,0.5) 55%, transparent 75%)',
         }}
       />
 

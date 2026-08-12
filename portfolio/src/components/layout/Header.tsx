@@ -27,13 +27,13 @@ export default function Header() {
   const contactReaction = useCaineReaction(HOVER_LINES['nav-contact'])
 
   return (
-    <header data-intro="interface" className="sticky top-0 z-30 border-b border-white/10 bg-void/70 backdrop-blur-xl">
+    <header data-intro="interface" className="sticky top-0 z-30 border-b border-white/[0.08] bg-void/70 backdrop-blur-lg">
       <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-5 sm:px-8">
         <NavLink to="/" className="flex items-center gap-2 text-2xl font-bold">
           <span className="neon-text-cyan flex h-9 w-9 items-center justify-center rounded border border-cyan-neon/60 font-mono text-lg">
-            H
+            O
           </span>
-          <span className="neon-text-cyan tracking-wide">-jaw</span>
+          <span className="neon-text-cyan tracking-wide">Orace HONFIN</span>
         </NavLink>
 
         <nav className="hidden items-center gap-10 text-base md:flex">
@@ -44,7 +44,7 @@ export default function Header() {
 
         <NavLink
           to="/contact"
-          className="neon-border-magenta rounded-full bg-magenta-neon/10 px-6 py-2.5 text-base font-semibold tracking-wide text-magenta-neon transition-transform hover:scale-105"
+          className="rounded-full border border-cyan-neon/50 bg-cyan-neon/10 px-6 py-2.5 font-mono text-sm uppercase tracking-[0.15em] text-cyan-neon transition-all duration-300 hover:scale-105 hover:border-cyan-neon hover:bg-cyan-neon/10 hover:shadow-[0_0_15px_rgba(0,240,255,0.2)]"
           {...contactReaction}
         >
           [ CONTACT ]

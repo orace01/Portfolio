@@ -81,22 +81,22 @@ export default function Contact() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-5">
         <div className="flex flex-col gap-6 lg:col-span-2">
           <GlowCard tone="cyan" className="flex flex-col gap-5">
-            <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-500">Direct Info</h2>
+            <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Direct Info</h2>
             <div className="flex flex-col gap-4">
               <div tabIndex={0} className="rounded-lg outline-none" {...locationReaction}>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Location</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Location</p>
                 <p className="neon-text-cyan text-lg font-semibold">Cotonou, Benin</p>
               </div>
               <div className="h-px w-full bg-white/10" />
               <a href="mailto:orace.honfin@epitech.eu" className="block rounded-lg outline-none" {...emailReaction}>
-                <p className="text-xs uppercase tracking-wide text-slate-500">Email</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Email</p>
                 <p className="neon-text-magenta break-all text-lg font-semibold">orace.honfin@epitech.eu</p>
               </a>
             </div>
           </GlowCard>
 
           <GlowCard tone="purple" className="flex flex-col gap-4">
-            <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-500">Elsewhere</h2>
+            <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Elsewhere</h2>
             <div className="flex flex-wrap gap-5">
               {SOCIALS.map((s) => (
                 <SocialLink key={s.label} {...s} />
@@ -118,10 +118,10 @@ export default function Contact() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
-              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-500">Send A Transmission</h2>
+              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Send A Transmission</h2>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="name" className="text-xs uppercase tracking-wide text-slate-400">
+                <label htmlFor="name" className="text-xs uppercase tracking-wide text-neutral-400">
                   Name
                 </label>
                 <input
@@ -130,13 +130,13 @@ export default function Contact() {
                   onChange={updateField('name')}
                   placeholder="Who's asking?"
                   aria-invalid={Boolean(errors.name)}
-                  className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-cyan-neon focus:outline-none"
+                  className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-200 placeholder:text-neutral-500 focus:border-cyan-neon focus:outline-none"
                 />
                 {errors.name ? <p className="text-xs text-magenta-neon">{errors.name}</p> : null}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="email" className="text-xs uppercase tracking-wide text-slate-400">
+                <label htmlFor="email" className="text-xs uppercase tracking-wide text-neutral-400">
                   Email
                 </label>
                 <input
@@ -145,13 +145,13 @@ export default function Contact() {
                   onChange={updateField('email')}
                   placeholder="you@somewhere.dev"
                   aria-invalid={Boolean(errors.email)}
-                  className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-cyan-neon focus:outline-none"
+                  className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-200 placeholder:text-neutral-500 focus:border-cyan-neon focus:outline-none"
                 />
                 {errors.email ? <p className="text-xs text-magenta-neon">{errors.email}</p> : null}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="message" className="text-xs uppercase tracking-wide text-slate-400">
+                <label htmlFor="message" className="text-xs uppercase tracking-wide text-neutral-400">
                   Message
                 </label>
                 <textarea
@@ -161,7 +161,7 @@ export default function Contact() {
                   placeholder="Type kindly. Caine reads everything before he does."
                   rows={5}
                   aria-invalid={Boolean(errors.message)}
-                  className="resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 placeholder:text-slate-500 focus:border-cyan-neon focus:outline-none"
+                  className="resize-none rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-200 placeholder:text-neutral-500 focus:border-cyan-neon focus:outline-none"
                 />
                 {errors.message ? <p className="text-xs text-magenta-neon">{errors.message}</p> : null}
               </div>

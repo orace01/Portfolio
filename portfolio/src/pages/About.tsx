@@ -98,8 +98,8 @@ function FactChip({ fact }: { fact: Fact }) {
     >
       <span className={TONE_TEXT[fact.tone]}>{fact.icon}</span>
       <div>
-        <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500">{fact.label}</p>
-        <p className="text-sm font-semibold text-slate-200 sm:text-base">{fact.value}</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-neutral-500">{fact.label}</p>
+        <p className="text-sm font-semibold text-neutral-200 sm:text-base">{fact.value}</p>
       </div>
     </GlowCard>
   )
@@ -116,7 +116,7 @@ function ValueItem({ value, index }: { value: Value; index: number }) {
       {...handlers}
     >
       <span className="mt-0.5 font-mono text-xs text-neon-purple">{String(index + 1).padStart(2, '0')}</span>
-      <span className="text-sm text-slate-300 sm:text-base">{value.text}</span>
+      <span className="text-sm text-neutral-300 sm:text-base">{value.text}</span>
     </li>
   )
 }
@@ -129,14 +129,14 @@ export default function About() {
       <div className="mx-auto flex max-w-3xl flex-col gap-8">
         <GlowCard tone="cyan">
           <h2 className="neon-text-cyan text-xs font-bold uppercase tracking-[0.25em]">Who's Behind The Jaw</h2>
-          <p className="mt-4 text-base leading-relaxed text-slate-300 sm:text-lg">
-            I'm <span className="font-semibold text-slate-100">Honfin Orace</span>, a full-stack developer and
+          <p className="mt-4 text-base leading-relaxed text-neutral-300 sm:text-lg">
+            I'm <span className="font-semibold text-neutral-100">Honfin Orace</span>, a full-stack developer and
             creative technologist currently training as an IT Expert at{' '}
             <span className="font-semibold text-magenta-neon">Epitech</span>, based in Cotonou, Benin. I live at the
             intersection of systems-level engineering — Rust, C++, the layers underneath the abstractions — and
             distributed machine learning, with a steady detour into expressive front-end and creative-coding work.
           </p>
-          <p className="mt-3 text-base leading-relaxed text-slate-300 sm:text-lg">
+          <p className="mt-3 text-base leading-relaxed text-neutral-300 sm:text-lg">
             That mix is exactly why this portfolio is a{' '}
             <span tabIndex={0} className="neon-text-magenta cursor-help font-semibold" {...circusReaction}>
               Digital Circus
@@ -165,7 +165,7 @@ export default function About() {
           <p className="neon-text-magenta text-lg font-semibold sm:text-xl">
             "He builds the circus. I just sell the tickets."
           </p>
-          <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-slate-500">
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.2em] text-neutral-500">
             — Caine, Ringmaster of the Digital Circus
           </p>
         </GlowCard>
