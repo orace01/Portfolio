@@ -20,6 +20,8 @@ const HOME_MIN_SIZE = 200
 const HOME_MAX_SIZE = 550
 /** Vertical offset of Caine's top edge as a fraction of the anchor height, keeping him past the column's midline. */
 const HOME_TOP_OFFSET_RATIO = 0.06
+/** Scrolling this far down the home page sends Caine to dock in the corner, same as on every other page. */
+const DOCK_SCROLL_THRESHOLD = 48
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -44,23 +46,22 @@ function getViewport() {
   return { w: window.innerWidth, h: window.innerHeight }
 }
 
-/** Bounding rect of the hero's right-column placeholder, in document coordinates. */
+/** Bounding rect of the hero's right-column placeholder, in viewport coordinates (Caine is always position:fixed). */
 function getAnchorRect(anchorEl: HTMLDivElement | null): AnchorRect | null {
   if (!anchorEl) return null
   const rect = anchorEl.getBoundingClientRect()
   if (rect.width === 0 || rect.height === 0) return null
-  return {
-    left: rect.left + window.scrollX,
-    top: rect.top + window.scrollY,
-    width: rect.width,
-    height: rect.height,
-  }
+  return { left: rect.left, top: rect.top, width: rect.width, height: rect.height }
 }
 
-function computeMascotTarget(isHome: boolean, anchor: AnchorRect | null) {
+function isPastDockThreshold() {
+  return window.scrollY > DOCK_SCROLL_THRESHOLD
+}
+
+function computeMascotTarget(docked: boolean, anchor: AnchorRect | null) {
   const { w, h } = getViewport()
   const isMobile = w < 640
-  if (isHome) {
+  if (!docked) {
     const size = getHomeMascotSize(anchor, isMobile)
     const scale = size / BASE_SIZE
     if (anchor) {
@@ -80,9 +81,19 @@ function getDockBubbleWidth() {
   return window.innerWidth < 640 ? DOCK_BUBBLE_WIDTH_MOBILE : DOCK_BUBBLE_WIDTH_DESKTOP
 }
 
-function computeBubbleTarget(isHome: boolean, bubbleWidth: number, anchor: AnchorRect | null) {
+function getHomeBubbleWidth() {
+  const w = window.innerWidth
+  const desired = w < 640 ? 270 : 420
+  return Math.min(desired, w - 48)
+}
+
+function getBubbleWidth(docked: boolean) {
+  return docked ? getDockBubbleWidth() : getHomeBubbleWidth()
+}
+
+function computeBubbleTarget(docked: boolean, bubbleWidth: number, anchor: AnchorRect | null) {
   const { w, h } = getViewport()
-  if (isHome) {
+  if (!docked) {
     const isMobile = w < 640
     const size = getHomeMascotSize(anchor, isMobile)
     if (anchor) {
@@ -95,46 +106,43 @@ function computeBubbleTarget(isHome: boolean, bubbleWidth: number, anchor: Ancho
   return { x: w - bubbleWidth - DOCK_MARGIN_X - 8, y: h - DOCK_MARGIN_Y - 22 }
 }
 
-function getHomeBubbleWidth() {
-  const w = window.innerWidth
-  const desired = w < 640 ? 270 : 420
-  return Math.min(desired, w - 48)
-}
-
-function getBubbleWidth(isHome: boolean) {
-  return isHome ? getHomeBubbleWidth() : getDockBubbleWidth()
-}
-
 export default function Caine() {
   const { pathname } = useLocation()
   const { message, excited, bump, heroAnchorRef } = useCaine()
   const isHome = pathname === '/'
   const mascotRef = useRef<HTMLDivElement>(null)
   const bubbleRef = useRef<HTMLDivElement>(null)
-  const [bubbleWidth, setBubbleWidth] = useState(() => getBubbleWidth(isHome))
+  const [docked, setDocked] = useState(() => !isHome || isPastDockThreshold())
+  const [bubbleWidth, setBubbleWidth] = useState(() => getBubbleWidth(docked))
 
   useLayoutEffect(() => {
+    const nowDocked = !isHome || isPastDockThreshold()
     const anchor = getAnchorRect(heroAnchorRef.current)
-    const initial = computeMascotTarget(isHome, anchor)
+    const width = getBubbleWidth(nowDocked)
+    setDocked(nowDocked)
+    setBubbleWidth(width)
     if (mascotRef.current) {
-      gsap.set(mascotRef.current, { transformOrigin: '0 0', ...initial })
+      gsap.set(mascotRef.current, { transformOrigin: '0 0', ...computeMascotTarget(nowDocked, anchor) })
     }
     if (bubbleRef.current) {
-      gsap.set(bubbleRef.current, computeBubbleTarget(isHome, bubbleWidth, anchor))
+      gsap.set(bubbleRef.current, computeBubbleTarget(nowDocked, width, anchor))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Animated transition whenever the route's home/away status changes.
   useEffect(() => {
-    const width = getBubbleWidth(isHome)
-    setBubbleWidth(width)
+    const nowDocked = !isHome || isPastDockThreshold()
     const anchor = getAnchorRect(heroAnchorRef.current)
+    const width = getBubbleWidth(nowDocked)
+    setDocked(nowDocked)
+    setBubbleWidth(width)
     if (mascotRef.current) {
-      gsap.to(mascotRef.current, { ...computeMascotTarget(isHome, anchor), duration: 1.15, ease: 'power3.inOut' })
+      gsap.to(mascotRef.current, { ...computeMascotTarget(nowDocked, anchor), duration: 1.15, ease: 'power3.inOut' })
     }
     if (bubbleRef.current) {
       gsap.to(bubbleRef.current, {
-        ...computeBubbleTarget(isHome, width, anchor),
+        ...computeBubbleTarget(nowDocked, width, anchor),
         duration: 1.15,
         ease: 'power3.inOut',
       })
@@ -142,13 +150,60 @@ export default function Caine() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHome])
 
+  // On the home hero, track the anchor as the page scrolls and dock into the corner past the threshold,
+  // the same way Caine already docks on every other page — so he's free to comment via hover reactions.
+  useEffect(() => {
+    if (!isHome) return
+
+    let wasDocked = isPastDockThreshold()
+    let ticking = false
+
+    const apply = (nowDocked: boolean, animate: boolean) => {
+      const anchor = getAnchorRect(heroAnchorRef.current)
+      const width = getBubbleWidth(nowDocked)
+      setDocked(nowDocked)
+      setBubbleWidth(width)
+      const mascotTarget = computeMascotTarget(nowDocked, anchor)
+      const bubbleTarget = computeBubbleTarget(nowDocked, width, anchor)
+      if (mascotRef.current) {
+        if (animate) gsap.to(mascotRef.current, { ...mascotTarget, duration: 0.9, ease: 'power3.inOut' })
+        else gsap.set(mascotRef.current, mascotTarget)
+      }
+      if (bubbleRef.current) {
+        if (animate) gsap.to(bubbleRef.current, { ...bubbleTarget, duration: 0.9, ease: 'power3.inOut' })
+        else gsap.set(bubbleRef.current, bubbleTarget)
+      }
+    }
+
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        const nowDocked = isPastDockThreshold()
+        if (nowDocked !== wasDocked) {
+          wasDocked = nowDocked
+          apply(nowDocked, true)
+        } else if (!nowDocked) {
+          apply(false, false)
+        }
+      })
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isHome])
+
   useEffect(() => {
     const onResize = () => {
-      const width = getBubbleWidth(isHome)
+      const nowDocked = !isHome || isPastDockThreshold()
+      const width = getBubbleWidth(nowDocked)
+      setDocked(nowDocked)
       setBubbleWidth(width)
       const anchor = getAnchorRect(heroAnchorRef.current)
-      if (mascotRef.current) gsap.set(mascotRef.current, computeMascotTarget(isHome, anchor))
-      if (bubbleRef.current) gsap.set(bubbleRef.current, computeBubbleTarget(isHome, width, anchor))
+      if (mascotRef.current) gsap.set(mascotRef.current, computeMascotTarget(nowDocked, anchor))
+      if (bubbleRef.current) gsap.set(bubbleRef.current, computeBubbleTarget(nowDocked, width, anchor))
     }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
@@ -157,13 +212,9 @@ export default function Caine() {
 
   return (
     <>
-      <div
-        ref={mascotRef}
-        className={`pointer-events-none left-0 top-0 z-40 ${isHome ? 'absolute' : 'fixed'}`}
-        style={{ width: BASE_SIZE, height: BASE_SIZE }}
-      >
+      <div ref={mascotRef} className="pointer-events-none fixed left-0 top-0 z-40" style={{ width: BASE_SIZE, height: BASE_SIZE }}>
         <div className="relative h-full w-full animate-float">
-          {isHome && (
+          {!docked && (
             <div
               aria-hidden="true"
               className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-3xl"
@@ -176,7 +227,7 @@ export default function Caine() {
           <div
             className="h-full w-full"
             style={
-              isHome
+              !docked
                 ? { filter: 'drop-shadow(0 0 18px rgba(168,85,247,0.35)) drop-shadow(0 0 10px rgba(0,240,255,0.3))' }
                 : undefined
             }
@@ -187,12 +238,10 @@ export default function Caine() {
       </div>
       <div
         ref={bubbleRef}
-        className={`pointer-events-none left-0 top-0 z-40 transition-[width] duration-300 ${
-          isHome ? 'absolute' : 'fixed'
-        }`}
+        className="pointer-events-none fixed left-0 top-0 z-40 transition-[width] duration-300"
         style={{ width: bubbleWidth }}
       >
-        <SpeechBubble message={message} compact={!isHome} />
+        <SpeechBubble message={message} compact={docked} />
       </div>
     </>
   )
