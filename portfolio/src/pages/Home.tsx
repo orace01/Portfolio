@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import IntroSequence from '@/components/intro/IntroSequence'
-import OutroSequence from '@/components/outro/OutroSequence'
 import CardSwap, { Card } from '@/components/ui/CardSwap'
 import CircularTechZoom, { type TechCardData } from '@/components/ui/CircularTechZoom'
 import Particles from '@/components/ui/Particles'
 import StatusBadge from '@/components/ui/StatusBadge'
+import TerminalContactForm from '@/components/ui/TerminalContactForm'
 import { useCaine } from '@/context/CaineContext'
 import { useCaineReaction } from '@/hooks/useCaineReaction'
 import { HOVER_LINES } from '@/lib/caine-lines'
@@ -251,7 +251,21 @@ export default function Home() {
 
       <CircularTechZoom items={TECH_ZOOM_ITEMS} />
 
-      <OutroSequence />
+      <section className="mx-auto flex w-full max-w-[1900px] flex-col items-center px-4 py-16 text-center">
+        <div className="mb-12 flex flex-col items-center gap-2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-cyan-400">
+            [ TRANSMISSION // UPLINK ]
+          </span>
+          <h2 className="text-5xl font-extrabold leading-none tracking-tight text-white md:text-[6.75rem]">
+            Get In Touch
+          </h2>
+          <p className="mt-1 max-w-lg text-sm font-light text-gray-400">
+            Open a direct line to the ringmaster. No hold music.
+          </p>
+        </div>
+
+        <TerminalContactForm />
+      </section>
     </div>
   )
 }

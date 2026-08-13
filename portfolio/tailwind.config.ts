@@ -30,6 +30,9 @@ export default {
         flicker: 'flicker 3.5s infinite',
         float: 'float 6s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2.4s ease-in-out infinite',
+        blink: 'blink 1s steps(1) infinite',
+        'scan-sweep': 'scan-sweep 0.6s ease-out forwards',
+        'flash-pulse': 'flash-pulse 0.5s ease-out forwards',
       },
       keyframes: {
         flicker: {
@@ -47,6 +50,18 @@ export default {
         'pulse-glow': {
           '0%, 100%': { opacity: '0.7' },
           '50%': { opacity: '1' },
+        },
+        blink: {
+          '0%, 49%': { opacity: '1' },
+          '50%, 100%': { opacity: '0' },
+        },
+        'scan-sweep': {
+          '0%': { transform: 'translateY(-100%)', opacity: '0.9' },
+          '100%': { transform: 'translateY(500%)', opacity: '0' },
+        },
+        'flash-pulse': {
+          '0%': { opacity: '0.55' },
+          '100%': { opacity: '0' },
         },
       },
     },
