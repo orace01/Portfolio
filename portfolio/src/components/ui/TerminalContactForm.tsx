@@ -246,7 +246,7 @@ export default function TerminalContactForm() {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#00F0FF]/40 bg-[#05070E]/90 shadow-[0_0_25px_rgba(0,240,255,0.15)] backdrop-blur-md"
+      className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-[#00F0FF]/40 bg-[#05070E]/90 text-left shadow-[0_0_25px_rgba(0,240,255,0.15)] backdrop-blur-md"
       {...formReaction}
     >
       <div className="flex items-center justify-between border-b border-white/10 bg-black/50 px-4 py-2.5">
