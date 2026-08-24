@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import CircuitBackground from '@/components/layout/CircuitBackground'
-import GlobalSpotlight from '@/components/layout/GlobalSpotlight'
 import Caine from '@/components/caine/Caine'
 import CurtainTransition from '@/components/transitions/CurtainTransition'
 import { CaineProvider } from '@/context/CaineContext'
@@ -15,7 +14,6 @@ import Contact from '@/pages/Contact'
 export default function App() {
   return (
     <CaineProvider>
-      <GlobalSpotlight />
       <CircuitBackground />
       <div className="relative flex min-h-screen flex-col">
         <Header />

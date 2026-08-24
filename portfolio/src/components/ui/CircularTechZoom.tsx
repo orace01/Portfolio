@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import SpotlightOverlay from './SpotlightOverlay'
-import { handleSpotlightMove } from '@/lib/spotlight'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -37,10 +35,8 @@ const ROTATION_RANGE = 15
 function TechCardNode({ tag, title, subtitle, description, badge }: TechCardData) {
   return (
     <div
-      onMouseMove={handleSpotlightMove}
       className="glass-panel group relative flex h-[600px] w-[640px] flex-col gap-4 overflow-hidden border-t-2 border-t-white/30 border-blue-800 p-7 shadow-[0_0_25px_rgba(0,240,255,0.15)] transition-colors duration-300 sm:w-[720px]"
     >
-      <SpotlightOverlay />
       <span className="relative bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text font-mono text-[10px] uppercase tracking-[0.3em] text-transparent">
         {tag}
       </span>
@@ -131,7 +127,15 @@ export default function CircularTechZoom({ items }: CircularTechZoomProps) {
     // React 18 StrictMode double-invokes this effect in dev, which can leave GSAP's
     // pin-spacer sized from a stale measurement taken mid create/revert/create cycle.
     // A refresh once the DOM has settled forces ScrollTrigger to re-measure and fixes it.
-    const raf = requestAnimationFrame(() => ScrollTrigger.refresh())
+    // We save the scroll position before and restore it if we were near the top, so the
+    // refresh doesn't scroll the page to the pin-spacer position on navigation.
+    const raf = requestAnimationFrame(() => {
+      const savedScroll = window.scrollY
+      ScrollTrigger.refresh()
+      if (savedScroll < 50) {
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      }
+    })
 
     return () => {
       cancelAnimationFrame(raf)

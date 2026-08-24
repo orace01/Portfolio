@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 export default function CurtainTransition({ children }: { children: ReactNode }) {
   const leftRef = useRef<HTMLDivElement>(null)
@@ -12,9 +13,26 @@ export default function CurtainTransition({ children }: { children: ReactNode })
     if (!leftRef.current || !rightRef.current) return
     const delay = isFirstRender.current ? 0.2 : 0.06
 
+    // Vider la mémoire scroll de GSAP/ScrollTrigger pour que le pin-spacer
+    // de CircularTechZoom ne force pas le scroll vers le bas après refresh().
+    ScrollTrigger.clearScrollMemory()
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+
     gsap.set([leftRef.current, rightRef.current], { xPercent: 0 })
-    window.scrollTo(0, 0)
-    const tl = gsap.timeline({ defaults: { ease: 'power3.inOut', duration: 0.7 } })
+
+    const forceTop = () => {
+      ScrollTrigger.clearScrollMemory()
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+
+    forceTop()
+    const tl = gsap.timeline({
+      defaults: { ease: 'power3.inOut', duration: 0.7 },
+      onComplete: forceTop,
+    })
     tl.to(leftRef.current, { xPercent: -100, delay }, 0).to(rightRef.current, { xPercent: 100, delay }, 0)
 
     isFirstRender.current = false

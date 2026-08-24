@@ -285,7 +285,6 @@ export default function TerminalContactForm() {
               autoComplete="off"
               autoCorrect="off"
               spellCheck={false}
-              autoFocus
               className="flex-1 min-w-0 bg-transparent font-mono text-sm text-neutral-100 caret-transparent outline-none"
             />
             <span aria-hidden="true" className="h-4 w-2 shrink-0 animate-blink bg-cyan-neon" />

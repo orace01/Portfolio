@@ -176,7 +176,7 @@ export default function IntroSequence() {
       <button
         type="button"
         onClick={handleSkip}
-        className="fixed right-6 top-24 z-[100] rounded-full border border-cyan-neon/60 bg-void/70 px-5 py-2 font-mono text-xs uppercase tracking-[0.25em] text-cyan-neon backdrop-blur-md transition-all hover:scale-105 hover:bg-cyan-neon/10"
+        className="liquid-glass fixed right-6 top-24 z-[100] overflow-hidden rounded-full border border-cyan-neon/60 px-5 py-2 font-mono text-xs uppercase tracking-[0.25em] text-cyan-neon transition-all hover:scale-105"
       >
         Skip
       </button>

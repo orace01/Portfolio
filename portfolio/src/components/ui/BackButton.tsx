@@ -10,7 +10,7 @@ export default function BackButton() {
     <button
       type="button"
       onClick={() => navigate('/')}
-      className="group neon-border-cyan flex items-center gap-3 rounded-full bg-void-panel/60 px-9 py-3.5 font-mono text-base tracking-[0.2em] text-cyan-neon transition-all hover:bg-cyan-neon/10 hover:scale-105"
+      className="group liquid-glass neon-border-cyan flex items-center gap-3 overflow-hidden rounded-full px-9 py-3.5 font-mono text-base tracking-[0.2em] text-cyan-neon transition-all hover:scale-105"
       {...reaction}
     >
       <span aria-hidden="true" className="transition-transform group-hover:-translate-x-1">

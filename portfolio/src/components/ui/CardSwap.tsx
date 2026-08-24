@@ -11,8 +11,6 @@ import React, {
   type RefObject,
 } from 'react'
 import gsap from 'gsap'
-import SpotlightOverlay from './SpotlightOverlay'
-import { handleSpotlightMove } from '@/lib/spotlight'
 import './CardSwap.css'
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,10 +21,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({ customClass, childr
   <div
     ref={ref}
     {...rest}
-    onMouseMove={handleSpotlightMove}
     className={`card group ${customClass ?? ''} ${rest.className ?? ''}`.trim()}
   >
-    <SpotlightOverlay />
     {children}
   </div>
 ))
