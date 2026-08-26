@@ -3,6 +3,16 @@
  * Each Act owns its own frame sequence, scroll-track height, and internal
  * section timing (fractions 0..1 of that Act's own track) — Acts are
  * independent pinned tracks, not slices of one shared timeline.
+ *
+ * `heightVh` is the *scrub distance* for the Act — how much scroll drives
+ * its frame sequence, independent of the 100vh viewport it plays in. All
+ * three Acts share a *single* pinned track (see `CinematicSequence`) rather
+ * than three independent ones: a pinned element always "lands" — settles
+ * back into normal flow, unpinned — for a stretch of scroll equal to its
+ * own height once its pin releases, no matter how the scrub distance is
+ * tuned, so three separate per-Act pins would reproduce a dead ~100vh gap
+ * at every boundary. One shared pin spanning all three Acts has nowhere
+ * for that gap to appear.
  */
 
 export const SITE = {
@@ -52,7 +62,7 @@ export function frameSrc(framePath: string, frameCount: number, index: number): 
 export const ACT1 = {
   framePath: "/frames",
   frameCount: 240,
-  heightVh: 400,
+  heightVh: 300,
   sections: {
     hero: { start: 0, end: 0.15 },
     architecture: { start: 0.15, end: 0.5 },
@@ -155,7 +165,7 @@ export const PROJECTS = [
 export const ACT2 = {
   framePath: "/frames_cube",
   frameCount: 240,
-  heightVh: 350,
+  heightVh: 250,
   sections: {
     assembly: { start: 0, end: 0.3 },
     rays: { start: 0.3, end: 0.7 },
@@ -198,7 +208,7 @@ export const ACT2_CONTENT = {
 export const ACT3 = {
   framePath: "/frames_keyboard",
   frameCount: 240,
-  heightVh: 350,
+  heightVh: 250,
   sections: {
     explosion: { start: 0, end: 0.4 },
     circuit: { start: 0.4, end: 0.8 },
@@ -241,10 +251,16 @@ export const TRANSITIONS = {
 
 /**
  * Acts with an outgoing crossfade (Act I, Act II) reserve this fraction of
- * their own scroll track for dissolving into the next Act's opening frame,
- * so their narrative content is compressed into the remaining [0, 1 - ZONE].
+ * their own scroll track to cross-dissolve into the next Act's canvas, so
+ * their narrative content is compressed into the remaining [0, 1 - ZONE].
+ *
+ * The crossfade is never a frozen hold: the outgoing Act keeps scrubbing its
+ * own final frames right up to its last frame while fading out, and the
+ * incoming Act's canvas — stacked in the same pinned layer, see
+ * CinematicSequence — fades in while scrubbing its own opening frames,
+ * starting this same fraction early so there is no held frame anywhere.
  */
-export const CROSSFADE_ZONE = 0.1;
+export const CROSSFADE_ZONE = 0.05;
 export const CROSSFADE_START = 1 - CROSSFADE_ZONE;
 
 export const FOOTER_CONTENT = {

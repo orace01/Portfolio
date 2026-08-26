@@ -2,12 +2,11 @@
 
 import { useCallback, useRef } from "react";
 import { ScrollNavContext } from "@/context/ScrollNavContext";
-import type { SectionId } from "@/lib/constants";
+import { ACT1, ACT2, ACT3, type SectionId } from "@/lib/constants";
+import { useFrameSequence } from "@/hooks/useFrameSequence";
 
 import Header from "@/components/layout/Header";
-import Act1Chip from "@/components/acts/Act1Chip";
-import Act2Cube from "@/components/acts/Act2Cube";
-import Act3Keyboard from "@/components/acts/Act3Keyboard";
+import CinematicSequence from "@/components/CinematicSequence";
 import ContactFooter from "@/components/ContactFooter";
 
 export default function ScrollExperience() {
@@ -21,13 +20,33 @@ export default function ScrollExperience() {
     registry.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
+  // Frame sequences are loaded once here and shared downward: each Act needs
+  // its own frames to play, plus the *next* Act's frames to paint a live
+  // cross-fade overlay in its own sticky wrapper instead of a frozen hold.
+  // All three load eagerly and concurrently (only Act I's progress blocks
+  // the loading screen) so the crossfade at each boundary never runs ahead
+  // of what's actually downloaded.
+  const act1Frames = useFrameSequence({
+    framePath: ACT1.framePath,
+    frameCount: ACT1.frameCount,
+    enabled: true,
+  });
+  const act2Frames = useFrameSequence({
+    framePath: ACT2.framePath,
+    frameCount: ACT2.frameCount,
+    enabled: true,
+  });
+  const act3Frames = useFrameSequence({
+    framePath: ACT3.framePath,
+    frameCount: ACT3.frameCount,
+    enabled: true,
+  });
+
   return (
     <ScrollNavContext.Provider value={{ registerSection, scrollToSection }}>
       <Header />
 
-      <Act1Chip />
-      <Act2Cube />
-      <Act3Keyboard />
+      <CinematicSequence act1Frames={act1Frames} act2Frames={act2Frames} act3Frames={act3Frames} />
       <ContactFooter />
     </ScrollNavContext.Provider>
   );
