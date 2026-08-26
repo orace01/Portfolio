@@ -22,6 +22,7 @@ const TECH_ZOOM_ITEMS: TechCardData[] = SKILL_CATEGORIES.map((category, index) =
       .map((skill) => skill.name)
       .join(', ')}.`,
     badge: `PROFICIENCY ${topLevel}/5`,
+    bgImage: category.bgImage,
   }
 })
 
@@ -217,7 +218,7 @@ export default function Home() {
                 onClick={() => navigate('/projects')}
                 className="flex cursor-pointer flex-col justify-between p-6"
               >
-                <div>
+                <div className="relative z-10">
                   <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3 font-mono text-[11px] text-gray-400">
                     <span>DOC_ID // {String(index + 1).padStart(2, '0')}</span>
                     <StatusBadge status={project.status} />
@@ -225,16 +226,26 @@ export default function Home() {
                   <h3 className="text-2xl font-bold tracking-wide text-white">{project.name}</h3>
                   <p className="mt-2 text-xs font-light leading-relaxed text-gray-400">{project.summary}</p>
                 </div>
-                <div className="flex items-center justify-between border-t border-white/5 pt-4 font-mono text-[10px]">
-                  <div className="flex gap-2">
+                <div className="flex items-center justify-between border-t border-white/5 pt-4 font-mono text-[10px] relative z-10">
+                  <div className="flex gap-2 relative z-10">
                     {project.tags.slice(0, 2).map((tag) => (
                       <span key={tag} className="rounded border border-white/10 bg-white/5 px-2 py-1 text-cyan-300">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <span className="text-gray-500">v1.{index}.0</span>
+                  <span className="text-gray-500 relative z-10">v1.{index}.0</span>
                 </div>
+                {project.bgImage && (
+                  <>
+                    <img
+                      src={project.bgImage}
+                      alt={project.name}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+                  </>
+                )}
               </Card>
             ))}
           </CardSwap>

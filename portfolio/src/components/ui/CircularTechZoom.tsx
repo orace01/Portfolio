@@ -10,6 +10,7 @@ export interface TechCardData {
   subtitle: string
   description: string
   badge: string
+  bgImage?: string
 }
 
 interface CircularTechZoomProps {
@@ -32,20 +33,28 @@ const SCALE_FAR = 0.05
 const SCALE_NEAR = 1.15
 const ROTATION_RANGE = 15
 
-function TechCardNode({ tag, title, subtitle, description, badge }: TechCardData) {
+function TechCardNode({ tag, title, subtitle, description, badge, bgImage }: TechCardData) {
   return (
-    <div
-      className="glass-panel group relative flex h-[600px] w-[640px] flex-col gap-4 overflow-hidden border-t-2 border-t-white/30 border-blue-800 p-7 shadow-[0_0_25px_rgba(0,240,255,0.15)] transition-colors duration-300 sm:w-[720px]"
-    >
-      <span className="relative bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text font-mono text-[10px] uppercase tracking-[0.3em] text-transparent">
+    <div className="glass-panel group relative flex h-[600px] w-[640px] flex-col gap-4 overflow-hidden border-t-2 border-t-white/30 border-blue-800 p-7 shadow-[0_0_25px_rgba(0,240,255,0.15)] transition-colors duration-300 sm:w-[720px]">
+      {bgImage && (
+        <>
+          <img
+            src={bgImage}
+            alt={title}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
+        </>
+      )}
+      <span className="relative z-10 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text font-mono text-[10px] uppercase tracking-[0.3em] text-transparent">
         {tag}
       </span>
-      <div className="relative">
+      <div className="relative z-10">
         <h3 className="text-2xl font-bold text-white">{title}</h3>
         <p className="mt-1 text-sm text-gray-400">{subtitle}</p>
       </div>
-      <p className="relative flex-1 text-sm leading-relaxed text-gray-400">{description}</p>
-      <span className="relative inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-cyan-neon">
+      <p className="relative z-10 flex-1 text-sm leading-relaxed text-gray-400">{description}</p>
+      <span className="relative z-10 inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-cyan-neon">
         {badge}
       </span>
     </div>

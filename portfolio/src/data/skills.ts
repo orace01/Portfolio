@@ -10,6 +10,7 @@ export interface SkillCategory {
   title: string
   tone: SkillTone
   skills: SkillItem[]
+  bgImage?: string
 }
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
@@ -17,6 +18,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     hoverKey: 'skill-languages',
     title: 'Languages',
     tone: 'cyan',
+    bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop', // Code / Hacker
     skills: [
       { name: 'C', level: 5 },
       { name: 'C++', level: 5 },

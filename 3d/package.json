@@ -1,0 +1,28 @@
+{
+  "name": "orace-honfin-ai-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ultra-premium single-page AI Engineer portfolio for Orace Honfin — scroll-driven canvas frame sequence built with Next.js, TypeScript, Tailwind CSS and GSAP ScrollTrigger.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "next": "^16.3.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.3.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  }
+}

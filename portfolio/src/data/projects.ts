@@ -10,6 +10,7 @@ export interface Project {
   summary: string
   detail: string
   reactionKey: string
+  bgImage?: string
 }
 
 export const PROJECTS: Project[] = [
@@ -23,6 +24,7 @@ export const PROJECTS: Project[] = [
     detail:
       'A planner agent decomposes goals into subtasks and hands them to specialized tool-calling agents over a shared blackboard. State handoff between agents is checkpointed so a failed step can retry or reroute without replaying the whole pipeline.',
     reactionKey: 'project-agent-ops',
+    bgImage: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop', // AI Core / Nodes
   },
   {
     slug: 'rust-engine',
