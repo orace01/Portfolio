@@ -5,7 +5,7 @@ import { gsap, ensureGsapRegistered } from "@/lib/gsap";
 import { useFrameSequence } from "@/hooks/useFrameSequence";
 import { useInView } from "@/hooks/useInView";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
-import { ACT1 } from "@/lib/constants";
+import { ACT1, ACT2, TRANSITIONS, CROSSFADE_START, CROSSFADE_ZONE, frameSrc } from "@/lib/constants";
 import { useScrollNav } from "@/context/ScrollNavContext";
 
 import FrameCanvas, { type FrameCanvasHandle } from "@/components/canvas/FrameCanvas";
@@ -14,6 +14,10 @@ import HeroOverlay from "@/components/sections/HeroOverlay";
 import ArchitectureOverlay from "@/components/sections/ArchitectureOverlay";
 import DataSignalOverlay from "@/components/sections/DataSignalOverlay";
 import ProjectNetworkOverlay from "@/components/sections/ProjectNetworkOverlay";
+
+// Act I's own narrative content is compressed into [0, CROSSFADE_START] so
+// the last 10% of its track is free for the crossfade into Act II.
+const scale = (fraction: number) => fraction * CROSSFADE_START;
 
 export default function Act1Chip() {
   const { images, loadedCount, total, ready, allMissing } = useFrameSequence({
@@ -27,7 +31,10 @@ export default function Act1Chip() {
   const [loaderExited, setLoaderExited] = useState(false);
 
   const rootRef = useRef<HTMLElement>(null);
+  const canvasWrapRef = useRef<HTMLDivElement>(null);
   const canvasHandleRef = useRef<FrameCanvasHandle>(null);
+  const nextPreviewRef = useRef<HTMLImageElement>(null);
+  const transitionBadgeRef = useRef<HTMLDivElement>(null);
 
   const isVisible = useInView(rootRef, "0px");
   const isVisibleRef = useRef(isVisible);
@@ -76,17 +83,22 @@ export default function Act1Chip() {
         },
       });
 
-      // --- Continuous frame scrub across the whole track --------------------
-      tl.to(frameState, { frame: ACT1.frameCount - 1, duration: 1, onUpdate: renderFrame }, 0);
+      // --- Continuous frame scrub, reaching the last frame exactly where --
+      // --- the crossfade begins, then holding on it while opacity fades --
+      tl.to(
+        frameState,
+        { frame: ACT1.frameCount - 1, duration: CROSSFADE_START, onUpdate: renderFrame },
+        0
+      );
 
       // --- Hero: visible at rest, fades out approaching Architecture --------
       tl.set(hero, { pointerEvents: "auto" }, 0);
       tl.to(
         hero,
         { autoAlpha: 0, y: -dist * 2, duration: 0.05 },
-        ACT1.sections.hero.end - 0.05
+        scale(ACT1.sections.hero.end) - 0.05
       );
-      tl.set(hero, { pointerEvents: "none" }, ACT1.sections.hero.end);
+      tl.set(hero, { pointerEvents: "none" }, scale(ACT1.sections.hero.end));
 
       // --- Architecture: staggered badges + circuit-trace connectors --------
       const badges = arch.querySelectorAll<HTMLElement>('[data-anim="badge"]');
@@ -99,7 +111,7 @@ export default function Act1Chip() {
       });
       gsap.set(dots, { transformOrigin: "50% 50%", scale: 0 });
 
-      const A = ACT1.sections.architecture;
+      const A = { start: scale(ACT1.sections.architecture.start), end: scale(ACT1.sections.architecture.end) };
       tl.set(arch, { pointerEvents: "auto" }, A.start);
       tl.fromTo(
         badges,
@@ -117,7 +129,7 @@ export default function Act1Chip() {
       const panel = signal.querySelector<HTMLElement>('[data-anim="signal-panel"]');
       const features = signal.querySelectorAll<HTMLElement>('[data-anim="feature"]');
 
-      const S = ACT1.sections.signal;
+      const S = { start: scale(ACT1.sections.signal.start), end: scale(ACT1.sections.signal.end) };
       tl.set(signal, { pointerEvents: "auto" }, S.start);
       tl.fromTo(
         panel,
@@ -136,7 +148,7 @@ export default function Act1Chip() {
 
       // --- Project Network: cards fade/scale over the plexus ----------------
       const cards = network.querySelectorAll<HTMLElement>('[data-anim="card"]');
-      const N = ACT1.sections.network;
+      const N = { start: scale(ACT1.sections.network.start), end: scale(ACT1.sections.network.end) };
       tl.set(network, { pointerEvents: "auto" }, N.start);
       tl.fromTo(
         cards,
@@ -144,6 +156,19 @@ export default function Act1Chip() {
         { autoAlpha: 1, y: 0, scale: 1, duration: 0.05, stagger: 0.03 },
         N.start + 0.005
       );
+      tl.to(cards, { autoAlpha: 0, duration: 0.04 }, N.end - 0.04);
+      tl.set(network, { pointerEvents: "none" }, N.end);
+
+      // --- Crossfade into Act II: dissolve the canvas, hold the badge -------
+      tl.to(canvasWrapRef.current, { opacity: 0, duration: CROSSFADE_ZONE }, CROSSFADE_START);
+      tl.to(nextPreviewRef.current, { opacity: 1, duration: CROSSFADE_ZONE }, CROSSFADE_START);
+      tl.fromTo(
+        transitionBadgeRef.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.03 },
+        CROSSFADE_START + 0.01
+      );
+      tl.to(transitionBadgeRef.current, { autoAlpha: 0, duration: 0.03 }, 1 - 0.03);
     }, root);
 
     return () => ctx.revert();
@@ -186,16 +211,40 @@ export default function Act1Chip() {
 
       <section ref={rootRef} className="relative" style={{ height: `${ACT1.heightVh}vh` }}>
         <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#050505]">
-          <FrameCanvas
-            ref={canvasHandleRef}
-            images={images}
-            className="absolute inset-0 h-full w-full"
-          />
+          <div ref={canvasWrapRef} className="absolute inset-0">
+            <FrameCanvas
+              ref={canvasHandleRef}
+              images={images}
+              className="absolute inset-0 h-full w-full"
+            />
+          </div>
 
           <HeroOverlay ref={heroRef} />
           <ArchitectureOverlay ref={archRef} />
           <DataSignalOverlay ref={signalRef} />
           <ProjectNetworkOverlay ref={networkRef} />
+
+          {/* Crossfade target: Act II's opening frame, dissolved in over Act I's last frame */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- loading is hand-managed alongside the frame sequences, not next/image */}
+          <img
+            ref={nextPreviewRef}
+            src={frameSrc(ACT2.framePath, ACT2.frameCount, 1)}
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0"
+          />
+
+          {/* Floating transition badge — no dedicated section, just a glass pill over the crossfade */}
+          <div
+            ref={transitionBadgeRef}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 opacity-0"
+          >
+            <div className="rounded-full border border-white/10 bg-black/30 px-6 py-3 backdrop-blur-md">
+              <p className="text-center font-mono text-xs tracking-[0.25em] text-[#00E5FF] sm:text-sm">
+                {TRANSITIONS.toAct2}
+              </p>
+            </div>
+          </div>
 
           {allMissing && (
             <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 font-mono text-[11px] text-red-300">

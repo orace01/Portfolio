@@ -239,6 +239,14 @@ export const TRANSITIONS = {
   toAct3: "// PROCESSING LAYER 03: HUMAN-MACHINE INTERACTION & EDGE EXECUTION",
 };
 
+/**
+ * Acts with an outgoing crossfade (Act I, Act II) reserve this fraction of
+ * their own scroll track for dissolving into the next Act's opening frame,
+ * so their narrative content is compressed into the remaining [0, 1 - ZONE].
+ */
+export const CROSSFADE_ZONE = 0.1;
+export const CROSSFADE_START = 1 - CROSSFADE_ZONE;
+
 export const FOOTER_CONTENT = {
   heading: "READY TO SCALE YOUR AI INFRASTRUCTURE?",
   subtext:

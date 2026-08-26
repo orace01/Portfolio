@@ -5,14 +5,29 @@ import { gsap, ensureGsapRegistered } from "@/lib/gsap";
 import { useFrameSequence } from "@/hooks/useFrameSequence";
 import { useInView } from "@/hooks/useInView";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
-import { ACT2, ACT2_CONTENT } from "@/lib/constants";
+import {
+  ACT2,
+  ACT2_CONTENT,
+  ACT3,
+  TRANSITIONS,
+  CROSSFADE_START,
+  CROSSFADE_ZONE,
+  frameSrc,
+} from "@/lib/constants";
 import { useScrollNav } from "@/context/ScrollNavContext";
 import FrameCanvas, { type FrameCanvasHandle } from "@/components/canvas/FrameCanvas";
 import { GlassPanel, TagPill, Eyebrow } from "@/components/ui/Glass";
 
+// Act II's own narrative content is compressed into [0, CROSSFADE_START] so
+// the last 10% of its track is free for the crossfade into Act III.
+const scale = (fraction: number) => fraction * CROSSFADE_START;
+
 export default function Act2Cube() {
   const rootRef = useRef<HTMLElement>(null);
+  const canvasWrapRef = useRef<HTMLDivElement>(null);
   const canvasHandleRef = useRef<FrameCanvasHandle>(null);
+  const nextPreviewRef = useRef<HTMLImageElement>(null);
+  const transitionBadgeRef = useRef<HTMLDivElement>(null);
   const assemblyRef = useRef<HTMLDivElement>(null);
   const raysRef = useRef<HTMLDivElement>(null);
   const expansionRef = useRef<HTMLDivElement>(null);
@@ -69,10 +84,14 @@ export default function Act2Cube() {
         },
       });
 
-      tl.to(frameState, { frame: ACT2.frameCount - 1, duration: 1, onUpdate: renderFrame }, 0);
+      tl.to(
+        frameState,
+        { frame: ACT2.frameCount - 1, duration: CROSSFADE_START, onUpdate: renderFrame },
+        0
+      );
 
       // --- Assembly: title + description -------------------------------
-      const A = ACT2.sections.assembly;
+      const A = { start: scale(ACT2.sections.assembly.start), end: scale(ACT2.sections.assembly.end) };
       const assemblyItems = assembly.querySelectorAll<HTMLElement>('[data-anim="item"]');
       tl.set(assembly, { pointerEvents: "auto" }, A.start);
       tl.fromTo(
@@ -85,7 +104,7 @@ export default function Act2Cube() {
       tl.set(assembly, { pointerEvents: "none" }, A.end);
 
       // --- Rays: two feature cards --------------------------------------
-      const R = ACT2.sections.rays;
+      const R = { start: scale(ACT2.sections.rays.start), end: scale(ACT2.sections.rays.end) };
       const rayItems = rays.querySelectorAll<HTMLElement>('[data-anim="item"]');
       tl.set(rays, { pointerEvents: "auto" }, R.start);
       tl.fromTo(
@@ -98,7 +117,7 @@ export default function Act2Cube() {
       tl.set(rays, { pointerEvents: "none" }, R.end);
 
       // --- Expansion: tech stack tags -----------------------------------
-      const E = ACT2.sections.expansion;
+      const E = { start: scale(ACT2.sections.expansion.start), end: scale(ACT2.sections.expansion.end) };
       const expansionItems = expansion.querySelectorAll<HTMLElement>('[data-anim="item"]');
       tl.set(expansion, { pointerEvents: "auto" }, E.start);
       tl.fromTo(
@@ -107,6 +126,19 @@ export default function Act2Cube() {
         { autoAlpha: 1, y: 0, duration: 0.05, stagger: 0.02 },
         E.start + 0.01
       );
+      tl.to(expansionItems, { autoAlpha: 0, duration: 0.04 }, E.end - 0.04);
+      tl.set(expansion, { pointerEvents: "none" }, E.end);
+
+      // --- Crossfade into Act III: dissolve the canvas, hold the badge ------
+      tl.to(canvasWrapRef.current, { opacity: 0, duration: CROSSFADE_ZONE }, CROSSFADE_START);
+      tl.to(nextPreviewRef.current, { opacity: 1, duration: CROSSFADE_ZONE }, CROSSFADE_START);
+      tl.fromTo(
+        transitionBadgeRef.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.03 },
+        CROSSFADE_START + 0.01
+      );
+      tl.to(transitionBadgeRef.current, { autoAlpha: 0, duration: 0.03 }, 1 - 0.03);
     }, root);
 
     return () => ctx.revert();
@@ -115,11 +147,13 @@ export default function Act2Cube() {
   return (
     <section ref={rootRef} className="relative" style={{ height: `${ACT2.heightVh}vh` }}>
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#050505]">
-        <FrameCanvas
-          ref={canvasHandleRef}
-          images={images}
-          className="absolute inset-0 h-full w-full"
-        />
+        <div ref={canvasWrapRef} className="absolute inset-0">
+          <FrameCanvas
+            ref={canvasHandleRef}
+            images={images}
+            className="absolute inset-0 h-full w-full"
+          />
+        </div>
 
         {/* Assembly phase */}
         <div
@@ -182,6 +216,28 @@ export default function Act2Cube() {
                 {item}
               </span>
             ))}
+          </div>
+        </div>
+
+        {/* Crossfade target: Act III's opening frame, dissolved in over Act II's last frame */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- loading is hand-managed alongside the frame sequences, not next/image */}
+        <img
+          ref={nextPreviewRef}
+          src={frameSrc(ACT3.framePath, ACT3.frameCount, 1)}
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0"
+        />
+
+        {/* Floating transition badge — no dedicated section, just a glass pill over the crossfade */}
+        <div
+          ref={transitionBadgeRef}
+          className="pointer-events-none absolute inset-0 flex items-center justify-center px-6 opacity-0"
+        >
+          <div className="rounded-full border border-white/10 bg-black/30 px-6 py-3 backdrop-blur-md">
+            <p className="text-center font-mono text-xs tracking-[0.25em] text-[#00E5FF] sm:text-sm">
+              {TRANSITIONS.toAct3}
+            </p>
           </div>
         </div>
       </div>
