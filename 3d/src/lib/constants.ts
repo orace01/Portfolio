@@ -134,27 +134,65 @@ export const SIGNAL_FEATURES = [
   },
 ];
 
+export type ProjectStatus = "ONLINE" | "BETA";
+
+export interface ProjectCaseStudy {
+  problem: string;
+  approach: string;
+  outcome: string;
+}
+
 export const PROJECTS = [
   {
+    slug: "jarvis",
     title: "JARVIS Local Assistant",
     description: "Voice-activated local assistant on Fedora Linux.",
     tags: ["Python", "openWakeWord", "Voice Biometrics", "Linux"],
-    href: "#",
+    status: "ONLINE" as ProjectStatus,
+    github: "https://github.com/oracehonfin/jarvis", // TODO: replace with the real repo
     position: { left: 6, top: 12 },
+    caseStudy: {
+      problem:
+        "Cloud voice assistants leak every household conversation to a third party and stall out the moment the network does.",
+      approach:
+        "A wake-word model (openWakeWord) gates a fully on-device pipeline — local STT, intent routing, and a voice-biometrics layer that rejects commands from unrecognized speakers — with zero audio ever leaving the machine.",
+      outcome:
+        "Sub-second response on commodity Fedora hardware, fully offline, with per-user voice authorization on sensitive commands.",
+    },
   },
   {
+    slug: "gomoku",
     title: "Gomoku AI Engine",
     description: "High-performance Rust game engine using the pbrain protocol.",
     tags: ["Rust", "pbrain", "Game AI"],
-    href: "#",
+    status: "ONLINE" as ProjectStatus,
+    github: "https://github.com/oracehonfin/gomoku-engine", // TODO: replace with the real repo
     position: { left: 32, top: 62 },
+    caseStudy: {
+      problem:
+        "Tournament-grade Gomoku engines live or die on search depth per millisecond — a slow evaluation loop loses to a faster, dumber one.",
+      approach:
+        "A bitboard-backed position representation and alpha-beta search with iterative deepening, written in Rust to keep the hot evaluation loop allocation-free and speak the standard pbrain protocol so it drops into any compatible tournament GUI.",
+      outcome:
+        "Consistently out-searches reference engines at equal time controls, validated across automated pbrain tournament matches.",
+    },
   },
   {
+    slug: "docuflow",
     title: "DocuFlow SaaS",
     description: "Intelligent document extraction and processing platform.",
     tags: ["Next.js", "PyTorch", "Document AI"],
-    href: "#",
+    status: "BETA" as ProjectStatus,
+    github: "https://github.com/oracehonfin/docuflow", // TODO: replace with the real repo
     position: { left: 64, top: 20 },
+    caseStudy: {
+      problem:
+        "Teams at the JEB Incubator were still hand-copying fields out of invoices and contracts into spreadsheets — slow and error-prone at any real volume.",
+      approach:
+        "A PyTorch document-layout model locates and classifies fields on unstructured scans and PDFs, feeding a Next.js review UI where a human confirms low-confidence extractions before they hit the database.",
+      outcome:
+        "Cuts manual data entry to a confirm-or-correct pass, with structured, queryable output in place of loose PDFs.",
+    },
   },
 ];
 
@@ -241,6 +279,17 @@ export const ACT3_CONTENT = {
 };
 
 // ---------------------------------------------------------------------------
+// "How I Work" — engineering philosophy pills overlaying Act III's circuit
+// phase, mirrored against the project cards on the opposite edge.
+// ---------------------------------------------------------------------------
+
+export const MANIFESTO = [
+  "Correctness first, performance second.",
+  "Low-level understanding makes high-level code trustworthy.",
+  "Automate the boring parts, own the hard parts.",
+];
+
+// ---------------------------------------------------------------------------
 // Transitions + Footer
 // ---------------------------------------------------------------------------
 
@@ -267,4 +316,17 @@ export const FOOTER_CONTENT = {
   heading: "READY TO SCALE YOUR AI INFRASTRUCTURE?",
   subtext:
     "Available for AI Engineering consultancy, Co-founder roles, and High-Impact Systems Architecture.",
+};
+
+export const CONTACT_TERMINAL = {
+  session: "session://core/contact-transceiver.sh",
+  bootLines: [
+    "[STATUS: CONNECTED]",
+    "[INITIALIZING TRANSMISSION...]",
+    `> LINKED TO ${SITE.name.toUpperCase()}_CORE [SYSTEMS: ONLINE]`,
+  ],
+  step1: ["> STEP 1/3: IDENTIFICATION", "> ENTER YOUR NAME:"],
+  step2: ["> STEP 2/3: RETURN ROUTE", "> ENTER YOUR EMAIL ADDRESS:"],
+  step3: ["> STEP 3/3: PAYLOAD", "> ENTER YOUR MESSAGE:"],
+  confirmLine: "> DISPATCH SIGNAL TO ORACE HONFIN? (Y/N)",
 };

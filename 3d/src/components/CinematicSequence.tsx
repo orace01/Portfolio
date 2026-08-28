@@ -11,6 +11,7 @@ import {
   ACT2_CONTENT,
   ACT3,
   ACT3_CONTENT,
+  MANIFESTO,
   TRANSITIONS,
   CROSSFADE_ZONE,
 } from "@/lib/constants";
@@ -364,6 +365,16 @@ export default function CinematicSequence({
       tl.to(circuitItems, { autoAlpha: 0, duration: a3dur(0.04) }, C.end - a3dur(0.04));
       tl.set(circuit, { pointerEvents: "none" }, C.end);
 
+      // --- How I Work: manifesto pills, mirrored in from the opposite edge ---
+      const manifestoItems = circuit.querySelectorAll<HTMLElement>('[data-anim="manifesto-item"]');
+      tl.fromTo(
+        manifestoItems,
+        { autoAlpha: 0, x: dist * 2 },
+        { autoAlpha: 1, x: 0, duration: a3dur(0.05), stagger: a3dur(0.03) },
+        C.start + a3dur(0.01)
+      );
+      tl.to(manifestoItems, { autoAlpha: 0, duration: a3dur(0.04) }, C.end - a3dur(0.04));
+
       const RE = { start: a3pos(ACT3.sections.reassembly.start), end: a3pos(ACT3.sections.reassembly.end) };
       const reassemblyItems = reassembly.querySelectorAll<HTMLElement>('[data-anim="item"]');
       tl.set(reassembly, { pointerEvents: "auto" }, RE.start);
@@ -525,24 +536,41 @@ export default function CinematicSequence({
 
             <div
               ref={circuitRef}
-              className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-4 px-5 sm:px-8 lg:px-12"
+              className="pointer-events-none absolute inset-0 flex items-center justify-between gap-6 px-5 sm:px-8 lg:px-12"
             >
-              {ACT3_CONTENT.projects.map((project) => (
-                <div key={project.index} data-anim="item" className="w-full max-w-sm">
-                  <GlassPanel accent="electric" className="p-5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-[#00E5FF]">{project.index}</span>
-                      <h3 className="text-sm font-medium text-white sm:text-base">{project.title}</h3>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/55">{project.description}</p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {project.tags.map((tag) => (
-                        <TagPill key={tag}>{tag}</TagPill>
-                      ))}
-                    </div>
-                  </GlassPanel>
-                </div>
-              ))}
+              <div className="flex flex-col gap-4">
+                {ACT3_CONTENT.projects.map((project) => (
+                  <div key={project.index} data-anim="item" className="w-full max-w-sm">
+                    <GlassPanel accent="electric" className="p-5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs text-[#00E5FF]">{project.index}</span>
+                        <h3 className="text-sm font-medium text-white sm:text-base">{project.title}</h3>
+                      </div>
+                      <p className="mt-2 text-xs leading-relaxed text-white/55">{project.description}</p>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                          <TagPill key={tag}>{tag}</TagPill>
+                        ))}
+                      </div>
+                    </GlassPanel>
+                  </div>
+                ))}
+              </div>
+
+              <div className="hidden flex-col items-end gap-3 lg:flex">
+                <span data-anim="manifesto-item" className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
+                  How I Work
+                </span>
+                {MANIFESTO.map((line) => (
+                  <div
+                    key={line}
+                    data-anim="manifesto-item"
+                    className="max-w-xs rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-right font-mono text-xs text-white/70 backdrop-blur-xl"
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div

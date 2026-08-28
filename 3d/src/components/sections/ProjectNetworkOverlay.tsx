@@ -2,11 +2,14 @@ import { forwardRef } from "react";
 import type { CSSProperties } from "react";
 import { PROJECTS } from "@/lib/constants";
 import { GlassPanel, TagPill } from "@/components/ui/Glass";
+import { useProjectModal } from "@/context/ProjectModalContext";
 
 const ProjectNetworkOverlay = forwardRef<HTMLDivElement>(function ProjectNetworkOverlay(
   _props,
   ref
 ) {
+  const { openProject } = useProjectModal();
+
   return (
     <div
       ref={ref}
@@ -19,12 +22,13 @@ const ProjectNetworkOverlay = forwardRef<HTMLDivElement>(function ProjectNetwork
         } as CSSProperties;
 
         return (
-          <a
-            key={project.title}
-            href={project.href}
+          <button
+            key={project.slug}
+            type="button"
+            onClick={() => openProject(project.slug)}
             data-anim="card"
             style={style}
-            className="block md:absolute md:left-[var(--x)] md:top-[var(--y)] md:w-72"
+            className="block w-full text-left md:absolute md:left-[var(--x)] md:top-[var(--y)] md:w-72"
           >
             <GlassPanel
               accent="electric"
@@ -40,10 +44,10 @@ const ProjectNetworkOverlay = forwardRef<HTMLDivElement>(function ProjectNetwork
                 ))}
               </div>
               <span className="mt-4 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider text-[#00E5FF] opacity-70 transition-opacity group-hover:opacity-100">
-                View project →
+                View case study →
               </span>
             </GlassPanel>
-          </a>
+          </button>
         );
       })}
     </div>

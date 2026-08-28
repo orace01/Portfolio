@@ -5,10 +5,10 @@ import { gsap, ensureGsapRegistered } from "@/lib/gsap";
 import { SITE, FOOTER_CONTENT } from "@/lib/constants";
 import { Eyebrow } from "@/components/ui/Glass";
 import { useScrollNav } from "@/context/ScrollNavContext";
+import TerminalContact from "@/components/contact/TerminalContact";
 
 const CTA_LINKS = [
   { label: "Download CV / Resume", href: SITE.cvHref, external: false },
-  { label: "Email Me", href: `mailto:${SITE.email}`, external: false },
   { label: "GitHub", href: SITE.github, external: true },
   { label: "LinkedIn", href: SITE.linkedin, external: true },
 ];
@@ -72,9 +72,13 @@ export default function ContactFooter() {
         {FOOTER_CONTENT.subtext}
       </p>
 
+      <div data-anim="item" className="mt-10 w-full opacity-0">
+        <TerminalContact />
+      </div>
+
       <div
         data-anim="item"
-        className="mt-10 flex flex-wrap items-center justify-center gap-3 opacity-0 sm:gap-4"
+        className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 sm:gap-4"
       >
         {CTA_LINKS.map((link) => (
           <a
