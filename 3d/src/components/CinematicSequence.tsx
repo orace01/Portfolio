@@ -29,6 +29,8 @@ interface CinematicSequenceProps {
   act1Frames: FrameSequenceState;
   act2Frames: FrameSequenceState;
   act3Frames: FrameSequenceState;
+  /** Called once the loading screen has fully exited. */
+  onLoaderExited?: () => void;
 }
 
 // All three Acts scrub off ONE shared pinned track instead of three
@@ -68,6 +70,7 @@ export default function CinematicSequence({
   act1Frames,
   act2Frames,
   act3Frames,
+  onLoaderExited,
 }: CinematicSequenceProps) {
   const reducedMotion = usePrefersReducedMotion();
   const { registerSection } = useScrollNav();
@@ -424,7 +427,10 @@ export default function CinematicSequence({
         <LoadingScreen
           progress={total > 0 ? loadedCount / total : 0}
           ready={act1Ready}
-          onExited={() => setLoaderExited(true)}
+          onExited={() => {
+            setLoaderExited(true);
+            onLoaderExited?.();
+          }}
         />
       )}
 

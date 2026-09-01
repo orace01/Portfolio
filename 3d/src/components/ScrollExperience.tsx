@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ScrollNavContext } from "@/context/ScrollNavContext";
 import { FocusModeProvider } from "@/components/focus/FocusModeProvider";
 import { ACT1, ACT2, ACT3, type SectionId } from "@/lib/constants";
@@ -8,12 +8,14 @@ import { useFrameSequence } from "@/hooks/useFrameSequence";
 
 import Header from "@/components/layout/Header";
 import CinematicSequence from "@/components/CinematicSequence";
+import PersonalHero from "@/components/sections/PersonalHero";
 
 import ContactFooter from "@/components/ContactFooter";
 import AssistantWidget from "@/components/assistant/AssistantWidget";
 
 export default function ScrollExperience() {
   const registry = useRef<Partial<Record<SectionId, HTMLElement>>>({});
+  const [heroReady, setHeroReady] = useState(false);
 
   const registerSection = useCallback((id: SectionId, el: HTMLElement | null) => {
     if (el) registry.current[id] = el;
@@ -49,8 +51,14 @@ export default function ScrollExperience() {
     <ScrollNavContext.Provider value={{ registerSection, scrollToSection }}>
       <FocusModeProvider>
         <Header />
+        <PersonalHero loaderReady={heroReady} />
 
-        <CinematicSequence act1Frames={act1Frames} act2Frames={act2Frames} act3Frames={act3Frames} />
+        <CinematicSequence
+          act1Frames={act1Frames}
+          act2Frames={act2Frames}
+          act3Frames={act3Frames}
+          onLoaderExited={() => setHeroReady(true)}
+        />
         <ContactFooter />
 
         <AssistantWidget />
