@@ -440,7 +440,7 @@ export default function CinematicSequence({
         <div ref={act2AnchorRef} className="absolute inset-x-0" style={{ top: `${ACT2_START}vh` }} aria-hidden="true" />
         <div ref={act3AnchorRef} className="absolute inset-x-0" style={{ top: `${ACT3_START}vh` }} aria-hidden="true" />
 
-        <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-[#050505]">
+        <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-[#030712]">
           {/* --- Act I: chip --- */}
           <div ref={act1WrapRef} className="pointer-events-none absolute inset-0">
             <FrameCanvas ref={act1CanvasRef} images={act1Images} className="absolute inset-0 h-full w-full" />

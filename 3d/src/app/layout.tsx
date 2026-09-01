@@ -32,7 +32,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-[#050505] font-sans text-white antialiased">
+      <body className="bg-[#030712] font-sans text-white antialiased">
         {children}
       </body>
     </html>

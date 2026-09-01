@@ -47,16 +47,12 @@ export default function ContactFooter() {
   return (
     <section
       ref={rootRef}
-      className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-6 py-24 text-center"
+      className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-[#030712] px-6 pt-12 pb-0 text-center"
     >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(0,229,255,0.06),transparent_70%)]"
       />
-
-      <div data-anim="item" className="opacity-0">
-        <Eyebrow>04. Contact</Eyebrow>
-      </div>
 
       <h2
         data-anim="item"
@@ -78,7 +74,7 @@ export default function ContactFooter() {
 
       <div
         data-anim="item"
-        className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 sm:gap-4"
+        className="mt-6 flex flex-wrap items-center justify-center gap-3 opacity-0 sm:gap-4 pb-16"
       >
         {CTA_LINKS.map((link) => (
           <a
@@ -95,22 +91,19 @@ export default function ContactFooter() {
 
       <div
         data-anim="item"
-        className="mt-16 flex flex-col items-center gap-2 border-t border-white/10 pt-8 opacity-0"
+        className="flex w-full flex-col items-center gap-2 bg-[#0A0F1D]/60 backdrop-blur-md border-t border-cyan-500/30 shadow-[0_-4px_25px_rgba(0,229,255,0.1)] py-6 opacity-0"
       >
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00E5FF] opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00E5FF]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
-            Available
+          <span className="font-mono text-xs uppercase tracking-wider text-slate-500">
+            AVAILABLE FOR NEW OPPORTUNITIES
           </span>
         </div>
-        <span className="font-mono text-[11px] tracking-wider text-white/30">
-          {`${SITE.name.toUpperCase()} // ${SITE.role.toUpperCase()}`}
-        </span>
-        <span className="font-mono text-[10px] tracking-wider text-white/20">
-          {`© ${new Date().getFullYear()} — ${SITE.location}`}
+        <span className="font-mono text-xs uppercase tracking-wider text-slate-500">
+          © 2026 ORACE HONFIN <span className="text-cyan-400/80 mx-1">—</span> AI & FULLSTACK ENGINEER
         </span>
       </div>
     </section>

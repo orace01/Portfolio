@@ -36,7 +36,7 @@ export default function LoadingScreen({ progress, ready, onExited }: LoadingScre
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050505]"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#030712]"
       role="status"
       aria-live="polite"
       aria-busy={!ready}

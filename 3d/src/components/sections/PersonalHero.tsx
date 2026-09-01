@@ -24,7 +24,6 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
     const root = rootRef.current;
     if (!root) return;
 
-    const label = root.querySelector('[data-anim="hero-label"]');
     const name1 = root.querySelector('[data-anim="hero-name-1"]');
     const name2 = root.querySelector('[data-anim="hero-name-2"]');
     const divider = root.querySelector('[data-anim="hero-divider"]');
@@ -33,7 +32,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
     const btns  = root.querySelectorAll('[data-anim="hero-btn"]');
 
     if (reducedMotion) {
-      gsap.set([label, name1, name2, divider, sub, desc, ...btns], {
+      gsap.set([name1, name2, divider, sub, desc, ...btns], {
         autoAlpha: 1, yPercent: 0, y: 0,
       });
       return;
@@ -41,9 +40,8 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
 
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
     tl
-      .fromTo(label,   { autoAlpha: 0, y: 12 },       { autoAlpha: 1, y: 0, duration: 0.5 }, 0)
-      .fromTo(name1,   { autoAlpha: 0, yPercent: 80 }, { autoAlpha: 1, yPercent: 0, duration: 1.0 }, 0.1)
-      .fromTo(name2,   { autoAlpha: 0, yPercent: 80 }, { autoAlpha: 1, yPercent: 0, duration: 1.0 }, 0.22)
+      .fromTo(name1,   { autoAlpha: 0, yPercent: 80 }, { autoAlpha: 1, yPercent: 0, duration: 1.0 }, 0)
+      .fromTo(name2,   { autoAlpha: 0, yPercent: 80 }, { autoAlpha: 1, yPercent: 0, duration: 1.0 }, 0.12)
       .fromTo(divider, { autoAlpha: 0, scaleX: 0 },    { autoAlpha: 1, scaleX: 1, duration: 0.6, transformOrigin: "left center" }, 0.55)
       .fromTo(sub,     { autoAlpha: 0, y: 16 },        { autoAlpha: 1, y: 0, duration: 0.6 }, 0.62)
       .fromTo(desc,    { autoAlpha: 0, y: 12 },        { autoAlpha: 1, y: 0, duration: 0.55 }, 0.72)
@@ -54,7 +52,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
     <section
       ref={rootRef}
       aria-label="Hero — Orace Honfin"
-      className="relative flex min-h-[88vh] w-full flex-col items-center justify-center overflow-hidden bg-[#050505] px-4 pb-16 pt-28 text-center sm:px-8 sm:pt-28"
+      className="relative flex min-h-[88vh] w-full flex-col items-center justify-center overflow-hidden bg-[#030712] px-4 pb-16 pt-28 text-center sm:px-8 sm:pt-28"
     >
       {/* ── Background depth layer ───────────────────────────── */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -90,19 +88,11 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
           }}
         />
         {/* Bottom fade — smooth transition into the cinematic section */}
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-[#050505]" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-[#030712]" />
       </div>
 
       {/* ── Main content ─────────────────────────────────────── */}
       <div className="relative z-10 flex w-full flex-col items-center">
-
-        {/* Label */}
-        <p
-          data-anim="hero-label"
-          className="mb-8 font-mono text-[10px] uppercase tracking-[0.35em] text-[#00C8E8]/70 opacity-0 sm:text-xs"
-        >
-          Full-Stack Developer&nbsp;/&nbsp;AI Engineer
-        </p>
 
         {/* ── NAME BLOCK ── */}
         {/*
@@ -149,12 +139,12 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
           className="mt-8 h-px w-full max-w-[560px] bg-gradient-to-r from-transparent via-white/15 to-transparent opacity-0"
         />
 
-        {/* Tagline */}
+        {/* Subtitle / Label (Moved from above) */}
         <p
           data-anim="hero-sub"
-          className="mt-8 max-w-xl text-[1.05rem] font-medium leading-snug tracking-wide text-white/70 opacity-0 sm:text-xl"
+          className="mt-8 font-mono text-[11px] uppercase tracking-[0.35em] text-[#00C8E8]/80 opacity-0 sm:text-xs"
         >
-          Full-Stack Developer &amp; Creative Technologist
+          Full-Stack Developer&nbsp;/&nbsp;AI Engineer
         </p>
 
         {/* Description */}

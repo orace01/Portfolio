@@ -28,7 +28,7 @@ export const SITE = {
 };
 
 export const COLORS = {
-  bg: "#050505",
+  bg: "#030712",
   electric: "#00E5FF",
   violet: "#7C4DFF",
 };

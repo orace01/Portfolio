@@ -36,7 +36,7 @@ const FrameCanvas = forwardRef<FrameCanvasHandle, FrameCanvasProps>(
       const { w, h } = sizeRef.current;
       if (!ctx || w === 0 || h === 0) return;
 
-      ctx.fillStyle = "#050505";
+      ctx.fillStyle = "#030712";
       ctx.fillRect(0, 0, w, h);
       if (!img) return;
 

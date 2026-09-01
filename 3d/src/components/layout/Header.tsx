@@ -15,7 +15,7 @@ export default function Header() {
   return (
     <header
       data-anim="header"
-      className="fixed top-0 left-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-[#030712]/70 backdrop-blur-md border-b border-white/10 opacity-0"
+      className="fixed top-0 left-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-[#0A0F1D]/80 backdrop-blur-md border-b border-cyan-500/30 shadow-[0_1px_15px_rgba(0,229,255,0.15)] opacity-0"
     >
       <button
         onClick={() => scrollToSection("act1")}
