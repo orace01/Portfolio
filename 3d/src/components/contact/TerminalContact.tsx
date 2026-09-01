@@ -245,7 +245,7 @@ export default function TerminalContact() {
     stage === "name" || stage === "email" || stage === "message" || stage === "confirm";
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl overflow-hidden rounded-xl border border-[#00E5FF]/30 bg-black/60 text-left shadow-[0_0_40px_-15px_rgba(0,229,255,0.3)] backdrop-blur-xl">
+    <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-xl border border-cyan-500/20 bg-black/70 text-left shadow-[0_0_30px_rgba(0,208,132,0.1),0_0_60px_-20px_rgba(0,229,255,0.2)] backdrop-blur-xl" style={{ fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
       <div className="flex items-center justify-between border-b border-white/10 bg-black/50 px-4 py-2.5">
         <span className="truncate font-mono text-xs text-white/40">{CONTACT_TERMINAL.session}</span>
         <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-emerald-400">
@@ -260,7 +260,8 @@ export default function TerminalContact() {
       <div
         ref={bodyRef}
         onClick={focusInput}
-        className="h-80 cursor-text overflow-y-auto px-5 py-4 font-mono text-sm leading-relaxed sm:h-96"
+        className="min-h-[420px] cursor-text overflow-y-auto px-5 py-4 text-sm leading-relaxed"
+        style={{ fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}
       >
         {lines.map((line) => (
           <p key={line.id} className={`whitespace-pre-wrap break-words ${LINE_TONE_CLASS[line.tone]}`}>

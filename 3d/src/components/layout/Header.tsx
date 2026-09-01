@@ -1,7 +1,13 @@
 "use client";
 
-import { NAV_LINKS, SITE } from "@/lib/constants";
 import { useScrollNav } from "@/context/ScrollNavContext";
+import { type SectionId } from "@/lib/constants";
+
+const HEADER_LINKS: { label: string; target: SectionId }[] = [
+  { label: "PROJETS", target: "act1" },
+  { label: "COMPÉTENCES", target: "act2" },
+  { label: "PARCOURS", target: "act3" },
+];
 
 export default function Header() {
   const { scrollToSection } = useScrollNav();
@@ -9,26 +15,21 @@ export default function Header() {
   return (
     <header
       data-anim="header"
-      className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-5 py-5 opacity-0 sm:px-8 lg:px-12"
+      className="fixed top-0 left-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-[#030712]/70 backdrop-blur-md border-b border-white/10 opacity-0"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-28 bg-gradient-to-b from-black/70 to-transparent"
-      />
-
       <button
         onClick={() => scrollToSection("act1")}
-        className="font-mono text-[11px] tracking-[0.2em] text-white/80 transition-colors hover:text-white sm:text-xs"
+        className="text-white font-bold tracking-widest text-sm"
       >
-        {SITE.headerTag}
+        ORACE HONFIN
       </button>
 
-      <nav className="hidden items-center gap-8 md:flex">
-        {NAV_LINKS.map((link) => (
+      <nav className="hidden md:flex gap-8">
+        {HEADER_LINKS.map((link) => (
           <button
             key={link.target}
             onClick={() => scrollToSection(link.target)}
-            className="font-mono text-xs uppercase tracking-[0.15em] text-white/60 transition-colors hover:text-[#00E5FF]"
+            className="text-xs font-mono text-slate-300 hover:text-cyan-400 transition-colors tracking-wider"
           >
             {link.label}
           </button>
@@ -37,9 +38,9 @@ export default function Header() {
 
       <button
         onClick={() => scrollToSection("contact")}
-        className="rounded-full border border-white/15 px-4 py-2 font-mono text-xs tracking-wide text-white transition-all hover:border-[#00E5FF]/50 hover:bg-[#00E5FF]/10 hover:text-[#00E5FF]"
+        className="px-5 py-2 text-xs font-mono text-cyan-300 bg-cyan-500/10 border border-cyan-500/30 rounded-full hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition-all"
       >
-        {`[ ${SITE.ctaLabel} ]`}
+        CONTACT
       </button>
     </header>
   );

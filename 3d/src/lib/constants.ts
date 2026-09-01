@@ -113,17 +113,17 @@ export const ARCHITECTURE_LAYERS = [
 export const SIGNAL_FEATURES = [
   {
     index: "01",
-    title: "Automated Security Auditing",
-    tags: ["OWASP ZAP", "Faraday"],
+    title: "Algorithmic Trading Signals",
+    tags: ["Python", "Time-Series ML"],
     description:
-      "Continuous vulnerability scanning and penetration-test reporting pipelines.",
+      "Real-time market signal analysis feeding automated, risk-managed trade execution.",
   },
   {
     index: "02",
-    title: "Document AI",
-    tags: ["DocuFlow"],
+    title: "On-Device Voice Pipelines",
+    tags: ["JARVIS", "openWakeWord"],
     description:
-      "Structured extraction from unstructured documents at production scale.",
+      "Fully offline wake-word, speech, and voice-biometrics pipeline — zero cloud dependency.",
   },
   {
     index: "03",
@@ -147,7 +147,7 @@ export const PROJECTS = [
     slug: "jarvis",
     title: "JARVIS Local Assistant",
     description: "Voice-activated local assistant on Fedora Linux.",
-    tags: ["Python", "openWakeWord", "Voice Biometrics", "Linux"],
+    tags: ["Python", "openWakeWord", "Gemini API", "Linux"],
     status: "ONLINE" as ProjectStatus,
     github: "https://github.com/oracehonfin/jarvis", // TODO: replace with the real repo
     position: { left: 6, top: 12 },
@@ -163,8 +163,8 @@ export const PROJECTS = [
   {
     slug: "gomoku",
     title: "Gomoku AI Engine",
-    description: "High-performance Rust game engine using the pbrain protocol.",
-    tags: ["Rust", "pbrain", "Game AI"],
+    description: "High-performance Gomoku AI using the pbrain protocol.",
+    tags: ["Rust", "pbrain protocol", "Game AI"],
     status: "ONLINE" as ProjectStatus,
     github: "https://github.com/oracehonfin/gomoku-engine", // TODO: replace with the real repo
     position: { left: 32, top: 62 },
@@ -178,20 +178,20 @@ export const PROJECTS = [
     },
   },
   {
-    slug: "docuflow",
-    title: "DocuFlow SaaS",
-    description: "Intelligent document extraction and processing platform.",
-    tags: ["Next.js", "PyTorch", "Document AI"],
+    slug: "sheetly",
+    title: "Sheetly",
+    description: "Intelligent accounting platform and tooling.",
+    tags: ["Next.js", "PyTorch", "TypeScript"],
     status: "BETA" as ProjectStatus,
-    github: "https://github.com/oracehonfin/docuflow", // TODO: replace with the real repo
+    github: "https://github.com/oracehonfin/sheetly", // TODO: replace with the real repo
     position: { left: 64, top: 20 },
     caseStudy: {
       problem:
-        "Teams at the JEB Incubator were still hand-copying fields out of invoices and contracts into spreadsheets — slow and error-prone at any real volume.",
+        "Small structures still manage their books in unstructured spreadsheets — slow and error-prone at any real volume.",
       approach:
-        "A PyTorch document-layout model locates and classifies fields on unstructured scans and PDFs, feeding a Next.js review UI where a human confirms low-confidence extractions before they hit the database.",
+        "Sheetly automatically structures accounting entries from raw documents and generates coherent financial reports, with human review on ambiguous cases.",
       outcome:
-        "Cuts manual data entry to a confirm-or-correct pass, with structured, queryable output in place of loose PDFs.",
+        "Structured, up-to-date financial tracking with no manual re-entry of routine transactions.",
     },
   },
 ];
@@ -288,6 +288,7 @@ export const MANIFESTO = [
   "Low-level understanding makes high-level code trustworthy.",
   "Automate the boring parts, own the hard parts.",
 ];
+
 
 // ---------------------------------------------------------------------------
 // Transitions + Footer

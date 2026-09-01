@@ -1,14 +1,14 @@
 import { forwardRef } from "react";
 import type { CSSProperties } from "react";
 import { PROJECTS } from "@/lib/constants";
-import { GlassPanel, TagPill } from "@/components/ui/Glass";
-import { useProjectModal } from "@/context/ProjectModalContext";
+import { GlassPanel, TagPill, ExpandHint } from "@/components/ui/Glass";
+import { useFocusMode } from "@/context/FocusModeContext";
 
 const ProjectNetworkOverlay = forwardRef<HTMLDivElement>(function ProjectNetworkOverlay(
   _props,
   ref
 ) {
-  const { openProject } = useProjectModal();
+  const { openFocus } = useFocusMode();
 
   return (
     <div
@@ -25,15 +25,30 @@ const ProjectNetworkOverlay = forwardRef<HTMLDivElement>(function ProjectNetwork
           <button
             key={project.slug}
             type="button"
-            onClick={() => openProject(project.slug)}
+            onClick={(e) =>
+              openFocus(
+                {
+                  id: `project-${project.slug}`,
+                  accent: "electric",
+                  status: project.status,
+                  title: project.title,
+                  description: project.description,
+                  tags: project.tags,
+                  github: project.github,
+                  caseStudy: project.caseStudy,
+                },
+                e.currentTarget
+              )
+            }
             data-anim="card"
             style={style}
-            className="block w-full text-left md:absolute md:left-[var(--x)] md:top-[var(--y)] md:w-72"
+            className="block w-full cursor-pointer text-left md:absolute md:left-[var(--x)] md:top-[var(--y)] md:w-72"
           >
             <GlassPanel
               accent="electric"
               className="group p-5 transition-colors hover:border-[#00E5FF]/50"
             >
+              <ExpandHint />
               <h3 className="text-base font-semibold text-white">{project.title}</h3>
               <p className="mt-2 text-xs leading-relaxed text-white/55">
                 {project.description}

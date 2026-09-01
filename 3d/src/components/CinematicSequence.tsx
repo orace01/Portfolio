@@ -436,7 +436,7 @@ export default function CinematicSequence({
 
         <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-[#050505]">
           {/* --- Act I: chip --- */}
-          <div ref={act1WrapRef} className="absolute inset-0">
+          <div ref={act1WrapRef} className="pointer-events-none absolute inset-0">
             <FrameCanvas ref={act1CanvasRef} images={act1Images} className="absolute inset-0 h-full w-full" />
             <HeroOverlay ref={heroRef} />
             <ArchitectureOverlay ref={archRef} />
@@ -445,7 +445,7 @@ export default function CinematicSequence({
           </div>
 
           {/* --- Act II: cube --- */}
-          <div ref={act2WrapRef} className="absolute inset-0 z-10 opacity-0">
+          <div ref={act2WrapRef} className="pointer-events-none absolute inset-0 z-10 opacity-0">
             <FrameCanvas ref={act2CanvasRef} images={act2Images} className="absolute inset-0 h-full w-full" />
 
             <div
@@ -511,7 +511,7 @@ export default function CinematicSequence({
           </div>
 
           {/* --- Act III: keyboard --- */}
-          <div ref={act3WrapRef} className="absolute inset-0 z-20 opacity-0">
+          <div ref={act3WrapRef} className="pointer-events-none absolute inset-0 z-20 opacity-0">
             <FrameCanvas ref={act3CanvasRef} images={act3Images} className="absolute inset-0 h-full w-full" />
 
             <div
