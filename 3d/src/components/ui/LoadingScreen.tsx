@@ -43,7 +43,7 @@ export default function LoadingScreen({ progress, ready, onExited }: LoadingScre
     >
       <div className="flex flex-col items-center gap-6">
         <div className="font-mono text-xs tracking-[0.35em] text-white/40">
-          INITIALIZING AI CORE
+          INITIALISATION DU CORE IA
         </div>
         <div className="flex items-baseline gap-1 font-mono text-4xl font-light text-white tabular-nums">
           <span ref={pctRef}>0</span>

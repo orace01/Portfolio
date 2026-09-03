@@ -16,9 +16,9 @@ const DataSignalOverlay = forwardRef<HTMLDivElement>(function DataSignalOverlay(
         className="w-full max-w-md"
       >
         <GlassPanel accent="violet" className="p-6 sm:p-8">
-          <Eyebrow>Data Signal &amp; Automation</Eyebrow>
+          <Eyebrow>Comment je travaille</Eyebrow>
           <h2 className="mt-3 text-xl font-semibold leading-tight text-white sm:text-2xl lg:text-3xl">
-            REAL-TIME SIGNAL PROCESSING &amp; AUTONOMOUS PIPELINES
+            RIGUEUR, AUTONOMIE, PLEINE PROPRIÉTÉ
           </h2>
 
           <div className="mt-7 flex flex-col gap-5">

@@ -25,10 +25,10 @@ const TYPE_SPEED_MS = 14;
 const LINE_PAUSE_MS = 120;
 
 const INPUT_LABEL: Partial<Record<Stage, string>> = {
-  name: "Your name",
-  email: "Your email address",
-  message: "Your message",
-  confirm: "Confirm dispatch, Y or N",
+  name: "Votre nom",
+  email: "Votre adresse email",
+  message: "Votre message",
+  confirm: "Confirmer l'envoi, O ou N",
 };
 
 const LINE_TONE_CLASS: Record<LineTone, string> = {
@@ -52,7 +52,7 @@ function generateTransmissionId() {
 
 /** Builds a mailto: link so "dispatching" the transmission actually opens a real email, prefilled. */
 function buildMailto(form: FormState) {
-  const subject = `Portfolio transmission from ${form.name || "unknown sender"}`;
+  const subject = `Transmission depuis le portfolio de ${form.name || "expéditeur inconnu"}`;
   const body = `${form.message}\n\n—\n${form.name}\n${form.email}`;
   const params = new URLSearchParams({ subject, body });
   return `mailto:${SITE.email}?${params.toString()}`;
@@ -133,7 +133,7 @@ export default function TerminalContact() {
 
     if (stage === "name") {
       if (!value) {
-        await print(["[ERROR] FIELD REQUIRED. TRY AGAIN:"], "error", runId);
+        await print(["[ERREUR] CHAMP REQUIS. RÉESSAYEZ :"], "error", runId);
         return;
       }
       echo(value);
@@ -148,7 +148,7 @@ export default function TerminalContact() {
     if (stage === "email") {
       if (!EMAIL_PATTERN.test(value)) {
         echo(value);
-        await print(["[ERROR] INVALID EMAIL FORMAT. RE-ENTER:"], "error", runId);
+        await print(["[ERREUR] FORMAT D'EMAIL INVALIDE. RESAISISSEZ :"], "error", runId);
         setInputValue("");
         return;
       }
@@ -163,7 +163,7 @@ export default function TerminalContact() {
 
     if (stage === "message") {
       if (!value) {
-        await print(["[ERROR] FIELD REQUIRED. TRY AGAIN:"], "error", runId);
+        await print(["[ERREUR] CHAMP REQUIS. RÉESSAYEZ :"], "error", runId);
         return;
       }
       echo(value);
@@ -181,13 +181,13 @@ export default function TerminalContact() {
         echo(value || "N");
         setInputValue("");
         setStage("advancing");
-        await print(["> TRANSMISSION ABORTED. RESTARTING..."], "system", runId);
+        await print(["> TRANSMISSION ANNULÉE. REDÉMARRAGE..."], "system", runId);
         formRef.current = { name: "", email: "", message: "" };
         await print(CONTACT_TERMINAL.step1, "system", runId);
         if (runId === runIdRef.current) setStage("name");
         return;
       }
-      echo(value || "Y");
+      echo(value || "O");
       setInputValue("");
       setStage("advancing");
       setFlashing(true);
@@ -196,9 +196,9 @@ export default function TerminalContact() {
       const txId = generateTransmissionId();
       await print(
         [
-          "[INITIALIZING TRANSMISSION...]",
-          `[SUCCESS] Payload dispatched. Transmission ID: ${txId}`,
-          "> OPENING MAIL CLIENT TO COMPLETE HANDSHAKE...",
+          "[INITIALISATION DE LA TRANSMISSION...]",
+          `[SUCCÈS] Payload envoyé. ID de transmission : ${txId}`,
+          "> OUVERTURE DU CLIENT MAIL POUR FINALISER L'ENVOI...",
         ],
         "success",
         runId
@@ -216,7 +216,7 @@ export default function TerminalContact() {
     setInputValue("");
     setLines([]);
     setStage("advancing");
-    await print(["> NEW SESSION STARTED."], "system", runId);
+    await print(["> NOUVELLE SESSION DÉMARRÉE."], "system", runId);
     await print(CONTACT_TERMINAL.step1, "system", runId);
     if (runId === runIdRef.current) setStage("name");
   };
@@ -224,9 +224,9 @@ export default function TerminalContact() {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (stage === "confirm") {
       const key = e.key.toLowerCase();
-      if (key === "y") {
+      if (key === "o") {
         e.preventDefault();
-        void handleEnter("Y");
+        void handleEnter("O");
         return;
       }
       if (key === "n") {
@@ -253,7 +253,7 @@ export default function TerminalContact() {
             className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"
             style={{ boxShadow: "0 0 6px rgba(52,211,153,0.8)" }}
           />
-          Status: Connected
+          Statut : Connecté
         </span>
       </div>
 
@@ -293,7 +293,7 @@ export default function TerminalContact() {
             onClick={() => void handleReset()}
             className="mt-3 font-mono text-xs uppercase tracking-wider text-emerald-400 transition-colors hover:text-emerald-300"
           >
-            {"[ New Transmission ]"}
+            {"[ Nouvelle Transmission ]"}
           </button>
         )}
       </div>

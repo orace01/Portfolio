@@ -15,14 +15,14 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Orace Honfin — AI Engineer",
+  title: "Orace Honfin — Ingénieur Logiciel Fullstack",
   description:
-    "AI Systems Architecture, Local LLM Orchestration & Full-Stack Engineering. Portfolio of Orace Honfin.",
+    "Ingénieur logiciel fullstack, conception de produits web & mobile de bout en bout. Co-fondateur chez Webspace. Portfolio d'Orace Honfin.",
   metadataBase: new URL("https://oracehonfin.dev"),
   openGraph: {
-    title: "Orace Honfin — AI Engineer",
+    title: "Orace Honfin — Ingénieur Logiciel Fullstack",
     description:
-      "AI Systems Architecture, Local LLM Orchestration & Full-Stack Engineering.",
+      "Ingénieur logiciel fullstack, conception de produits web & mobile de bout en bout. Co-fondateur chez Webspace.",
     type: "website",
   },
 };
@@ -31,7 +31,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="bg-[#030712] font-sans text-white antialiased">
         {children}
       </body>

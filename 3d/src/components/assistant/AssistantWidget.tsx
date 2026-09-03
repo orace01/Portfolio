@@ -75,7 +75,7 @@ export default function AssistantWidget() {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            aria-label="Close assistant"
+            aria-label="Fermer l'assistant"
             className="rounded-full p-1 text-white/50 transition-colors hover:text-white"
           >
             <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
@@ -128,7 +128,7 @@ export default function AssistantWidget() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask a question about Orace..."
+            placeholder="Posez une question sur Orace..."
             autoComplete="off"
             className="min-w-0 flex-1 bg-transparent font-mono text-xs text-white placeholder:text-white/30 outline-none"
           />
@@ -136,7 +136,7 @@ export default function AssistantWidget() {
             type="button"
             onClick={() => ask(inputValue)}
             disabled={!inputValue.trim()}
-            aria-label="Send"
+            aria-label="Envoyer"
             className="shrink-0 rounded-full border border-[#00E5FF]/30 p-1.5 text-[#00E5FF] transition-colors hover:bg-[#00E5FF]/10 disabled:opacity-30"
           >
             <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5">
@@ -162,7 +162,7 @@ export default function AssistantWidget() {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00E5FF] opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00E5FF]" />
         </span>
-        {open ? "Close" : "Ask me about Orace"}
+        {open ? "Fermer" : "Me demander à propos d'Orace"}
       </button>
     </div>
   );

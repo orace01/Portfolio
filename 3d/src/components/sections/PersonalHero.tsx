@@ -51,7 +51,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
   return (
     <section
       ref={rootRef}
-      aria-label="Hero — Orace Honfin"
+      aria-label="Accueil — Orace Honfin"
       className="relative flex min-h-[88vh] w-full flex-col items-center justify-center overflow-hidden bg-[#030712] px-4 pb-16 pt-28 text-center sm:px-8 sm:pt-28"
     >
       {/* ── Background depth layer ───────────────────────────── */}
@@ -144,7 +144,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
           data-anim="hero-sub"
           className="mt-8 font-mono text-[11px] uppercase tracking-[0.35em] text-[#00C8E8]/80 opacity-0 sm:text-xs"
         >
-          Full-Stack Developer&nbsp;/&nbsp;AI Engineer
+          Ingénieur Logiciel&nbsp;Fullstack
         </p>
 
         {/* Description */}
@@ -153,8 +153,9 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
           className="mt-5 max-w-[540px] text-sm leading-[1.75] opacity-0 sm:text-[0.95rem]"
           style={{ color: "#A6AFB8" }}
         >
-          I build systems-level software, distributed machine&nbsp;learning
-          tools and expressive real-time web&nbsp;experiences.
+          Je conçois et je livre des produits web &amp; mobile de bout en
+          bout — co-fondateur chez Webspace, porté par l&rsquo;IA
+          et&nbsp;la cybersécurité.
         </p>
 
         {/* CTAs */}
@@ -162,10 +163,10 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
           {/* Primary */}
           <button
             data-anim="hero-btn"
-            onClick={() => scrollToSection("act1")}
+            onClick={() => scrollToSection("act2")}
             className="w-48 rounded-full border border-[#00C8E8]/40 bg-[#00C8E8]/10 px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-[#00C8E8] opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-[#00C8E8]/70 hover:bg-[#00C8E8]/18 hover:shadow-[0_0_22px_rgba(0,200,232,0.22)] sm:w-auto"
           >
-            View My Work
+            Voir mes réalisations
           </button>
           {/* Secondary */}
           <button
@@ -173,7 +174,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
             onClick={() => scrollToSection("contact")}
             className="w-48 rounded-full border border-white/15 bg-white/[0.04] px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.18em] text-white/60 opacity-0 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/[0.08] hover:text-white/85 sm:w-auto"
           >
-            Contact Me
+            Me contacter
           </button>
         </div>
       </div>
@@ -184,7 +185,7 @@ export default function PersonalHero({ loaderReady = false }: PersonalHeroProps)
         className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
       >
         <span className="font-mono text-[8px] uppercase tracking-[0.28em] text-white/18">
-          scroll
+          défiler
         </span>
         <div className="h-10 w-px overflow-hidden bg-white/10">
           <div className="h-1/2 w-full animate-scroll-drip bg-gradient-to-b from-[#00C8E8]/60 to-transparent" />

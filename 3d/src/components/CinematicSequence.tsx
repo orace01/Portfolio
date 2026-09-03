@@ -11,8 +11,6 @@ import {
   ACT2_CONTENT,
   ACT3,
   ACT3_CONTENT,
-  MANIFESTO,
-  TRANSITIONS,
   CROSSFADE_ZONE,
 } from "@/lib/constants";
 import { useScrollNav } from "@/context/ScrollNavContext";
@@ -22,8 +20,10 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 import HeroOverlay from "@/components/sections/HeroOverlay";
 import ArchitectureOverlay from "@/components/sections/ArchitectureOverlay";
 import DataSignalOverlay from "@/components/sections/DataSignalOverlay";
+import AboutStoryOverlay from "@/components/sections/AboutStoryOverlay";
 import ProjectNetworkOverlay from "@/components/sections/ProjectNetworkOverlay";
-import { GlassPanel, TagPill, Eyebrow } from "@/components/ui/Glass";
+import { GlassPanel, TagPill, Eyebrow, ExpandHint } from "@/components/ui/Glass";
+import { useFocusMode } from "@/context/FocusModeContext";
 
 interface CinematicSequenceProps {
   act1Frames: FrameSequenceState;
@@ -74,6 +74,7 @@ export default function CinematicSequence({
 }: CinematicSequenceProps) {
   const reducedMotion = usePrefersReducedMotion();
   const { registerSection } = useScrollNav();
+  const { openFocus } = useFocusMode();
   const [loaderExited, setLoaderExited] = useState(false);
 
   const rootRef = useRef<HTMLElement>(null);
@@ -102,9 +103,6 @@ export default function CinematicSequence({
   const explosionRef = useRef<HTMLDivElement>(null);
   const circuitRef = useRef<HTMLDivElement>(null);
   const reassemblyRef = useRef<HTMLDivElement>(null);
-
-  const badge1Ref = useRef<HTMLDivElement>(null);
-  const badge2Ref = useRef<HTMLDivElement>(null);
 
   const isVisible = useInView(rootRef, "0px");
   const isVisibleRef = useRef(isVisible);
@@ -171,7 +169,10 @@ export default function CinematicSequence({
       act3CanvasRef.current?.renderFrame(act3Frame.frame);
 
       const tl = gsap.timeline({
-        defaults: { ease: "none" },
+        // Content reveals ease with power2.out for a softer, less abrupt feel;
+        // the frame-scrub tweens below override back to "none" since a frame
+        // index must track scroll position linearly to scrub smoothly.
+        defaults: { ease: "power2.out" },
         scrollTrigger: {
           trigger: root,
           pin,
@@ -185,7 +186,11 @@ export default function CinematicSequence({
       });
 
       // === Act I — frame scrub across its full track ========================
-      tl.to(act1Frame, { frame: ACT1.frameCount - 1, duration: T1, onUpdate: renderAct1 }, ACT1_START);
+      tl.to(
+        act1Frame,
+        { frame: ACT1.frameCount - 1, duration: T1, ease: "none", onUpdate: renderAct1 },
+        ACT1_START
+      );
 
       // --- Hero: visible at rest, fades out approaching Architecture --------
       tl.set(hero, { pointerEvents: "auto" }, ACT1_START);
@@ -268,20 +273,8 @@ export default function CinematicSequence({
       tl.fromTo(
         act2Frame,
         { frame: 0 },
-        { frame: ACT2.frameCount - 1, duration: Z1 + T2, onUpdate: renderAct2 },
+        { frame: ACT2.frameCount - 1, duration: Z1 + T2, ease: "none", onUpdate: renderAct2 },
         ACT2_START - Z1
-      );
-
-      tl.fromTo(
-        badge1Ref.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: Z1 * 0.25 },
-        ACT1_START + T1 - Z1 + Z1 * 0.15
-      );
-      tl.to(
-        badge1Ref.current,
-        { autoAlpha: 0, duration: Z1 * 0.25 },
-        ACT1_START + T1 - Z1 + Z1 * 0.6
       );
 
       // === Act II — content sections =========================================
@@ -298,7 +291,7 @@ export default function CinematicSequence({
       tl.set(assembly, { pointerEvents: "none" }, A2.end);
 
       const R = { start: a2pos(ACT2.sections.rays.start), end: a2pos(ACT2.sections.rays.end) };
-      const rayItems = rays.querySelectorAll<HTMLElement>('[data-anim="item"]');
+      const rayItems = rays.querySelectorAll<HTMLElement>('[data-anim="card"]');
       tl.set(rays, { pointerEvents: "auto" }, R.start);
       tl.fromTo(
         rayItems,
@@ -327,20 +320,8 @@ export default function CinematicSequence({
       tl.fromTo(
         act3Frame,
         { frame: 0 },
-        { frame: ACT3.frameCount - 1, duration: Z2 + T3, onUpdate: renderAct3 },
+        { frame: ACT3.frameCount - 1, duration: Z2 + T3, ease: "none", onUpdate: renderAct3 },
         ACT3_START - Z2
-      );
-
-      tl.fromTo(
-        badge2Ref.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: Z2 * 0.25 },
-        ACT2_START + T2 - Z2 + Z2 * 0.15
-      );
-      tl.to(
-        badge2Ref.current,
-        { autoAlpha: 0, duration: Z2 * 0.25 },
-        ACT2_START + T2 - Z2 + Z2 * 0.6
       );
 
       // === Act III — content sections (no outgoing crossfade) ===============
@@ -440,14 +421,18 @@ export default function CinematicSequence({
         <div ref={act2AnchorRef} className="absolute inset-x-0" style={{ top: `${ACT2_START}vh` }} aria-hidden="true" />
         <div ref={act3AnchorRef} className="absolute inset-x-0" style={{ top: `${ACT3_START}vh` }} aria-hidden="true" />
 
-        <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-[#030712]">
+        <div
+          ref={pinRef}
+          data-focus-backdrop
+          className="relative h-screen w-full overflow-hidden bg-[#030712]"
+        >
           {/* --- Act I: chip --- */}
           <div ref={act1WrapRef} className="pointer-events-none absolute inset-0">
             <FrameCanvas ref={act1CanvasRef} images={act1Images} className="absolute inset-0 h-full w-full" />
             <HeroOverlay ref={heroRef} />
             <ArchitectureOverlay ref={archRef} />
             <DataSignalOverlay ref={signalRef} />
-            <ProjectNetworkOverlay ref={networkRef} />
+            <AboutStoryOverlay ref={networkRef} />
           </div>
 
           {/* --- Act II: cube --- */}
@@ -458,7 +443,12 @@ export default function CinematicSequence({
               ref={assemblyRef}
               className="pointer-events-none absolute inset-0 flex items-end px-5 pb-24 sm:px-8 sm:pb-28 lg:px-12 lg:pb-32"
             >
-              <div className="max-w-2xl">
+              <div
+                data-anim="item"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/25 to-transparent"
+              />
+              <div className="relative max-w-2xl">
                 <div data-anim="item">
                   <Eyebrow>{ACT2_CONTENT.assembly.eyebrow}</Eyebrow>
                 </div>
@@ -474,44 +464,18 @@ export default function CinematicSequence({
               </div>
             </div>
 
-            <div
-              ref={raysRef}
-              className="pointer-events-none absolute inset-0 flex flex-col items-end justify-center gap-4 px-5 sm:px-8 lg:px-12"
-            >
-              {ACT2_CONTENT.features.map((feature) => (
-                <div key={feature.index} data-anim="item" className="w-full max-w-sm">
-                  <GlassPanel accent="violet" className="p-5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-[#7C4DFF]">{feature.index}</span>
-                      <h3 className="text-sm font-medium text-white sm:text-base">{feature.title}</h3>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/55">{feature.description}</p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {feature.tags.map((tag) => (
-                        <TagPill key={tag}>{tag}</TagPill>
-                      ))}
-                    </div>
-                  </GlassPanel>
-                </div>
-              ))}
-            </div>
+            <ProjectNetworkOverlay ref={raysRef} />
 
             <div
               ref={expansionRef}
-              className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center"
+              className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 text-center"
             >
               <div data-anim="item">
-                <Eyebrow>{ACT2_CONTENT.expansion.eyebrow}</Eyebrow>
-              </div>
-              <div data-anim="item" className="flex flex-wrap items-center justify-center gap-3">
-                {ACT2_CONTENT.expansion.stack.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full border border-[#00E5FF]/25 bg-white/[0.04] px-4 py-2 font-mono text-xs uppercase tracking-wider text-white/80 backdrop-blur-xl"
-                  >
-                    {item}
-                  </span>
-                ))}
+                <GlassPanel accent="electric" className="px-6 py-4">
+                  <p className="font-mono text-xs uppercase tracking-[0.15em] text-white sm:text-sm">
+                    {ACT2_CONTENT.expansion.closingBadge}
+                  </p>
+                </GlassPanel>
               </div>
             </div>
           </div>
@@ -524,7 +488,12 @@ export default function CinematicSequence({
               ref={explosionRef}
               className="pointer-events-none absolute inset-0 flex items-end px-5 pb-24 sm:px-8 sm:pb-28 lg:px-12 lg:pb-32"
             >
-              <div className="max-w-2xl">
+              <div
+                data-anim="item"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/25 to-transparent"
+              />
+              <div className="relative max-w-2xl">
                 <div data-anim="item">
                   <Eyebrow>{ACT3_CONTENT.explosion.eyebrow}</Eyebrow>
                 </div>
@@ -545,35 +514,56 @@ export default function CinematicSequence({
               className="pointer-events-none absolute inset-0 flex items-center justify-between gap-6 px-5 sm:px-8 lg:px-12"
             >
               <div className="flex flex-col gap-4">
-                {ACT3_CONTENT.projects.map((project) => (
-                  <div key={project.index} data-anim="item" className="w-full max-w-sm">
-                    <GlassPanel accent="electric" className="p-5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs text-[#00E5FF]">{project.index}</span>
-                        <h3 className="text-sm font-medium text-white sm:text-base">{project.title}</h3>
-                      </div>
-                      <p className="mt-2 text-xs leading-relaxed text-white/55">{project.description}</p>
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {project.tags.map((tag) => (
-                          <TagPill key={tag}>{tag}</TagPill>
-                        ))}
-                      </div>
-                    </GlassPanel>
+                {ACT3_CONTENT.skillCategories.map((category) => (
+                  <div key={category.index} data-anim="item" className="w-full max-w-sm">
+                    <button
+                      type="button"
+                      onClick={(e) =>
+                        openFocus(
+                          {
+                            id: `skill-${category.index}`,
+                            accent: "electric",
+                            title: category.title,
+                            description: category.description,
+                            tags: category.tags,
+                          },
+                          e.currentTarget
+                        )
+                      }
+                      className="block w-full cursor-pointer text-left"
+                    >
+                      <GlassPanel
+                        accent="electric"
+                        className="group p-5 transition-colors hover:border-[#00E5FF]/50"
+                      >
+                        <ExpandHint />
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs text-[#00E5FF]">{category.index}</span>
+                          <h3 className="text-sm font-medium text-white sm:text-base">{category.title}</h3>
+                        </div>
+                        <p className="mt-2 text-xs leading-relaxed text-white/55">{category.description}</p>
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {category.tags.map((tag) => (
+                            <TagPill key={tag}>{tag}</TagPill>
+                          ))}
+                        </div>
+                      </GlassPanel>
+                    </button>
                   </div>
                 ))}
               </div>
 
               <div className="hidden flex-col items-end gap-3 lg:flex">
                 <span data-anim="manifesto-item" className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40">
-                  How I Work
+                  {ACT3_CONTENT.toolsEyebrow}
                 </span>
-                {MANIFESTO.map((line) => (
+                {ACT3_CONTENT.tools.map((tool) => (
                   <div
-                    key={line}
+                    key={tool}
                     data-anim="manifesto-item"
-                    className="max-w-xs rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-right font-mono text-xs text-white/70 backdrop-blur-xl"
+                    className="max-w-xs rounded-full border border-white/10 bg-slate-900/80 px-4 py-2 text-right font-mono text-xs text-white/70 shadow-xl backdrop-blur-lg"
                   >
-                    {line}
+                    {tool}
                   </div>
                 ))}
               </div>
@@ -593,31 +583,9 @@ export default function CinematicSequence({
             </div>
           </div>
 
-          {/* --- Floating transition badges --- */}
-          <div
-            ref={badge1Ref}
-            className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-6 opacity-0"
-          >
-            <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-md">
-              <p className="text-center font-mono text-xs tracking-[0.25em] text-[#00E5FF] sm:text-sm">
-                {TRANSITIONS.toAct2}
-              </p>
-            </div>
-          </div>
-          <div
-            ref={badge2Ref}
-            className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center px-6 opacity-0"
-          >
-            <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-md">
-              <p className="text-center font-mono text-xs tracking-[0.25em] text-[#00E5FF] sm:text-sm">
-                {TRANSITIONS.toAct3}
-              </p>
-            </div>
-          </div>
-
           {allMissing && (
             <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 z-30 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-2 font-mono text-[11px] text-red-300">
-              No frames found in {ACT1.framePath} — add frame_0001.webp …
+              Aucune frame trouvée dans {ACT1.framePath} — ajoutez frame_0001.webp …
               frame_{String(ACT1.frameCount).padStart(4, "0")}.webp
             </div>
           )}

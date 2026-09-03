@@ -4,9 +4,9 @@ import { useScrollNav } from "@/context/ScrollNavContext";
 import { type SectionId } from "@/lib/constants";
 
 const HEADER_LINKS: { label: string; target: SectionId }[] = [
-  { label: "PROJETS", target: "act1" },
-  { label: "COMPÉTENCES", target: "act2" },
-  { label: "PARCOURS", target: "act3" },
+  { label: "À PROPOS", target: "act1" },
+  { label: "RÉALISATIONS", target: "act2" },
+  { label: "COMPÉTENCES", target: "act3" },
 ];
 
 export default function Header() {
@@ -18,7 +18,8 @@ export default function Header() {
       className="fixed top-0 left-0 w-full z-50 px-8 py-4 flex items-center justify-between bg-[#0A0F1D]/80 backdrop-blur-md border-b border-cyan-500/30 shadow-[0_1px_15px_rgba(0,229,255,0.15)] opacity-0"
     >
       <button
-        onClick={() => scrollToSection("act1")}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        aria-label="Accueil"
         className="text-white font-bold tracking-widest text-sm"
       >
         ORACE HONFIN

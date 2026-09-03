@@ -12,51 +12,51 @@ export interface FaqEntry {
 export const ASSISTANT_FAQ: FaqEntry[] = [
   {
     id: "stack",
-    prompt: "What's Orace's tech stack?",
-    keywords: ["stack", "tech", "language", "tools", "technolog"],
+    prompt: "Quelle est la stack technique d'Orace ?",
+    keywords: ["stack", "tech", "langage", "outils", "technolog"],
     answer:
-      "Python, Rust, C/C++, and TypeScript day to day — PyTorch and on-device LLMs for the AI side, Next.js and React Three Fiber for interfaces, Docker and Linux for everything that has to actually run in production.",
+      "C, C++ et Haskell pour le bas niveau et les langages, Python et JavaScript au quotidien, React/Node.js pour le fullstack, plus Docker, CI/CD et Git/Linux pour tout livrer.",
   },
   {
-    id: "projects",
-    prompt: "Tell me about JARVIS.",
-    keywords: ["jarvis", "voice", "assistant"],
+    id: "trading-bot",
+    prompt: "Parle-moi du bot de trading.",
+    keywords: ["trading", "bot", "finance", "marché"],
     answer:
-      "JARVIS is a fully offline voice assistant running on Fedora Linux — wake-word detection via openWakeWord, local speech processing, and voice biometrics so it only acts on commands from a recognized speaker. Zero cloud dependency, zero audio leaving the machine.",
+      "Un bot de trading automatisé qui intègre des algorithmes d'IA pour analyser les marchés financiers et appuyer des décisions d'achat/vente en temps réel.",
   },
   {
-    id: "gomoku",
-    prompt: "What's the Gomoku engine?",
-    keywords: ["gomoku", "game", "engine"],
+    id: "game-engine",
+    prompt: "C'est quoi le moteur de jeu maison ?",
+    keywords: ["jeu", "moteur", "rpg", "c++"],
     answer:
-      "A tournament-grade Gomoku AI written in Rust: bitboard position representation, alpha-beta search with iterative deepening, speaking the standard pbrain protocol so it drops into any compatible tournament GUI.",
+      "Un moteur de jeu 2D construit de zéro en C, utilisé pour livrer deux jeux jouables façon RPG : Hunter et Sokoban.",
   },
   {
     id: "availability",
-    prompt: "Is Orace available for hire?",
-    keywords: ["available", "hire", "hiring", "freelance", "consult", "job", "work with"],
+    prompt: "Orace est-il disponible ?",
+    keywords: ["disponible", "embauche", "recrut", "freelance", "consult", "poste", "travailler avec"],
     answer:
-      "Yes — open to AI Engineering consultancy, co-founder roles, and high-impact systems architecture work. Use the terminal below or email to start a conversation.",
+      "Oui — ouvert aux postes d'ingénieur fullstack, aux projets freelance, et aux opportunités de co-fondation technique. Utilisez le terminal ci-dessous ou l'email pour démarrer une conversation.",
   },
   {
     id: "location",
-    prompt: "Where is Orace based?",
-    keywords: ["where", "location", "based", "timezone", "remote"],
-    answer: `Working from a Fedora Linux workstation, open to remote work — see the footer for details.`,
+    prompt: "Où est basé Orace ?",
+    keywords: ["où", "localisation", "basé", "fuseau", "remote"],
+    answer: `Basé à ${SITE.location}, ouvert au travail à distance.`,
   },
   {
     id: "contact",
-    prompt: "How do I get in touch?",
-    keywords: ["contact", "email", "reach", "touch", "message"],
-    answer: `Scroll down to the contact terminal to send a message directly, or email ${SITE.email}.`,
+    prompt: "Comment te contacter ?",
+    keywords: ["contact", "email", "joindre", "message"],
+    answer: `Faites défiler jusqu'au terminal de contact pour envoyer un message directement, ou écrivez à ${SITE.email}.`,
   },
 ];
 
 export const ASSISTANT_GREETING =
-  "Hey — I'm a lightweight assistant trained on Orace's portfolio. Ask about his stack, projects, or availability.";
+  "Salut — je suis un assistant léger entraîné sur le portfolio d'Orace. Posez-moi des questions sur sa stack, ses projets ou sa disponibilité.";
 
 export const ASSISTANT_FALLBACK =
-  "I don't have a canned answer for that one — try asking about his stack, a specific project, or availability, or drop a message in the contact terminal below.";
+  "Je n'ai pas de réponse toute faite pour celle-là — essayez de me demander sa stack, un projet précis, ou sa disponibilité, ou laissez un message dans le terminal de contact ci-dessous.";
 
 export function matchFaq(input: string): FaqEntry | null {
   const normalized = input.toLowerCase();

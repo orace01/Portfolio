@@ -8,9 +8,9 @@ import { useScrollNav } from "@/context/ScrollNavContext";
 import TerminalContact from "@/components/contact/TerminalContact";
 
 const CTA_LINKS = [
-  { label: "Download CV / Resume", href: SITE.cvHref, external: false },
-  { label: "GitHub", href: SITE.github, external: true },
+  { label: "Télécharger le CV", href: SITE.cvHref, external: false },
   { label: "LinkedIn", href: SITE.linkedin, external: true },
+  { label: "M'écrire", href: `mailto:${SITE.email}`, external: false },
 ];
 
 export default function ContactFooter() {
@@ -91,19 +91,10 @@ export default function ContactFooter() {
 
       <div
         data-anim="item"
-        className="flex w-full flex-col items-center gap-2 bg-[#0A0F1D]/60 backdrop-blur-md border-t border-cyan-500/30 shadow-[0_-4px_25px_rgba(0,229,255,0.1)] py-6 opacity-0"
+        className="flex w-full items-center justify-center bg-[#0A0F1D]/60 backdrop-blur-md border-t border-cyan-500/30 shadow-[0_-4px_25px_rgba(0,229,255,0.1)] py-4 opacity-0"
       >
-        <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
-          </span>
-          <span className="font-mono text-xs uppercase tracking-wider text-slate-500">
-            AVAILABLE FOR NEW OPPORTUNITIES
-          </span>
-        </div>
-        <span className="font-mono text-xs uppercase tracking-wider text-slate-500">
-          © 2026 ORACE HONFIN <span className="text-cyan-400/80 mx-1">—</span> AI & FULLSTACK ENGINEER
+        <span className="font-mono text-[11px] tracking-wider text-slate-600">
+          {SITE.location} · {SITE.phone}
         </span>
       </div>
     </section>

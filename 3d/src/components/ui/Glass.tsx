@@ -18,7 +18,7 @@ export function GlassPanel({ children, className, accent = "none" }: GlassPanelP
   return (
     <div
       className={cx(
-        "rounded-2xl border bg-white/[0.04] backdrop-blur-xl backdrop-saturate-150",
+        "rounded-2xl border bg-slate-900/80 shadow-2xl backdrop-blur-lg backdrop-saturate-150",
         accentBorder[accent],
         className
       )}
@@ -30,7 +30,7 @@ export function GlassPanel({ children, className, accent = "none" }: GlassPanelP
 
 export function TagPill({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white/60">
+    <span className="rounded-full border border-white/10 bg-white/[0.08] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-white/70">
       {children}
     </span>
   );

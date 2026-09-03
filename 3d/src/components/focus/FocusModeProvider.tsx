@@ -188,7 +188,7 @@ export function FocusModeProvider({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={closeFocus}
-                aria-label="Close (ESC)"
+                aria-label="Fermer (ÉCHAP)"
                 className="shrink-0 rounded-full border border-white/15 bg-white/5 p-2 text-white/60 backdrop-blur-sm transition-all duration-200 hover:border-[#00E5FF]/40 hover:bg-[#00E5FF]/10 hover:text-[#00E5FF]"
               >
                 <svg viewBox="0 0 20 20" fill="none" className="h-4 w-4">
@@ -203,6 +203,17 @@ export function FocusModeProvider({ children }: { children: ReactNode }) {
                 {session.payload.description}
               </p>
 
+              {session.payload.role && (
+                <p
+                  className={cx(
+                    "mt-3 font-mono text-xs uppercase tracking-[0.15em]",
+                    ACCENT_TEXT[session.payload.accent]
+                  )}
+                >
+                  {session.payload.role}
+                </p>
+              )}
+
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {session.payload.tags.map((tag) => (
                   <TagPill key={tag}>{tag}</TagPill>
@@ -213,7 +224,7 @@ export function FocusModeProvider({ children }: { children: ReactNode }) {
                 <dl className="mt-8 flex max-w-2xl flex-col gap-6">
                   <div>
                     <dt className={cx("font-mono text-xs font-bold uppercase tracking-[0.2em]", ACCENT_TEXT[session.payload.accent])}>
-                      Problem
+                      Problème
                     </dt>
                     <dd className="mt-2 text-sm leading-relaxed text-white/60">
                       {session.payload.caseStudy.problem}
@@ -221,7 +232,7 @@ export function FocusModeProvider({ children }: { children: ReactNode }) {
                   </div>
                   <div>
                     <dt className={cx("font-mono text-xs font-bold uppercase tracking-[0.2em]", ACCENT_TEXT[session.payload.accent])}>
-                      Approach
+                      Approche
                     </dt>
                     <dd className="mt-2 text-sm leading-relaxed text-white/60">
                       {session.payload.caseStudy.approach}
@@ -229,7 +240,7 @@ export function FocusModeProvider({ children }: { children: ReactNode }) {
                   </div>
                   <div>
                     <dt className={cx("font-mono text-xs font-bold uppercase tracking-[0.2em]", ACCENT_TEXT[session.payload.accent])}>
-                      Outcome
+                      Résultat
                     </dt>
                     <dd className="mt-2 text-sm leading-relaxed text-white/60">
                       {session.payload.caseStudy.outcome}

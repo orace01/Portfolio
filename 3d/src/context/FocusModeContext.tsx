@@ -15,6 +15,7 @@ export interface FocusPayload {
   tags: string[];
   /** Project-only extras — present only for Project-Network cards. */
   status?: ProjectStatus;
+  role?: string;
   github?: string;
   caseStudy?: { problem: string; approach: string; outcome: string };
 }

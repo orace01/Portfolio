@@ -4,6 +4,9 @@
  * section timing (fractions 0..1 of that Act's own track) — Acts are
  * independent pinned tracks, not slices of one shared timeline.
  *
+ * Acts map to one part of Orace each: Act I (chip) = À Propos, Act II
+ * (cube) = Réalisations, Act III (keyboard) = Compétences.
+ *
  * `heightVh` is the *scrub distance* for the Act — how much scroll drives
  * its frame sequence, independent of the 100vh viewport it plays in. All
  * three Acts share a *single* pinned track (see `CinematicSequence`) rather
@@ -17,14 +20,15 @@
 
 export const SITE = {
   name: "Orace Honfin",
-  role: "AI Engineer",
-  headerTag: "ORACE HONFIN // AI ENGINEER",
-  ctaLabel: "Let's Connect",
-  email: "contact@oracehonfin.dev", // TODO: replace with the real public email
-  github: "https://github.com/oracehonfin", // TODO: replace with the real handle
-  linkedin: "https://linkedin.com/in/oracehonfin", // TODO: replace with the real handle
-  cvHref: "/cv/orace-honfin-cv.pdf", // TODO: drop the real CV at public/cv/orace-honfin-cv.pdf
-  location: "Fedora Linux Workstation / Remote",
+  role: "Ingénieur Logiciel Fullstack",
+  headerTag: "ORACE HONFIN // INGÉNIEUR FULLSTACK",
+  ctaLabel: "Discutons",
+  email: "orace.honfin@epitech.eu",
+  phone: "+229 01 50 78 46 60",
+  // Pas de GitHub public au dossier — en ajouter un et relier les CTA une fois disponible.
+  linkedin: "https://linkedin.com/in/oracehonfin",
+  cvHref: "/cv/orace-honfin-cv.pdf", // TODO: déposer le vrai CV dans public/cv/orace-honfin-cv.pdf
+  location: "Cotonou, Bénin",
 };
 
 export const COLORS = {
@@ -40,9 +44,9 @@ export const COLORS = {
 export type SectionId = "act1" | "act2" | "act3" | "contact";
 
 export const NAV_LINKS: { label: string; target: SectionId }[] = [
-  { label: "01. Core Systems", target: "act1" },
-  { label: "02. Data Flow", target: "act2" },
-  { label: "03. Edge & UI", target: "act3" },
+  { label: "01. À Propos", target: "act1" },
+  { label: "02. Réalisations", target: "act2" },
+  { label: "03. Compétences", target: "act3" },
   { label: "04. Contact", target: "contact" },
 ];
 
@@ -56,13 +60,13 @@ export function frameSrc(framePath: string, frameCount: number, index: number): 
 }
 
 // ---------------------------------------------------------------------------
-// Act I — Core Systems & Hardware-Software Co-Design (Chip)
+// Act I — À Propos (Chip)
 // ---------------------------------------------------------------------------
 
 export const ACT1 = {
   framePath: "/frames",
   frameCount: 240,
-  heightVh: 300,
+  heightVh: 420,
   sections: {
     hero: { start: 0, end: 0.15 },
     architecture: { start: 0.15, end: 0.5 },
@@ -71,68 +75,120 @@ export const ACT1 = {
   },
 };
 
+// "hero" slot — functional section title, no decorative giant word.
+export const ACT1_CONTENT = {
+  hero: {
+    eyebrow: "Acte I — À Propos",
+    title: "PROFIL & PARCOURS",
+    description:
+      "Je suis Orace Honfin, ingénieur logiciel fullstack et cofondateur de Webspace. Je conçois des produits numériques de bout en bout, de l'architecture technique jusqu'à la mise en production. Mon travail se situe à la croisée du développement web et mobile, des systèmes, de l'intelligence artificielle et de la cybersécurité.",
+  },
+};
+
+// "architecture" slot — 4 badges wired onto the chip diagram. Quick facts.
 export const ARCHITECTURE_LAYERS = [
   {
     index: "01",
-    title: "System Orchestration & LLM Agents",
-    layer: "Top Ceramic Layer",
-    tags: ["Python", "Rust", "Docker", "Make.com", "n8n"],
+    title: "Cotonou, Bénin",
+    layer: "Localisation",
+    tags: ["GMT+1", "Remote OK"],
     anchor: { x: 47, y: 20 },
     lineStart: { x: 30, y: 14 },
     badge: { side: "left" as const, x: 6, y: 10 },
   },
   {
     index: "02",
-    title: "Full-Stack & 3D Web Interfaces",
-    layer: "Translucent Glass Layer",
-    tags: ["Next.js", "TypeScript", "React Three Fiber", "Tailwind"],
+    title: "Epitech — Expert en Informatique",
+    layer: "Formation",
+    tags: ["Cycle Ingénieur"],
     anchor: { x: 60, y: 38 },
     lineStart: { x: 70, y: 32 },
     badge: { side: "right" as const, x: 6, y: 28 },
   },
   {
     index: "03",
-    title: "Core AI & Perception",
-    layer: "NPU Central Core",
-    tags: ["PyTorch", "Computer Vision", "openWakeWord", "Voice Biometrics"],
+    title: "Systèmes, IA & ingénierie créative",
+    layer: "Focus",
+    tags: ["Bas niveau", "Machine Learning", "Créatif"],
     anchor: { x: 50, y: 50 },
     lineStart: { x: 30, y: 60 },
     badge: { side: "left" as const, x: 6, y: 56 },
   },
   {
     index: "04",
-    title: "Low-Level & Embedded Systems",
-    layer: "Base Board",
-    tags: ["C", "C++", "Linux SysAdmin"],
+    title: "Ouvert aux opportunités",
+    layer: "Statut",
+    tags: ["Freelance", "Temps plein", "Co-fondation"],
     anchor: { x: 53, y: 72 },
     lineStart: { x: 70, y: 78 },
     badge: { side: "right" as const, x: 6, y: 74 },
   },
 ];
 
+// "signal" slot — glass panel, philosophie / façon de travailler.
 export const SIGNAL_FEATURES = [
   {
     index: "01",
-    title: "Algorithmic Trading Signals",
-    tags: ["Python", "Time-Series ML"],
+    title: "Justesse, performance, finition",
+    tags: ["Qualité"],
     description:
-      "Real-time market signal analysis feeding automated, risk-managed trade execution.",
+      "La justesse d'abord, la performance ensuite, la finition en dernier — toujours dans cet ordre.",
   },
   {
     index: "02",
-    title: "On-Device Voice Pipelines",
-    tags: ["JARVIS", "openWakeWord"],
+    title: "Le bas niveau au service de la confiance",
+    tags: ["Rigueur"],
     description:
-      "Fully offline wake-word, speech, and voice-biometrics pipeline — zero cloud dependency.",
+      "Comprendre ce qu'il y a sous les abstractions rend le code haut niveau fiable, pas seulement rapide.",
   },
   {
     index: "03",
-    title: "Local Assistants",
-    tags: ["On-Device LLMs"],
-    description:
-      "Fully offline voice and language assistants with zero cloud dependency.",
+    title: "Livrer petit, livrer souvent",
+    tags: ["Autonomie"],
+    description: "La production reste la vraie revue de code.",
   },
 ];
+
+// "network" slot — cartes flottantes sur la puce. Compléments au profil,
+// sans répéter la bio du slot "hero" ni les quick facts d'ARCHITECTURE_LAYERS.
+export const ABOUT_STORY = [
+  {
+    title: "Webspace",
+    description:
+      "Une plateforme d'incubation qui accompagne des startups de l'idée à la mise en production. J'y suis cofondateur et développeur principal.",
+    tags: ["Cofondateur", "Startup"],
+    position: { left: 6, top: 12 },
+  },
+  {
+    title: "Formation",
+    description:
+      "Cycle ingénieur à Epitech, expert en informatique — un parcours exigeant qui a forgé le goût de la rigueur et des délais tenus.",
+    tags: ["Epitech", "Expert en informatique"],
+    position: { left: 32, top: 62 },
+  },
+  {
+    title: "Ce qui m'anime",
+    description:
+      "La curiosité plus que la spécialisation : comprendre un système jusqu'au bas niveau, puis s'en servir pour construire quelque chose d'utile.",
+    tags: ["Curiosité", "Rigueur"],
+    position: { left: 64, top: 20 },
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Act II — Réalisations (Cube)
+// ---------------------------------------------------------------------------
+
+export const ACT2 = {
+  framePath: "/frames_cube",
+  frameCount: 240,
+  heightVh: 480,
+  sections: {
+    assembly: { start: 0, end: 0.3 },
+    rays: { start: 0.3, end: 0.7 },
+    expansion: { start: 0.7, end: 1 },
+  },
+};
 
 export type ProjectStatus = "ONLINE" | "BETA";
 
@@ -142,111 +198,135 @@ export interface ProjectCaseStudy {
   outcome: string;
 }
 
+// "rays" slot — cartes projet cliquables (étude de cas complète).
 export const PROJECTS = [
   {
-    slug: "jarvis",
-    title: "JARVIS Local Assistant",
-    description: "Voice-activated local assistant on Fedora Linux.",
-    tags: ["Python", "openWakeWord", "Gemini API", "Linux"],
+    slug: "trading-bot",
+    title: "Bot de Trading IA",
+    description:
+      "Outil d'automatisation et d'aide à la décision qui analyse les marchés financiers en temps réel.",
+    role: "Conception et développement solo — de l'algorithme au déploiement.",
+    tags: ["IA", "Machine Learning", "Finance"],
     status: "ONLINE" as ProjectStatus,
-    github: "https://github.com/oracehonfin/jarvis", // TODO: replace with the real repo
-    position: { left: 6, top: 12 },
+    position: { left: 4, top: 10 },
     caseStudy: {
       problem:
-        "Cloud voice assistants leak every household conversation to a third party and stall out the moment the network does.",
+        "Suivre les marchés financiers à la main et réagir assez vite aux opportunités d'achat/vente ne tient pas à l'échelle.",
       approach:
-        "A wake-word model (openWakeWord) gates a fully on-device pipeline — local STT, intent routing, and a voice-biometrics layer that rejects commands from unrecognized speakers — with zero audio ever leaving the machine.",
+        "Conception et développement d'un bot de trading automatisé intégrant des algorithmes d'IA pour analyser les marchés financiers et déclencher des décisions d'achat/vente en temps réel.",
       outcome:
-        "Sub-second response on commodity Fedora hardware, fully offline, with per-user voice authorization on sensitive commands.",
+        "Un bot fonctionnel qui transforme l'analyse de marché en décisions de trading automatisées, en temps réel.",
     },
   },
   {
-    slug: "gomoku",
-    title: "Gomoku AI Engine",
-    description: "High-performance Gomoku AI using the pbrain protocol.",
-    tags: ["Rust", "pbrain protocol", "Game AI"],
+    slug: "incubation-platform",
+    title: "Plateforme d'Incubation de Startups",
+    description:
+      "Plateforme web & mobile fullstack accompagnant les startups de l'idée à la production.",
+    role: "Cofondateur et développeur principal chez Webspace.",
+    tags: ["Fullstack", "Web", "Mobile"],
     status: "ONLINE" as ProjectStatus,
-    github: "https://github.com/oracehonfin/gomoku-engine", // TODO: replace with the real repo
-    position: { left: 32, top: 62 },
+    position: { left: 36, top: 14 },
     caseStudy: {
       problem:
-        "Tournament-grade Gomoku engines live or die on search depth per millisecond — a slow evaluation loop loses to a faster, dumber one.",
+        "Les startups en incubation avaient besoin d'un seul endroit pour passer du concept initial à un produit livré, plutôt que des outils épars.",
       approach:
-        "A bitboard-backed position representation and alpha-beta search with iterative deepening, written in Rust to keep the hot evaluation loop allocation-free and speak the standard pbrain protocol so it drops into any compatible tournament GUI.",
+        "Conception et développement d'une plateforme web et mobile fullstack de bout en bout, couvrant tout le parcours d'incubation, du concept initial jusqu'au déploiement en production.",
       outcome:
-        "Consistently out-searches reference engines at equal time controls, validated across automated pbrain tournament matches.",
+        "Une plateforme qui accompagne activement des startups dans leur construction et leur lancement.",
     },
   },
   {
-    slug: "sheetly",
-    title: "Sheetly",
-    description: "Intelligent accounting platform and tooling.",
-    tags: ["Next.js", "PyTorch", "TypeScript"],
+    slug: "game-engine",
+    title: "Moteur de Jeu & RPG Maison",
+    description: "Un moteur de jeu 2D conçu de zéro en C/C++, propulsant des titres façon RPG.",
+    role: "Conception et développement solo du moteur et des jeux.",
+    tags: ["C", "C++", "Moteur de jeu"],
     status: "BETA" as ProjectStatus,
-    github: "https://github.com/oracehonfin/sheetly", // TODO: replace with the real repo
-    position: { left: 64, top: 20 },
+    position: { left: 68, top: 10 },
     caseStudy: {
       problem:
-        "Small structures still manage their books in unstructured spreadsheets — slow and error-prone at any real volume.",
+        "Utiliser un moteur de jeu tout fait cache exactement ce qu'on cherche à apprendre : comment le rendu, les entrées et la boucle de jeu fonctionnent réellement en dessous.",
       approach:
-        "Sheetly automatically structures accounting entries from raw documents and generates coherent financial reports, with human review on ambiguous cases.",
+        "Construction d'un moteur de jeu complet de zéro en C/C++ — architecture, rendu, boucle de jeu et outils internes — puis utilisation de ce moteur pour livrer des jeux façon RPG, Hunter et Sokoban, comme preuve concrète et jouable.",
+      outcome: "Un moteur maison fonctionnel, avec deux jeux jouables construits directement dessus.",
+    },
+  },
+  {
+    slug: "haskell-language",
+    title: "Langage de Programmation Maison",
+    description: "Un langage de programmation conçu et implémenté de zéro en Haskell.",
+    role: "Conception et implémentation solo — parseur, typage, interpréteur.",
+    tags: ["Haskell", "Langage", "Compilateur"],
+    status: "BETA" as ProjectStatus,
+    position: { left: 6, top: 58 },
+    caseStudy: {
+      problem:
+        "Utiliser des langages existants ne dit rien sur ce qui se passe réellement entre le code source et son exécution : comment un parseur, un système de types et un interpréteur fonctionnent ensemble.",
+      approach:
+        "Conception et implémentation d'un langage de programmation complet en Haskell — analyse lexicale, parsing, vérification de types et interprétation — en s'appuyant sur les garanties du système de types de Haskell lui-même.",
       outcome:
-        "Structured, up-to-date financial tracking with no manual re-entry of routine transactions.",
+        "Un langage fonctionnel avec son propre parseur, typeur et interpréteur, et une compréhension concrète de ce qu'un langage fait réellement sous le capot.",
+    },
+  },
+  {
+    slug: "security-audits",
+    title: "Audits de Sécurité Applicative",
+    description:
+      "Audits de sécurité et durcissement d'applications web pour protéger les données utilisateur.",
+    role: "Audit, test d'intrusion et recommandations de correction.",
+    tags: ["Pentest", "Hardening", "Sécurité Web"],
+    status: "ONLINE" as ProjectStatus,
+    position: { left: 38, top: 62 },
+    caseStudy: {
+      problem:
+        "Des applications web mises en production sans revue de sécurité dédiée exposent des failles évitables — injection, authentification faible, données mal protégées.",
+      approach:
+        "Conduite d'audits de sécurité et de tests d'intrusion sur des applications web, puis durcissement des points faibles identifiés.",
+      outcome:
+        "Des applications plus robustes face aux vecteurs d'attaque courants, avec des recommandations de correction priorisées.",
+    },
+  },
+  {
+    slug: "ia-sport-trophy",
+    title: "Trophée IA & Sport",
+    description:
+      "Vainqueur d'un concours d'innovation combinant intelligence artificielle et performance sportive.",
+    role: "Lauréat — conception et présentation du projet gagnant.",
+    tags: ["IA", "Innovation", "Compétition"],
+    status: "ONLINE" as ProjectStatus,
+    position: { left: 68, top: 58 },
+    caseStudy: {
+      problem:
+        "Le concours proposait de repenser l'apport de l'IA à la performance sportive, dans un format compétitif à délai serré.",
+      approach:
+        "Conception et développement d'un projet combinant intelligence artificielle et analyse de performance sportive, présenté devant un jury.",
+      outcome: "Premier prix du concours, récompensant l'approche technique et sa présentation.",
     },
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Act II — Data Pipelines & Neural Information Flow (Cube)
-// ---------------------------------------------------------------------------
-
-export const ACT2 = {
-  framePath: "/frames_cube",
-  frameCount: 240,
-  heightVh: 250,
-  sections: {
-    assembly: { start: 0, end: 0.3 },
-    rays: { start: 0.3, end: 0.7 },
-    expansion: { start: 0.7, end: 1 },
-  },
-};
-
 export const ACT2_CONTENT = {
   assembly: {
-    eyebrow: "Act II — Data Pipelines",
-    title: "HIGH-THROUGHPUT DATA ARCHITECTURE",
+    eyebrow: "Acte II — Réalisations",
+    title: "RÉALISATIONS",
     description:
-      "Ingesting, structuring, and routing complex vector data across scalable pipelines.",
+      "Six réalisations qui vont du prototype à la production et à la reconnaissance : produits, langage de programmation, sécurité. Cliquez une carte pour l'étude de cas complète.",
   },
-  features: [
-    {
-      index: "01",
-      title: "Automated Security & Auditing",
-      description: "Integration of OWASP ZAP & Faraday into automated dev pipelines.",
-      tags: ["OWASP ZAP", "Faraday"],
-    },
-    {
-      index: "02",
-      title: "Intelligent Data Extraction",
-      description:
-        "Unstructured document parsing at scale — JEB Incubator Data Extractor.",
-      tags: ["Document Parsing", "JEB Incubator"],
-    },
-  ],
+  // "expansion" slot — mot de clôture de l'acte.
   expansion: {
-    eyebrow: "Key Metrics & Technology Stack",
-    stack: ["Vector Databases", "RAG Architectures", "Event-driven Systems"],
+    closingBadge: "6 réalisations, de l'idée au déploiement.",
   },
 };
 
 // ---------------------------------------------------------------------------
-// Act III — Human-Machine Interaction & Edge AI (Keyboard)
+// Act III — Compétences (Keyboard)
 // ---------------------------------------------------------------------------
 
 export const ACT3 = {
   framePath: "/frames_keyboard",
   frameCount: 240,
-  heightVh: 250,
+  heightVh: 350,
   sections: {
     explosion: { start: 0, end: 0.4 },
     circuit: { start: 0.4, end: 0.8 },
@@ -256,48 +336,47 @@ export const ACT3 = {
 
 export const ACT3_CONTENT = {
   explosion: {
-    eyebrow: "Act III — Edge & UI",
-    title: "PRECISION HARDWARE-SOFTWARE INTERFACING",
+    eyebrow: "Acte III — Compétences",
+    title: "COMPÉTENCES TECHNIQUES",
     description:
-      "Bridging low-level system events with intuitive, high-performance user interfaces.",
+      "Du bas niveau à l'intelligence artificielle, en passant par le web — les compétences avec lesquelles je construis au quotidien.",
   },
-  projects: [
+  // "circuit" slot, colonne gauche — catégories de compétences.
+  skillCategories: [
     {
       index: "01",
-      title: "Local Voice AI Assistant",
-      description: "Zero-cloud latency assistant running on Fedora Linux.",
-      tags: ["JARVIS", "Fedora Linux", "On-Device"],
+      title: "Langages",
+      description: "Bas niveau et haut niveau, du système au script.",
+      tags: ["C", "C++", "Python", "Haskell"],
     },
     {
       index: "02",
-      title: "Developer Tooling & UI Engineering",
-      description: "Custom 3D engine interfaces and interactive web apps.",
-      tags: ["React Three Fiber", "Next.js", "WebGL"],
+      title: "Web & Mobile",
+      description: "Applications fullstack, du serveur à l'interface.",
+      tags: ["React", "Next.js", "Dart", "API REST"],
+    },
+    {
+      index: "03",
+      title: "IA & Data",
+      description: "Machine learning appliqué et trading algorithmique.",
+      tags: ["Machine Learning", "PyTorch", "scikit-learn"],
+    },
+    {
+      index: "04",
+      title: "Sécurité & Ops",
+      description: "Audits, durcissement, et livraison continue.",
+      tags: ["Pentest", "Docker", "CI/CD", "Linux"],
     },
   ],
-  summaryBadge: "Optimized for Performance, Privacy, and Execution Speed.",
+  // "circuit" slot, colonne droite — outils du quotidien (miroir de la colonne gauche).
+  toolsEyebrow: "Outils & Workflow",
+  tools: ["Git", "Linux", "Docker", "CI/CD"],
+  summaryBadge: "Du bas niveau à l'IA — rigoureux, autonome, prêt à livrer.",
 };
 
 // ---------------------------------------------------------------------------
-// "How I Work" — engineering philosophy pills overlaying Act III's circuit
-// phase, mirrored against the project cards on the opposite edge.
+// Footer
 // ---------------------------------------------------------------------------
-
-export const MANIFESTO = [
-  "Correctness first, performance second.",
-  "Low-level understanding makes high-level code trustworthy.",
-  "Automate the boring parts, own the hard parts.",
-];
-
-
-// ---------------------------------------------------------------------------
-// Transitions + Footer
-// ---------------------------------------------------------------------------
-
-export const TRANSITIONS = {
-  toAct2: "// PROCESSING LAYER 02: NEURAL DATA ROUTING & TENSOR FLOWS",
-  toAct3: "// PROCESSING LAYER 03: HUMAN-MACHINE INTERACTION & EDGE EXECUTION",
-};
 
 /**
  * Acts with an outgoing crossfade (Act I, Act II) reserve this fraction of
@@ -314,20 +393,20 @@ export const CROSSFADE_ZONE = 0.05;
 export const CROSSFADE_START = 1 - CROSSFADE_ZONE;
 
 export const FOOTER_CONTENT = {
-  heading: "READY TO SCALE YOUR AI INFRASTRUCTURE?",
+  heading: "CONSTRUISONS VOTRE PROCHAIN PRODUIT",
   subtext:
-    "Available for AI Engineering consultancy, Co-founder roles, and High-Impact Systems Architecture.",
+    "Ouvert au développement de produit, aux missions freelance, à un poste d'ingénieur fullstack à temps plein, ou à un projet de co-fondation.",
 };
 
 export const CONTACT_TERMINAL = {
   session: "session://core/contact-transceiver.sh",
   bootLines: [
-    "[STATUS: CONNECTED]",
-    "[INITIALIZING TRANSMISSION...]",
-    `> LINKED TO ${SITE.name.toUpperCase()}_CORE [SYSTEMS: ONLINE]`,
+    "[STATUT : CONNECTÉ]",
+    "[INITIALISATION DE LA TRANSMISSION...]",
+    `> CONNEXION AU CORE DE ${SITE.name.toUpperCase()} [SYSTÈMES : EN LIGNE]`,
   ],
-  step1: ["> STEP 1/3: IDENTIFICATION", "> ENTER YOUR NAME:"],
-  step2: ["> STEP 2/3: RETURN ROUTE", "> ENTER YOUR EMAIL ADDRESS:"],
-  step3: ["> STEP 3/3: PAYLOAD", "> ENTER YOUR MESSAGE:"],
-  confirmLine: "> DISPATCH SIGNAL TO ORACE HONFIN? (Y/N)",
+  step1: ["> ÉTAPE 1/3 : IDENTIFICATION", "> ENTREZ VOTRE NOM :"],
+  step2: ["> ÉTAPE 2/3 : ROUTE DE RETOUR", "> ENTREZ VOTRE ADRESSE EMAIL :"],
+  step3: ["> ÉTAPE 3/3 : PAYLOAD", "> ENTREZ VOTRE MESSAGE :"],
+  confirmLine: "> ENVOYER LE SIGNAL À ORACE HONFIN ? (O/N)",
 };
