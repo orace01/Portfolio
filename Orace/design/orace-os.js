@@ -52,6 +52,42 @@
 
   // Icônes d'application plates et colorées (grille plein écran)
   // localStorage peut lever en file:// (origine opaque) : tout est encapsulé.
+  /* ============================================================
+     MISE À L'ÉCHELLE DE L'INTERFACE
+     L'interface garde la mise en page du PC sur tous les écrans. Quand le
+     viewport est trop petit (téléphone en paysage), on applique un zoom global
+     plutôt que de réorganiser quoi que ce soit.
+
+     Conséquence : les coordonnées souris (clientX/Y) et les rectangles renvoyés
+     par getBoundingClientRect sont dans l'espace « écran », alors que les styles
+     (left/top/width) s'écrivent dans l'espace « interface ». Tout le code de
+     positionnement passe donc par les convertisseurs ci-dessous.
+     ============================================================ */
+  const VIRTUAL_W = 1280, VIRTUAL_H = 640;
+
+  function applyUiScale(){
+    const s = Math.min(1, window.innerWidth / VIRTUAL_W, window.innerHeight / VIRTUAL_H);
+    document.documentElement.style.setProperty('--ui-scale', s.toFixed(4));
+    return s;
+  }
+  // échelle courante
+  const S = ()=> parseFloat(getComputedStyle(document.body).zoom) || 1;
+  // viewport exprimé dans l'espace interface
+  const vw = ()=> window.innerWidth / S();
+  const vh = ()=> window.innerHeight / S();
+  // position souris exprimée dans l'espace interface
+  const cx = (e)=> e.clientX / S();
+  const cy = (e)=> e.clientY / S();
+  // rectangle d'un élément exprimé dans l'espace interface
+  function rectOf(elx){
+    const r = elx.getBoundingClientRect(), k = S();
+    return {left:r.left/k, top:r.top/k, right:r.right/k, bottom:r.bottom/k, width:r.width/k, height:r.height/k};
+  }
+
+  applyUiScale();
+  window.addEventListener('resize', applyUiScale);
+  window.addEventListener('orientationchange', ()=> setTimeout(applyUiScale, 120));
+
   const store = {
     get(k, fallback){
       try{ const v = localStorage.getItem('oraceos.'+k); return v === null ? fallback : JSON.parse(v); }
@@ -353,10 +389,10 @@
   // Taille d'ouverture : plancher 850x550, ~70% du viewport pour les grandes
   // fenêtres, le tout borné à l'espace réellement disponible.
   function fitToViewport(cfg){
-    const availW = window.innerWidth - dockW() - 32;
-    const availH = window.innerHeight - topbarH() - 32;
-    const w = Math.max(850, cfg.big ? Math.round(window.innerWidth * 0.7) : cfg.w);
-    const h = Math.max(550, cfg.big ? Math.round(window.innerHeight * 0.7) : cfg.h);
+    const availW = vw() - dockW() - 32;
+    const availH = vh() - topbarH() - bottomInset() - 24;
+    const w = Math.max(850, cfg.big ? Math.round(vw() * 0.7) : cfg.w);
+    const h = Math.max(420, cfg.big ? Math.round(vh() * 0.7) : cfg.h);
     return { w: Math.max(320, Math.min(w, availW)), h: Math.max(220, Math.min(h, availH)) };
   }
 
@@ -367,6 +403,13 @@
   // quel que soit le breakpoint (desktop / mobile).
   function topbarH(){ return document.getElementById('topbar').offsetHeight || 52; }
   // Largeur occupée par le dock latéral (0 quand il bascule en barre basse sur mobile)
+  // Place prise par le dock du bas, pour que les fenêtres n'aillent pas se cacher dessous
+  function bottomInset(){
+    const d = document.getElementById('bottomdock');
+    if(!d || getComputedStyle(d).display === 'none') return 0;
+    return d.offsetHeight + 28;
+  }
+
   function dockW(){
     const d = document.getElementById('sidedock');
     return (d && d.getBoundingClientRect().height > window.innerHeight/2) ? d.offsetWidth : 0;
@@ -393,8 +436,8 @@
     // centrée dans l'espace utile (hors barre du haut et rail), avec un décalage
     // discret pour que deux fenêtres ne se superposent pas exactement
     const off = (cascade - 1) * 18;
-    const centerX = dockW() + (window.innerWidth - dockW() - cfg.w)/2;
-    const centerY = topbarH() + (window.innerHeight - topbarH() - cfg.h)/2;
+    const centerX = dockW() + (vw() - dockW() - cfg.w)/2;
+    const centerY = topbarH() + (vh() - topbarH() - bottomInset() - cfg.h)/2;
     elw.style.left = Math.max(dockW() + 12, centerX + off)+'px';
     elw.style.top = Math.max(topbarH() + 12, centerY + off)+'px';
     cascade = (cascade+1) % 3;
@@ -491,12 +534,12 @@
     const edge = 24;
     if(y <= topbarH() + edge) return 'top';
     if(x <= dockW() + edge) return 'left';
-    if(x >= window.innerWidth - edge) return 'right';
+    if(x >= vw() - edge) return 'right';
     return null;
   }
   function snapRect(zone){
     const t = topbarH(), d = dockW();
-    const w = window.innerWidth - d, h = window.innerHeight - t;
+    const w = vw() - d, h = vh() - t;
     if(zone === 'top')   return {left:d, top:t, width:w, height:h};
     if(zone === 'left')  return {left:d, top:t, width:w/2, height:h};
     if(zone === 'right') return {left:d + w/2, top:t, width:w/2, height:h};
@@ -515,16 +558,16 @@
     let sx,sy,ox,oy,dragging=false,zone=null;
     bar.addEventListener('mousedown', (e)=>{
       if(e.target.closest('.win-controls') || winEl.classList.contains('maximized')) return;
-      dragging = true; sx=e.clientX; sy=e.clientY;
-      const r = winEl.getBoundingClientRect(); ox=r.left; oy=r.top;
+      dragging = true; sx=cx(e); sy=cy(e);
+      const r = rectOf(winEl); ox=r.left; oy=r.top;
     });
     window.addEventListener('mousemove', (e)=>{
       if(!dragging) return;
-      const nx = ox + (e.clientX - sx);
+      const nx = ox + (cx(e) - sx);
       // la fenêtre ne peut pas passer sous la barre supérieure
-      const ny = Math.max(topbarH(), oy + (e.clientY - sy));
+      const ny = Math.max(topbarH(), oy + (cy(e) - sy));
       winEl.style.left = nx+'px'; winEl.style.top = ny+'px';
-      zone = snapZoneFor(e.clientX, e.clientY);
+      zone = snapZoneFor(cx(e), cy(e));
       showGhost(zone);
     });
     window.addEventListener('mouseup', ()=>{
@@ -545,13 +588,13 @@
         e.stopPropagation(); e.preventDefault();
         if(winEl.classList.contains('maximized')) return;
         resizing = true;
-        sx=e.clientX; sy=e.clientY;
-        const r = winEl.getBoundingClientRect();
+        sx=cx(e); sy=cy(e);
+        const r = rectOf(winEl);
         sw=r.width; sh=r.height; sl=r.left; st=r.top;
       });
       window.addEventListener('mousemove', (e)=>{
         if(!resizing) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
+        const dx = cx(e) - sx, dy = cy(e) - sy;
         let nl=sl, nt=st, nw=sw, nh=sh;
         if(dir.includes('e')) nw = Math.max(320, sw+dx);
         if(dir.includes('s')) nh = Math.max(220, sh+dy);
@@ -997,7 +1040,7 @@
       const appId = icon.dataset.app;
       const w = openWindows[appId];
       if(!w || w.minimized) return;
-      const rect = icon.getBoundingClientRect();
+      const rect = rectOf(icon);
       popover = document.createElement('div');
       popover.className = 'dock-preview';
       const inner = document.createElement('div');
@@ -1015,10 +1058,10 @@
       if(dockW()){
         // dock vertical : aperçu à droite de l'icône, centré verticalement
         popover.style.left = (rect.right + 12) + 'px';
-        popover.style.top = Math.max(topbarH()+8, Math.min(window.innerHeight - boxH - 40, rect.top + rect.height/2 - boxH/2)) + 'px';
+        popover.style.top = Math.max(topbarH()+8, Math.min(vh() - boxH - 40, rect.top + rect.height/2 - boxH/2)) + 'px';
       } else {
         // dock en barre basse (mobile) : aperçu au-dessus
-        popover.style.left = Math.max(4, Math.min(window.innerWidth-pw-4, rect.left + rect.width/2 - pw/2)) + 'px';
+        popover.style.left = Math.max(4, Math.min(vw()-pw-4, rect.left + rect.width/2 - pw/2)) + 'px';
         popover.style.top = (rect.top - boxH - 40) + 'px';
       }
       const ow = w.el.offsetWidth || parseInt(w.el.style.width), oh = w.el.offsetHeight || parseInt(w.el.style.height);
@@ -1156,16 +1199,16 @@
   let msx=0, msy=0, marqueeActive=false, marqueeMoved=false;
   wallpaperEl.addEventListener('mousedown', (e)=>{
     marqueeActive = true; marqueeMoved = false;
-    msx = e.clientX; msy = e.clientY;
+    msx = cx(e); msy = cy(e);
   });
   window.addEventListener('mousemove', (e)=>{
     if(!marqueeActive) return;
     if(!marqueeMoved){
-      if(Math.hypot(e.clientX-msx, e.clientY-msy) < 4) return;
+      if(Math.hypot(cx(e)-msx, cy(e)-msy) < 4) return;
       marqueeMoved = true;
     }
-    const x = Math.min(msx, e.clientX), y = Math.min(msy, e.clientY);
-    const w = Math.abs(e.clientX - msx), h = Math.abs(e.clientY - msy);
+    const x = Math.min(msx, cx(e)), y = Math.min(msy, cy(e));
+    const w = Math.abs(cx(e) - msx), h = Math.abs(cy(e) - msy);
     marquee.style.left=x+'px'; marquee.style.top=y+'px'; marquee.style.width=w+'px'; marquee.style.height=h+'px';
     marquee.style.display = 'block';
   });
@@ -1782,8 +1825,8 @@
   function hideCtx(){ ctxMenu.hidden = true; }
   document.getElementById('wallpaper').addEventListener('contextmenu', (e)=>{
     e.preventDefault();
-    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 240) + 'px';
-    ctxMenu.style.top  = Math.min(e.clientY, window.innerHeight - 180) + 'px';
+    ctxMenu.style.left = Math.min(cx(e), vw() - 240) + 'px';
+    ctxMenu.style.top  = Math.min(cy(e), vh() - 180) + 'px';
     ctxMenu.hidden = false;
     sfx('tick');
   });
