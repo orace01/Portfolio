@@ -1,0 +1,10 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 9400, "title": "Desktop — Page complète" },
+    { "file": "Mobile.dc.html", "x": 1560, "y": 0, "w": 390, "h": 1150, "title": "Mobile — Navbar & Hero" }
+  ],
+  "annotations": [
+    { "id": "brief-note", "x": -300, "y": 0, "w": 240, "text": "Direction : Modern Print éditorial\n\nCormorant Garamond + Inter, palette fournie (linen / walnut / amber / champagne / mocha / ink).\n\nAucune image de référence n'a été transmise avec le brief : l'esthétique magazine imprimé (cadres fins, repères d'angle, grain papier, grille éditoriale) a été interprétée à partir de la description écrite." }
+  ],
+  "launch": { "view": "canvas" }
+}

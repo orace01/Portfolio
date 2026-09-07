@@ -91,7 +91,7 @@ export default function ContactFooter() {
 
       <div
         data-anim="item"
-        className="flex w-full items-center justify-center bg-[#0A0F1D]/60 backdrop-blur-md border-t border-cyan-500/30 shadow-[0_-4px_25px_rgba(0,229,255,0.1)] py-4 opacity-0"
+        className="flex w-full items-center justify-center bg-[#0A0F1D]/60 backdrop-blur-md border-t border-cyan-500/30 shadow-[0_-4px_25px_rgba(0,229,255,0.1)] py-7 opacity-0"
       >
         <span className="font-mono text-[11px] tracking-wider text-slate-600">
           {SITE.location} · {SITE.phone}

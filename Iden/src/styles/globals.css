@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --linen-light: #f4efe5;
+  --amber-wheat: #d39a4a;
+  --walnut-wood: #754321;
+  --woven-jute: #b7a184;
+  --champagne: #e6c9a8;
+  --mocha-mousse: #9a6b58;
+  --ink: #2b211b;
+  --paper-white: #fbf8f1;
+  --line: #a98a6d;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--linen-light);
+    color: var(--ink);
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  a {
+    color: var(--walnut-wood);
+  }
+
+  ::selection {
+    background-color: var(--champagne);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--walnut-wood);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .font-script {
+    font-family: "Parisienne", cursive;
+  }
+
+  .paper-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22180%22 height=%22180%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22matrix%22 values=%220 0 0 0 0.29 0 0 0 0 0.22 0 0 0 0 0.14 0 0 0 0.05 0%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E");
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+  }
+}

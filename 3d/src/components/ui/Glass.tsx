@@ -18,7 +18,7 @@ export function GlassPanel({ children, className, accent = "none" }: GlassPanelP
   return (
     <div
       className={cx(
-        "rounded-2xl border bg-slate-900/80 shadow-2xl backdrop-blur-lg backdrop-saturate-150",
+        "rounded-2xl border bg-white/[0.04] backdrop-blur-xl backdrop-saturate-150",
         accentBorder[accent],
         className
       )}

@@ -443,12 +443,7 @@ export default function CinematicSequence({
               ref={assemblyRef}
               className="pointer-events-none absolute inset-0 flex items-end px-5 pb-24 sm:px-8 sm:pb-28 lg:px-12 lg:pb-32"
             >
-              <div
-                data-anim="item"
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/25 to-transparent"
-              />
-              <div className="relative max-w-2xl">
+              <div className="max-w-2xl">
                 <div data-anim="item">
                   <Eyebrow>{ACT2_CONTENT.assembly.eyebrow}</Eyebrow>
                 </div>
@@ -488,12 +483,7 @@ export default function CinematicSequence({
               ref={explosionRef}
               className="pointer-events-none absolute inset-0 flex items-end px-5 pb-24 sm:px-8 sm:pb-28 lg:px-12 lg:pb-32"
             >
-              <div
-                data-anim="item"
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/70 via-black/25 to-transparent"
-              />
-              <div className="relative max-w-2xl">
+              <div className="max-w-2xl">
                 <div data-anim="item">
                   <Eyebrow>{ACT3_CONTENT.explosion.eyebrow}</Eyebrow>
                 </div>
@@ -561,7 +551,7 @@ export default function CinematicSequence({
                   <div
                     key={tool}
                     data-anim="manifesto-item"
-                    className="max-w-xs rounded-full border border-white/10 bg-slate-900/80 px-4 py-2 text-right font-mono text-xs text-white/70 shadow-xl backdrop-blur-lg"
+                    className="max-w-xs rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-right font-mono text-xs text-white/70 backdrop-blur-xl"
                   >
                     {tool}
                   </div>
