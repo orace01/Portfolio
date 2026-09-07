@@ -114,12 +114,12 @@
 
   /* ---------------- Fonds d'écran ---------------- */
   const WALLPAPERS = [
+    {f:'linux-1.jpg',         n:'Linux'},          // fond d'écran par défaut du bureau
     {f:'dragon-carbone.jpg',  n:'Dragon carbone'},
     {f:'kali-officiel.jpg',   n:'Kali officiel'},
     {f:'kali-violet.jpg',     n:'Kali violet'},
     {f:'kali-hd.jpg',         n:'Kali HD'},
     {f:'ubuntu-dragon.jpg',   n:'Ubuntu dragon'},
-    {f:'linux-1.jpg',         n:'Linux'},
     {f:'paysage-1080p.jpg',   n:'Paysage'},
     {f:'sans-nom.jpg',        n:'Sans titre'},
   ];
@@ -1173,17 +1173,22 @@
     t.classList.toggle('on');
     if(t.id !== 'qs-sound') sfx('toggle');
   }));
+  // le volet Orace Phone a son propre bouton DND : on le maintient synchronisé avec celui du bureau
+  document.getElementById('qs-dnd').addEventListener('click', ()=> setDND(dndOn()));
   document.addEventListener('click', (e)=>{
     if(!e.target.closest('#quick-settings') && !e.target.closest('#qs-btn')) qsPanel.hidden = true;
     if(!e.target.closest('#power-menu') && !e.target.closest('#power-btn')) powerMenu.hidden = true;
   });
   const volSlider = document.getElementById('vol-slider');
   const volLabel = document.getElementById('volLabel');
-  volSlider.addEventListener('input', ()=>{
-    volLabel.textContent = volSlider.value+'%';
-    audio.volume = +volSlider.value; audio.sync(); store.set('volume', audio.volume);
+  // bureau et volet Orace Phone partagent le même volume : un seul point d'entrée pour les deux curseurs
+  function setVolume(v){
+    audio.volume = +v; audio.sync(); store.set('volume', audio.volume);
+    volLabel.textContent = audio.volume + '%';
+    document.querySelectorAll('#vol-slider, #ph-vol-slider').forEach(s=>{ if(+s.value !== audio.volume) s.value = audio.volume; });
     logLine('pipewire', `volume réglé à ${audio.volume}%`);
-  });
+  }
+  volSlider.addEventListener('input', ()=> setVolume(volSlider.value));
 
   /* ================= LAUNCHER BUTTON ================= */
   document.getElementById('launcher-btn').addEventListener('click', toggleOverview);
@@ -1602,9 +1607,9 @@
     brightness = Math.max(20, Math.min(100, v));
     // 100% => aucun voile ; 20% => voile à 0.6 (jamais totalement noir)
     dimEl.style.opacity = ((100 - brightness) / 100 * 0.75).toFixed(3);
-    const s = document.getElementById('bright-slider');
+    // bureau et volet Orace Phone partagent le même réglage : on synchronise les deux curseurs
+    document.querySelectorAll('#bright-slider, #ph-bright-slider').forEach(s=>{ if(+s.value !== brightness) s.value = brightness; });
     const l = document.getElementById('brightLabel');
-    if(s && +s.value !== brightness) s.value = brightness;
     if(l) l.textContent = brightness + '%';
     store.set('brightness', brightness);
   }
@@ -1674,6 +1679,10 @@
     const row = document.getElementById('qs-dnd');
     return !!(row && row.classList.contains('on'));
   }
+  // synchronise le toggle DND du bureau et celui du volet Orace Phone
+  function setDND(on){
+    document.querySelectorAll('#qs-dnd, #ph-tg-dnd').forEach(t=> t.classList.toggle('on', on));
+  }
 
   function notify(title, body, appId){
     const time = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
@@ -1729,18 +1738,21 @@
     logLine('backlight', `luminosité à ${brightness}%`);
   });
 
-  // restaure l'état enregistré du volume dans l'interface
-  volSlider.value = audio.volume;
+  // restaure l'état enregistré du volume dans l'interface (bureau + volet Orace Phone)
+  document.querySelectorAll('#vol-slider, #ph-vol-slider').forEach(s=> s.value = audio.volume);
   volLabel.textContent = audio.volume + '%';
 
   const soundToggle = document.getElementById('qs-sound');
-  if(audio.enabled) soundToggle.classList.add('on');
-  soundToggle.addEventListener('click', ()=>{
-    audio.enabled = soundToggle.classList.contains('on');
-    store.set('sound', audio.enabled);
+  // synchronise le bureau et le volet Orace Phone (#ph-tg-sound) sur un seul état
+  function setSoundEnabled(on){
+    audio.enabled = on;
+    store.set('sound', on);
     audio.sync();
-    if(audio.enabled) sfx('toggle');
-  });
+    document.querySelectorAll('#qs-sound, #ph-tg-sound').forEach(t=> t.classList.toggle('on', on));
+    if(on) sfx('toggle');
+  }
+  if(audio.enabled) soundToggle.classList.add('on');
+  soundToggle.addEventListener('click', ()=> setSoundEnabled(!audio.enabled));
 
   applyBrightness(brightness);
 
@@ -1863,43 +1875,95 @@
   const PHONE_BREAKPOINT = 768;
   function isPhoneMode(){ return window.innerWidth < PHONE_BREAKPOINT; }
 
+  // deux glyphes distincts pour le dock, qui réutilise des destinations déjà
+  // présentes dans la grille (Contact, Fichiers) sous une autre étiquette :
+  // sans ça, ces cases afficheraient deux fois la même icône que sur la grille.
   const ANDROID_ICONS = {
-    calendar: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#123D2E"/><rect x="7" y="9" width="18" height="15" rx="2" fill="#fff"/><rect x="7" y="9" width="18" height="5" rx="2" fill="#3DDC97"/><rect x="11" y="6" width="2.4" height="5" rx="1.2" fill="#3DDC97"/><rect x="18.6" y="6" width="2.4" height="5" rx="1.2" fill="#3DDC97"/><g fill="#8FE7C4"><circle cx="11.5" cy="19" r="1.4"/><circle cx="16" cy="19" r="1.4"/><circle cx="20.5" cy="19" r="1.4"/></g></svg>`,
-    clock: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#0F2A44"/><circle cx="16" cy="16" r="10" fill="#fff"/><path d="M16 10v6l4.5 2.5" stroke="#1E88E5" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>`,
     phonecall: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#123D2E"/><path d="M11 8c-2 0-3 1.2-3 3.2 0 7 6.8 13.8 13.8 13.8 2 0 3.2-1 3.2-3v-2.3l-4.6-1.9-1.7 1.7a9.4 9.4 0 0 1-5-5l1.7-1.7L13.6 8Z" fill="#3DDC97"/></svg>`,
     messages: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#0F2A44"/><path d="M7 10a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-8l-5 4v-4h-2a3 3 0 0 1-3-3Z" fill="#4FC1FF"/></svg>`,
   };
 
   const phoneShell    = document.getElementById('phone-shell');
-  const phoneGrid     = document.getElementById('ph-grid');
   const phoneDock     = document.getElementById('ph-dock');
   const phoneAppview  = document.getElementById('ph-appview');
   const pwIcon        = document.getElementById('pw-icon');
   const pwUpdated     = document.getElementById('pw-updated');
   const pwRefresh     = document.getElementById('pw-refresh');
   const phSearchPill  = document.getElementById('ph-search-pill');
-  const phDotMore     = document.getElementById('ph-dot-more');
   const phNavRecents  = document.getElementById('ph-nav-recents');
   const phNavHome     = document.getElementById('ph-nav-home');
   const phNavBack     = document.getElementById('ph-nav-back');
   let currentPhoneApp = null;
 
-  // écran d'accueil : 4 icônes fixes (pas la grille complète des 22 apps —
-  // celle-ci reste accessible via la pilule de recherche / le tiroir partagé)
-  const PHONE_GRID_APPS = [
-    ['files',  'Portfolio', null],
-    ['contact','Contact',   null],
-    ['about',  'Parcours',  ANDROID_ICONS.calendar],
-    ['sysmon', 'Statut',    ANDROID_ICONS.clock],
-  ];
-  PHONE_GRID_APPS.forEach(([appId,label,icon])=>{
-    const btn = el('button','ph-app');
-    btn.dataset.app = appId;
-    btn.type = 'button';
-    btn.innerHTML = `<span class="glyph">${icon || APP_ICONS_FLAT[appId] || ICONS[appId] || ''}</span><span>${label}</span>`;
-    btn.addEventListener('click', ()=> openPhoneApp(appId));
-    phoneGrid.appendChild(btn);
+  /* ---- écran d'accueil paginé : les 22 applications, réparties sur plusieurs
+     pages (4 colonnes × 2 rangées, comme un vrai écran Android), balayables
+     horizontalement — au lieu d'une poignée d'icônes géantes sur une seule page. */
+  const PH_PAGE_SIZE = 8;
+  const phPages      = document.getElementById('ph-pages');
+  const phPagesTrack = document.getElementById('ph-pages-track');
+  const phDots       = document.getElementById('ph-dots');
+  let phPageCount = 1, phCurrentPage = 0;
+
+  function buildPhonePages(){
+    phPagesTrack.innerHTML = '';
+    phDots.innerHTML = '';
+    const chunks = [];
+    for(let i=0;i<OV_APPS.length;i+=PH_PAGE_SIZE) chunks.push(OV_APPS.slice(i, i+PH_PAGE_SIZE));
+    phPageCount = chunks.length;
+    chunks.forEach((chunk, pageIdx)=>{
+      const page = el('div','ph-page');
+      chunk.forEach(appId=>{
+        const btn = el('button','ph-app');
+        btn.dataset.app = appId;
+        btn.type = 'button';
+        btn.innerHTML = `<span class="glyph">${APP_ICONS_FLAT[appId === 'meta' ? 'settings' : appId] || ICONS[appId] || ''}</span><span>${APP_NAMES[appId]}</span>`;
+        btn.addEventListener('click', ()=> openPhoneApp(appId));
+        page.appendChild(btn);
+      });
+      phPagesTrack.appendChild(page);
+      const dot = el('span', pageIdx === 0 ? 'dot on' : 'dot');
+      dot.dataset.page = pageIdx;
+      phDots.appendChild(dot);
+    });
+    gotoPhonePage(0);
+  }
+
+  function gotoPhonePage(idx){
+    phCurrentPage = Math.max(0, Math.min(phPageCount - 1, idx));
+    phPagesTrack.style.transform = `translateX(${-phCurrentPage * 100}%)`;
+    [...phDots.children].forEach((d,i)=> d.classList.toggle('on', i === phCurrentPage));
+  }
+  buildPhonePages();
+
+  phDots.addEventListener('click', (e)=>{
+    const dot = e.target.closest('.dot');
+    if(dot) gotoPhonePage(Number(dot.dataset.page));
   });
+
+  // balayage horizontal (Pointer Events : tactile et souris) pour changer de page
+  let phDragX0 = null, phDragDx = 0, phDragging = false;
+  phPages.addEventListener('pointerdown', (e)=>{
+    phDragX0 = e.clientX; phDragDx = 0; phDragging = true;
+    phPagesTrack.classList.add('dragging');
+    phPages.setPointerCapture(e.pointerId);
+  });
+  phPages.addEventListener('pointermove', (e)=>{
+    if(!phDragging) return;
+    phDragDx = e.clientX - phDragX0;
+    const pct = (phDragDx / phPages.clientWidth) * 100;
+    phPagesTrack.style.transform = `translateX(${-phCurrentPage * 100 + pct}%)`;
+  });
+  function phEndDrag(){
+    if(!phDragging) return;
+    phDragging = false;
+    phPagesTrack.classList.remove('dragging');
+    const threshold = phPages.clientWidth * 0.18;
+    if(phDragDx < -threshold && phCurrentPage < phPageCount - 1) gotoPhonePage(phCurrentPage + 1);
+    else if(phDragDx > threshold && phCurrentPage > 0) gotoPhonePage(phCurrentPage - 1);
+    else gotoPhonePage(phCurrentPage);
+  }
+  phPages.addEventListener('pointerup', phEndDrag);
+  phPages.addEventListener('pointercancel', phEndDrag);
 
   // dock : 4 icônes façon Android (Téléphone / Messages / Terminal / Appareil photo)
   const PHONE_DOCK_APPS = [
@@ -1958,9 +2022,8 @@
   phNavRecents.addEventListener('click', openOverview);
   document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && currentPhoneApp) closePhoneApp(); });
 
-  // pilule de recherche + second point de pagination : ouvrent le tiroir d'applications partagé
+  // pilule de recherche : ouvre le tiroir d'applications partagé
   phSearchPill.addEventListener('click', openOverview);
-  phDotMore.addEventListener('click', openOverview);
 
   // widget météo : valeur représentative (pas d'appel API), seul l'horodatage est réel
   function stampWeather(){ pwUpdated.textContent = 'maj ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
@@ -1972,13 +2035,61 @@
     stampWeather();
   });
 
+  /* ---- volet de réglages rapides : glisser vers le bas depuis la barre d'état
+     (ou taper dessus). Réutilise le même état système que le panneau du bureau
+     (luminosité, son, ne pas déranger, thème) via les fonctions partagées
+     définies plus haut ; Wi-Fi/Bluetooth restent décoratifs, comme sur le bureau. */
+  const phShade      = document.getElementById('ph-shade');
+  const phStatusbar  = document.getElementById('ph-statusbar');
+  const phBrightSl   = document.getElementById('ph-bright-slider');
+  const phVolSl      = document.getElementById('ph-vol-slider');
+  const phTgSound    = document.getElementById('ph-tg-sound');
+  const phTgDnd      = document.getElementById('ph-tg-dnd');
+  const phTgWifi     = document.getElementById('ph-tg-wifi');
+  const phTgBt       = document.getElementById('ph-tg-bt');
+  const phShadeSettings = document.getElementById('ph-shade-settings');
+  let shadeOpen = false;
+  function setShadeOpen(v){ shadeOpen = v; phShade.classList.toggle('show', v); }
+  function toggleShade(){ setShadeOpen(!shadeOpen); sfx('tick'); }
+
+  phStatusbar.addEventListener('click', toggleShade);
+  let shadeDragY0 = null, shadeDragging = false;
+  function shadeDragStart(e){ shadeDragY0 = e.clientY; shadeDragging = true; }
+  function shadeDragMove(e){
+    if(!shadeDragging) return;
+    const dy = e.clientY - shadeDragY0;
+    if(!shadeOpen && dy > 26){ setShadeOpen(true); shadeDragging = false; }
+    else if(shadeOpen && dy < -26){ setShadeOpen(false); shadeDragging = false; }
+  }
+  function shadeDragEnd(){ shadeDragging = false; }
+  phStatusbar.addEventListener('pointerdown', shadeDragStart);
+  phShade.addEventListener('pointerdown', shadeDragStart);
+  window.addEventListener('pointermove', shadeDragMove);
+  window.addEventListener('pointerup', shadeDragEnd);
+  document.addEventListener('click', (e)=>{
+    if(shadeOpen && !e.target.closest('#ph-shade') && !e.target.closest('#ph-statusbar')) setShadeOpen(false);
+  });
+
+  phBrightSl.addEventListener('input', ()=>{ applyBrightness(+phBrightSl.value); logLine('backlight', `luminosité à ${brightness}%`); });
+  phVolSl.addEventListener('input', ()=> setVolume(phVolSl.value));
+  phTgSound.addEventListener('click', ()=> setSoundEnabled(!audio.enabled));
+  phTgDnd.addEventListener('click', ()=>{ setDND(!dndOn()); sfx('toggle'); });
+  [phTgWifi, phTgBt].forEach(t=> t.addEventListener('click', ()=>{ t.classList.toggle('on'); sfx('toggle'); }));
+  phShadeSettings.addEventListener('click', ()=>{ setShadeOpen(false); openPhoneApp('meta'); });
+
+  // état initial du volet, aligné sur l'état système déjà restauré (localStorage)
+  phBrightSl.value = brightness;
+  phVolSl.value = audio.volume;
+  phTgSound.classList.toggle('on', audio.enabled);
+  phTgDnd.classList.toggle('on', dndOn());
+
   // ---- bascule entre le bureau et Orace Phone ----
   function updateShellMode(){
     const phone = isPhoneMode();
     document.documentElement.dataset.mode = phone ? 'phone' : 'desktop';
     document.getElementById('desktop').hidden = phone;
     phoneShell.hidden = !phone;
-    if(!phone) closePhoneApp();               // en repassant au bureau, on revient a l'accueil
+    if(!phone){ closePhoneApp(); setShadeOpen(false); }   // en repassant au bureau, on revient a l'accueil
   }
   window.addEventListener('resize', updateShellMode);
   window.addEventListener('orientationchange', ()=> setTimeout(updateShellMode, 120));

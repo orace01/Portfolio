@@ -833,6 +833,7 @@
 
 /* -- barre d'état -- */
 #ph-statusbar{
+  position:relative;z-index:70; /* reste visible au-dessus d'une app ouverte (z-index:50) */
   flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
   padding:max(env(safe-area-inset-top),12px) 22px 6px;
   font-family:var(--mono);font-size:14px;font-weight:600;color:#fff;
@@ -842,7 +843,7 @@
 .ph-status-icons .battery-pct{font-size:11.5px;font-weight:500;color:rgba(255,255,255,.75);}
 
 /* -- écran d'accueil -- */
-#ph-home{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 20px 12px;display:flex;flex-direction:column;}
+#ph-home{flex:1;min-height:0;padding:6px 20px 4px;display:flex;flex-direction:column;}
 
 /* widget météo : valeur representative pour Cotonou (pas d'API live), horodatage reel */
 #ph-weather{
@@ -875,12 +876,50 @@
 #ph-search-pill svg{width:18px;height:18px;flex-shrink:0;color:rgba(255,255,255,.65);}
 #ph-search-pill:active{transform:scale(.98);}
 
-#ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:auto;}
-.ph-app{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;padding:2px;}
-.ph-app .glyph{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ph-app .glyph svg{width:52px;height:52px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
+/* -- volet de reglages rapides : glisser vers le bas depuis la barre d'etat --
+   reutilise le meme etat que le bureau (luminosite, son) via des fonctions
+   partagees ; Wi-Fi/Bluetooth restent decoratifs, comme dans le panneau du bureau. */
+#ph-shade{
+  position:fixed;top:0;left:0;right:0;z-index:65;
+  background:rgba(18,14,34,.94);
+  backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
+  border-bottom-left-radius:28px;border-bottom-right-radius:28px;box-shadow:0 24px 60px rgba(0,0,0,.55);
+  padding:calc(max(env(safe-area-inset-top),12px) + 34px) 20px 18px;
+  transform:translateY(-100%);transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+#ph-shade.show{transform:translateY(0);}
+.ph-shade-toggles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+.ph-toggle{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;color:rgba(255,255,255,.55);padding:4px 0;}
+.ph-toggle .ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);color:inherit;}
+.ph-toggle .ico svg{width:20px;height:20px;}
+.ph-toggle span:last-child{font-size:9.5px;text-align:center;line-height:1.2;}
+.ph-toggle.on{color:#fff;}
+.ph-toggle.on .ico{background:linear-gradient(155deg,var(--violet),var(--cyan));color:#fff;}
+.ph-shade-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ph-shade-ico{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);}
+.ph-shade-ico svg{width:18px;height:18px;}
+.ph-shade-row input[type=range]{flex:1;accent-color:var(--violet);}
+#ph-shade-settings{
+  display:flex;align-items:center;gap:8px;width:100%;padding:10px 14px;margin-top:2px;
+  border-radius:14px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.85);font-size:12.5px;
+}
+#ph-shade-settings svg{width:16px;height:16px;}
+
+/* pages d'icones : une page = un ecran plein de la grille, on glisse horizontalement entre elles */
+#ph-pages{flex:1;min-height:0;overflow:hidden;position:relative;touch-action:pan-y;}
+#ph-pages-track{display:flex;height:100%;transition:transform .32s cubic-bezier(.16,1,.3,1);}
+#ph-pages-track.dragging{transition:none;}
+.ph-page{
+  flex:0 0 100%;width:100%;height:100%;box-sizing:border-box;
+  display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:min-content;
+  gap:14px 2px;align-content:start;padding:2px 0 8px;
+}
+/* icones a taille reelle de smartphone : plus petites, plusieurs rangees par page */
+.ph-app{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;padding:2px;}
+.ph-app .glyph{width:42px;height:42px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-app .glyph svg{width:42px;height:42px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));}
 .ph-app span{
-  font-size:11px;color:#fff;text-align:center;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.4);
+  font-size:9.5px;color:#fff;text-align:center;line-height:1.25;text-shadow:0 1px 3px rgba(0,0,0,.4);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .ph-app:active .glyph{transform:scale(.9);}
@@ -944,5 +983,5 @@
 #phone-shell .term-input-row input{font-size:16px;}
 
 @media (prefers-reduced-motion:reduce){
-  #ph-appview{transition:none;}
+  #ph-appview,#ph-shade,#ph-pages-track{transition:none;}
 }

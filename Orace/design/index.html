@@ -247,6 +247,42 @@
     </div>
   </div>
 
+  <!-- volet de reglages rapides : glisser vers le bas depuis la barre d'etat (ou cliquer dessus) -->
+  <div id="ph-shade">
+    <div class="ph-shade-toggles">
+      <button class="ph-toggle on" id="ph-tg-wifi" type="button">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 8a15 15 0 0120 0M5 12a10 10 0 0114 0M8.5 16a5 5 0 017 0"/></svg></span>
+        <span>Wi-Fi</span>
+      </button>
+      <button class="ph-toggle" id="ph-tg-bt" type="button">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8.5l10 7M16 8.5l-10 7M6 4h6v16H6z"/></svg></span>
+        <span>Bluetooth</span>
+      </button>
+      <button class="ph-toggle" id="ph-tg-dnd" type="button">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></span>
+        <span>Ne pas déranger</span>
+      </button>
+      <button class="ph-toggle" id="ph-tg-theme" data-theme-toggle type="button">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.5A9 9 0 1111.5 3 7 7 0 0021 12.5Z"/></svg></span>
+        <span>Sombre</span>
+      </button>
+    </div>
+    <div class="ph-shade-row">
+      <span class="ph-shade-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></span>
+      <input type="range" id="ph-bright-slider" min="20" max="100" value="100" aria-label="Luminosité">
+    </div>
+    <div class="ph-shade-row">
+      <button class="ph-shade-ico" id="ph-tg-sound" type="button" aria-label="Activer ou couper le son">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M17 9a4 4 0 010 6"/></svg>
+      </button>
+      <input type="range" id="ph-vol-slider" min="0" max="100" value="70" aria-label="Volume">
+    </div>
+    <button id="ph-shade-settings" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.2M12 18.8V21M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3 12h2.2M18.8 12H21M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      Réglages
+    </button>
+  </div>
+
   <div id="ph-home">
     <!-- widget meteo : valeur representative pour Cotonou, pas d'API externe —
          seul l'horodatage "mis a jour" est reel (horloge du systeme) -->
@@ -271,14 +307,14 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5v4a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5Z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v4"/></svg>
     </button>
 
-    <div id="ph-grid"></div>
+    <!-- pages d'icones : glisser horizontalement pour changer de page -->
+    <div id="ph-pages">
+      <div id="ph-pages-track"></div>
+    </div>
   </div>
 
   <div id="ph-dock-area">
-    <div id="ph-dots">
-      <span class="dot on"></span>
-      <button class="dot" id="ph-dot-more" type="button" aria-label="Toutes les applications"></button>
-    </div>
+    <div id="ph-dots"></div>
     <div id="ph-dock"></div>
   </div>
 
