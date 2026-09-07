@@ -341,9 +341,10 @@
   .win-body::-webkit-scrollbar-thumb{background:var(--hairline);border-radius:6px;}
   .win-body::-webkit-scrollbar-track{background:transparent;}
 
-  /* ================= FULLSCREEN APP GRID ================= */
+  /* ================= FULLSCREEN APP GRID =================
+     Partagé entre le bureau (zoomé via --ui-scale) et Orace Phone (natif). */
   #overview{
-    position:absolute;inset:0;z-index:800;
+    position:fixed;inset:0;z-index:800;
     background:radial-gradient(circle at 50% 40%, rgba(36,26,66,.72) 0%, rgba(13,9,22,.86) 75%);
     backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -351,6 +352,7 @@
     transition:opacity .28s ease, transform .28s ease;
   }
   #overview.show{opacity:1;pointer-events:auto;transform:scale(1);}
+  html[data-mode="desktop"] #overview{zoom:var(--ui-scale,1);}
   #ov-search{
     width:380px;padding:13px 20px;border-radius:24px;background:var(--surface-3);
     border:1px solid var(--hairline);color:#fff;font-size:14px;outline:none;margin-bottom:16px;
@@ -823,52 +825,77 @@
 #phone-shell{
   position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;
   height:100dvh;background:var(--bg);color:var(--text);overflow:hidden;
+  padding-bottom:48px; /* reserve la place de la barre de navigation Android fixe */
 }
 #phone-shell[hidden]{display:none;}
-#ph-wallpaper{position:absolute;inset:0;background:var(--bg) center/cover no-repeat;z-index:-1;}
+/* fond fixe façon Android : degradé sombre, independant du fond d'ecran du bureau */
+#ph-wallpaper{position:absolute;inset:0;background:linear-gradient(180deg,#0B0C2A 0%,#2D1B4E 100%);z-index:-1;}
 
 /* -- barre d'état -- */
 #ph-statusbar{
   flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
   padding:max(env(safe-area-inset-top),12px) 22px 6px;
-  font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text);
+  font-family:var(--mono);font-size:14px;font-weight:600;color:#fff;
 }
-.ph-status-icons{display:flex;align-items:center;gap:7px;}
+.ph-status-icons{display:flex;align-items:center;gap:7px;color:#fff;}
 .ph-status-icons svg{width:16px;height:16px;}
-.ph-status-icons .battery-pct{font-size:11.5px;font-weight:500;color:var(--text-dim);}
+.ph-status-icons .battery-pct{font-size:11.5px;font-weight:500;color:rgba(255,255,255,.75);}
 
 /* -- écran d'accueil -- */
-#ph-home{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 20px 20px;}
-#ph-profile{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;padding:16px 0 26px;}
-.ph-avatar{
-  width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(155deg,var(--violet),var(--violet-deep));color:#fff;font-weight:700;font-size:21px;
-  box-shadow:0 10px 24px rgba(108,59,255,.35);
-}
-.ph-name{font-size:18px;font-weight:600;}
-.ph-role{font-size:13px;color:var(--text-dim);}
-.ph-avail{
-  display:inline-flex;align-items:center;gap:7px;margin-top:4px;padding:6px 13px;border-radius:20px;
-  background:var(--surface-2);border:1px solid var(--panel-border);font-size:11.5px;color:var(--text-dim);
-}
-.ph-avail .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);flex-shrink:0;}
+#ph-home{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 20px 12px;display:flex;flex-direction:column;}
 
-#ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 6px;}
+/* widget météo : valeur representative pour Cotonou (pas d'API live), horodatage reel */
+#ph-weather{
+  display:flex;align-items:center;gap:14px;padding:16px 6px 10px;color:#fff;
+}
+#ph-weather .pw-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+#ph-weather .pw-icon svg{width:40px;height:40px;}
+.pw-main{flex:1;min-width:0;}
+.pw-temp{font-size:32px;font-weight:300;line-height:1;}
+.pw-city{font-size:13px;font-weight:600;margin-top:2px;}
+.pw-meta{display:flex;align-items:center;gap:6px;font-size:11.5px;color:rgba(255,255,255,.7);margin-top:2px;}
+.pw-sep{opacity:.6;}
+#pw-refresh{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);margin-left:2px;}
+#pw-refresh svg{width:14px;height:14px;}
+#pw-refresh:active{transform:rotate(-40deg);}
+#pw-refresh.spin svg{animation:ph-spin .5s linear;}
+@keyframes ph-spin{to{transform:rotate(360deg);}}
+
+/* -- pilule de recherche façon Google, ouvre le tiroir d'applications partagé -- */
+#ph-search-pill{
+  display:flex;align-items:center;gap:10px;width:100%;margin:6px 0 22px;padding:12px 16px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.16);border-radius:26px;
+  color:rgba(255,255,255,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+#ph-search-pill .pill-mark{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(155deg,var(--violet),var(--cyan));color:#fff;font-size:12px;font-weight:700;
+}
+#ph-search-pill .pill-text{flex:1;text-align:left;font-size:14px;color:rgba(255,255,255,.65);}
+#ph-search-pill svg{width:18px;height:18px;flex-shrink:0;color:rgba(255,255,255,.65);}
+#ph-search-pill:active{transform:scale(.98);}
+
+#ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:auto;}
 .ph-app{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;padding:2px;}
-.ph-app .glyph{width:56px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ph-app .glyph svg{width:56px;height:56px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
+.ph-app .glyph{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-app .glyph svg{width:52px;height:52px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
 .ph-app span{
-  font-size:10.5px;color:var(--text);text-align:center;line-height:1.3;
+  font-size:11px;color:#fff;text-align:center;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.4);
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .ph-app:active .glyph{transform:scale(.9);}
 
-/* -- dock (4 applications principales) -- */
+/* -- zone basse : indicateur de pages + dock -- */
+#ph-dock-area{flex-shrink:0;padding:6px 16px 10px;}
+#ph-dots{display:flex;justify-content:center;align-items:center;gap:7px;padding-bottom:10px;}
+#ph-dots .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);padding:0;flex-shrink:0;}
+#ph-dots .dot.on{background:#fff;}
+
 #ph-dock{
-  flex-shrink:0;display:flex;justify-content:space-around;align-items:center;
-  margin:0 16px max(env(safe-area-inset-bottom),14px);padding:10px 16px;
-  background:var(--glass);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
-  border:1px solid var(--panel-border);border-radius:24px;box-shadow:0 16px 40px rgba(0,0,0,.4);
+  display:flex;justify-content:space-around;align-items:center;
+  margin:0 0 max(env(safe-area-inset-bottom),10px);padding:10px 16px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  border:1px solid rgba(255,255,255,.14);border-radius:24px;box-shadow:0 16px 40px rgba(0,0,0,.4);
 }
 .ph-dock-btn{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .ph-dock-btn svg{width:44px;height:44px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
@@ -878,6 +905,7 @@
 #ph-appview{
   position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
   background:var(--win-bg);transform:translateY(100%);transition:transform .32s cubic-bezier(.16,1,.3,1);
+  padding-bottom:var(--ph-navbar-h,48px);
 }
 #ph-appview.show{transform:translateY(0);}
 #ph-appview[hidden]{display:none;}
@@ -891,9 +919,18 @@
 .ph-appview-title{font-size:16px;font-weight:600;color:var(--text);}
 .ph-appview-status{font-size:11.5px;color:var(--text-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ph-appview-body{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;}
-.ph-swipebar{flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:14px 0 max(env(safe-area-inset-bottom),12px);}
-.ph-handle{width:120px;height:5px;border-radius:3px;background:var(--hairline);transition:background .12s ease;}
-.ph-swipebar:active .ph-handle{background:var(--violet);}
+
+/* -- barre de navigation Android à 3 boutons, toujours visible -- */
+#ph-navbar{
+  --ph-navbar-h:48px;
+  position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;justify-content:space-around;align-items:center;
+  height:var(--ph-navbar-h);padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(10,8,20,.55);backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.ph-nav-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;}
+.ph-nav-btn svg{width:20px;height:20px;}
+.ph-nav-btn:active{opacity:.55;}
 
 /* -- applications réutilisées : adaptations propres au format téléphone -- */
 #phone-shell .skills-grid{grid-template-columns:1fr;gap:14px;padding:18px;}

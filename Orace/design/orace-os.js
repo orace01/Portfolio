@@ -127,9 +127,11 @@
   let currentWallpaper = null;
 
   function setWallpaper(file, persist){
+    // Orace Phone garde un dégradé fixe (voir #ph-wallpaper en CSS), indépendant
+    // du fond d'écran choisi côté bureau : on ne synchronise donc que #wp-photo.
     const wp = document.getElementById('wallpaper');
     const layer = document.getElementById('wp-photo');
-    if(!file){                                   // aucun fichier : on garde le fond dessiné
+    if(!file){                                   // aucun fichier : on garde le fond dessiné (bureau)
       wp.classList.remove('has-photo'); currentWallpaper = null;
       if(persist !== false) store.set('wallpaper', null);
       return;
@@ -361,9 +363,12 @@
   }
   function tickClock(){
     const d = new Date();
+    const hhmm = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     document.getElementById('topbar-clock').innerHTML = formatClock(d);
     const lc = document.getElementById('lockClock');
-    if(lc) lc.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    if(lc) lc.textContent = hhmm;
+    const pc = document.getElementById('ph-clock');
+    if(pc) pc.textContent = hhmm;
   }
   tickClock(); setInterval(tickClock, 10000);
 
@@ -957,12 +962,14 @@
     const inputRow = el('div','term-input-row');
     inputRow.innerHTML = `<span class="prompt">orace@kali:~$</span>`;
     const input = document.createElement('input'); input.autocomplete='off'; input.spellcheck=false;
+    input.autocapitalize='off'; input.setAttribute('autocorrect','off'); input.setAttribute('inputmode','text');
+    input.enterKeyHint = 'send';                 // clavier mobile : bouton Envoyer plutot que Entree
     input.setAttribute('aria-label','Commande terminal');
     inputRow.appendChild(input);
     wrap.appendChild(out); wrap.appendChild(inputRow);
     termState = { out, input, mode:'command', data:{} };
     printLine(out, '<span class="dim">Orace OS [Terminal] — tapez "help" pour la liste des commandes.</span>');
-    setTimeout(()=>input.focus(), 50);
+    if(!isPhoneMode()) setTimeout(()=>input.focus(), 50);
     input.addEventListener('keydown', (e)=>{
       sfx('key');
       if(e.key !== 'Enter') return;
@@ -1077,6 +1084,10 @@
   const overview = document.getElementById('overview');
   const ovGrid = document.getElementById('ov-grid');
   const ovSearch = document.getElementById('ov-search');
+  // le tiroir d'applications est partagé entre le bureau et Orace Phone :
+  // on route vers la bonne coque selon le mode actif (isPhoneMode/openPhoneApp
+  // sont déclarés plus bas mais sont des « function », donc hissés).
+  function openAnyApp(appId){ if(isPhoneMode()) openPhoneApp(appId); else openApp(appId); }
   const OV_APPS = ['terminal','files','aimodels','browser','tradingbot','skills','about','contact','meta','trash',
     'sysmon','calc','texted','clocks','software','logs','disks','archives','imgview','chars','agenda','maps'];
   OV_APPS.forEach(appId=>{
@@ -1084,7 +1095,7 @@
     item.dataset.app = appId; item.dataset.name = APP_NAMES[appId].toLowerCase();
     item.tabIndex = 0; item.setAttribute('role','button'); item.setAttribute('aria-label', APP_NAMES[appId]);
     item.innerHTML = `<div class="glyph">${APP_ICONS_FLAT[appId === 'meta' ? 'settings' : appId] || ICONS[appId]}</div><span>${APP_NAMES[appId]}</span>`;
-    const open = ()=>{ openApp(appId); closeOverview(); };
+    const open = ()=>{ openAnyApp(appId); closeOverview(); };
     item.addEventListener('click', open);
     activateOnKey(item, open);
     ovGrid.appendChild(item);
@@ -1140,7 +1151,7 @@
     if(e.key !== 'Enter') return;
     const q = ovSearch.value.trim().toLowerCase();
     if(!q) return;
-    if(COMMANDS[q]){ openApp(COMMANDS[q]); closeOverview(); return; }
+    if(COMMANDS[q]){ openAnyApp(COMMANDS[q]); closeOverview(); return; }
     if(q.includes('cv') || q.includes('résumé') || q.includes('resume')){
       ovSearch.placeholder = 'CV bientôt disponible…';
       ovSearch.value = '';
@@ -1804,8 +1815,8 @@
   let battery = store.get('battery', 87);
   let lowNotified = false;
   function renderBattery(){
-    const elx = document.getElementById('battery-pct');
-    if(elx) elx.textContent = Math.round(battery) + '%';
+    const pct = Math.round(battery) + '%';
+    document.querySelectorAll('.battery-pct').forEach(elx=> elx.textContent = pct);
     store.set('battery', battery);
   }
   renderBattery();
@@ -1839,5 +1850,139 @@
     else if(a === 'sysmon') openApp('sysmon');
     else if(a === 'apps') openOverview();
   }));
+
+
+  /* ============================================================
+     ORACE PHONE — interface native mobile (< 768px), habillage Android / One UI
+     Reutilise les memes donnees et le meme rendu d'application que le
+     bureau (APP_NAMES, APP_ICONS_FLAT, renderApp, overview partagé) ; seule
+     la coque change. Quatre icônes génériques (calendrier, horloge, appel,
+     messages) sont ajoutées pour donner un aspect « appli système Android »
+     aux emplacements qui réutilisent une destination déjà présente ailleurs.
+     ============================================================ */
+  const PHONE_BREAKPOINT = 768;
+  function isPhoneMode(){ return window.innerWidth < PHONE_BREAKPOINT; }
+
+  const ANDROID_ICONS = {
+    calendar: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#123D2E"/><rect x="7" y="9" width="18" height="15" rx="2" fill="#fff"/><rect x="7" y="9" width="18" height="5" rx="2" fill="#3DDC97"/><rect x="11" y="6" width="2.4" height="5" rx="1.2" fill="#3DDC97"/><rect x="18.6" y="6" width="2.4" height="5" rx="1.2" fill="#3DDC97"/><g fill="#8FE7C4"><circle cx="11.5" cy="19" r="1.4"/><circle cx="16" cy="19" r="1.4"/><circle cx="20.5" cy="19" r="1.4"/></g></svg>`,
+    clock: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#0F2A44"/><circle cx="16" cy="16" r="10" fill="#fff"/><path d="M16 10v6l4.5 2.5" stroke="#1E88E5" stroke-width="2.4" stroke-linecap="round" fill="none"/></svg>`,
+    phonecall: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#123D2E"/><path d="M11 8c-2 0-3 1.2-3 3.2 0 7 6.8 13.8 13.8 13.8 2 0 3.2-1 3.2-3v-2.3l-4.6-1.9-1.7 1.7a9.4 9.4 0 0 1-5-5l1.7-1.7L13.6 8Z" fill="#3DDC97"/></svg>`,
+    messages: `<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#0F2A44"/><path d="M7 10a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-8l-5 4v-4h-2a3 3 0 0 1-3-3Z" fill="#4FC1FF"/></svg>`,
+  };
+
+  const phoneShell    = document.getElementById('phone-shell');
+  const phoneGrid     = document.getElementById('ph-grid');
+  const phoneDock     = document.getElementById('ph-dock');
+  const phoneAppview  = document.getElementById('ph-appview');
+  const pwIcon        = document.getElementById('pw-icon');
+  const pwUpdated     = document.getElementById('pw-updated');
+  const pwRefresh     = document.getElementById('pw-refresh');
+  const phSearchPill  = document.getElementById('ph-search-pill');
+  const phDotMore     = document.getElementById('ph-dot-more');
+  const phNavRecents  = document.getElementById('ph-nav-recents');
+  const phNavHome     = document.getElementById('ph-nav-home');
+  const phNavBack     = document.getElementById('ph-nav-back');
+  let currentPhoneApp = null;
+
+  // écran d'accueil : 4 icônes fixes (pas la grille complète des 22 apps —
+  // celle-ci reste accessible via la pilule de recherche / le tiroir partagé)
+  const PHONE_GRID_APPS = [
+    ['files',  'Portfolio', null],
+    ['contact','Contact',   null],
+    ['about',  'Parcours',  ANDROID_ICONS.calendar],
+    ['sysmon', 'Statut',    ANDROID_ICONS.clock],
+  ];
+  PHONE_GRID_APPS.forEach(([appId,label,icon])=>{
+    const btn = el('button','ph-app');
+    btn.dataset.app = appId;
+    btn.type = 'button';
+    btn.innerHTML = `<span class="glyph">${icon || APP_ICONS_FLAT[appId] || ICONS[appId] || ''}</span><span>${label}</span>`;
+    btn.addEventListener('click', ()=> openPhoneApp(appId));
+    phoneGrid.appendChild(btn);
+  });
+
+  // dock : 4 icônes façon Android (Téléphone / Messages / Terminal / Appareil photo)
+  const PHONE_DOCK_APPS = [
+    ['contact', 'Appel',    ANDROID_ICONS.phonecall],
+    ['files',   'Projets',  ANDROID_ICONS.messages],
+    ['terminal','Terminal', null],
+    ['imgview', 'Photos',   null],
+  ];
+  PHONE_DOCK_APPS.forEach(([appId,label,icon])=>{
+    const btn = el('button','ph-dock-btn');
+    btn.dataset.app = appId;
+    btn.type = 'button';
+    btn.setAttribute('aria-label', label);
+    btn.innerHTML = icon || APP_ICONS_FLAT[appId] || ICONS[appId] || '';
+    btn.addEventListener('click', ()=> openPhoneApp(appId));
+    phoneDock.appendChild(btn);
+  });
+
+  function openPhoneApp(appId){
+    sfx('tick');
+    phoneAppview.querySelector('.ph-appview-icon').innerHTML = APP_ICONS_FLAT[appId] || ICONS[appId] || '';
+    phoneAppview.querySelector('.ph-appview-title').textContent = APP_NAMES[appId];
+    const statusEl = phoneAppview.querySelector('.ph-appview-status');
+    statusEl.textContent = STATUS_DEFAULT[appId] || '';
+    const bodyEl = phoneAppview.querySelector('.ph-appview-body');
+    bodyEl.innerHTML = '';
+    // renderApp() attend un conteneur exposant .ws-text via querySelector : on lui fournit le notre
+    const fauxWin = { querySelector: (sel)=> sel === '.ws-text' ? statusEl : null };
+    bodyEl.appendChild(renderApp(appId, fauxWin));
+    currentPhoneApp = appId;
+    phoneAppview.hidden = false;
+    requestAnimationFrame(()=> phoneAppview.classList.add('show'));
+    sfx('open');
+    logLine('orace-phone', `application ouverte : ${APP_NAMES[appId]}`);
+  }
+
+  function closePhoneApp(){
+    if(!currentPhoneApp) return;
+    sfx('close');
+    logLine('orace-phone', `application fermee : ${APP_NAMES[currentPhoneApp]}`);
+    clearTimers(currentPhoneApp);
+    phoneAppview.classList.remove('show');
+    currentPhoneApp = null;
+    setTimeout(()=>{
+      if(currentPhoneApp) return;              // une autre app a ete rouverte entre-temps
+      phoneAppview.hidden = true;
+      phoneAppview.querySelector('.ph-appview-body').innerHTML = '';
+    }, 340);
+  }
+
+  // barre de navigation Android : Accueil et Retour ramènent tous deux à
+  // l'écran d'accueil (pas de pile de navigation interne aux applications
+  // simulées), Récents ouvre le même tiroir que la pilule de recherche.
+  phNavHome.addEventListener('click', closePhoneApp);
+  phNavBack.addEventListener('click', closePhoneApp);
+  phNavRecents.addEventListener('click', openOverview);
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && currentPhoneApp) closePhoneApp(); });
+
+  // pilule de recherche + second point de pagination : ouvrent le tiroir d'applications partagé
+  phSearchPill.addEventListener('click', openOverview);
+  phDotMore.addEventListener('click', openOverview);
+
+  // widget météo : valeur représentative (pas d'appel API), seul l'horodatage est réel
+  function stampWeather(){ pwUpdated.textContent = 'maj ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }
+  pwIcon.innerHTML = `<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="20" cy="11" r="6" fill="#FFC94D"/><path d="M24 25H10a5.5 5.5 0 0 1-.6-10.97A7 7 0 0 1 22.6 11 6 6 0 0 1 24 25Z" fill="#fff"/></svg>`;
+  stampWeather();
+  pwRefresh.addEventListener('click', ()=>{
+    sfx('tick');
+    pwRefresh.classList.remove('spin'); void pwRefresh.offsetWidth; pwRefresh.classList.add('spin');
+    stampWeather();
+  });
+
+  // ---- bascule entre le bureau et Orace Phone ----
+  function updateShellMode(){
+    const phone = isPhoneMode();
+    document.documentElement.dataset.mode = phone ? 'phone' : 'desktop';
+    document.getElementById('desktop').hidden = phone;
+    phoneShell.hidden = !phone;
+    if(!phone) closePhoneApp();               // en repassant au bureau, on revient a l'accueil
+  }
+  window.addEventListener('resize', updateShellMode);
+  window.addEventListener('orientationchange', ()=> setTimeout(updateShellMode, 120));
+  updateShellMode();
+
 
 })();

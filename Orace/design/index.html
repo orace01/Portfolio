@@ -224,14 +224,16 @@
     <div class="dock-sep-v"></div>
   </div>
 
-  <div id="overview">
-    <input id="ov-search" placeholder="Tapez pour rechercher ou une commande…" aria-label="Rechercher ou exécuter une commande">
-    <div id="ov-hint">Essayez <kbd>contact</kbd>, <kbd>projects</kbd>, <kbd>about</kbd> — <kbd>Échap</kbd> pour fermer</div>
-    <div id="ov-grid"></div>
-  </div>
 </div>
 
-<!-- ============ ORACE PHONE (mode natif, écrans < 768px) ============ -->
+<!-- accessible depuis le bureau ET Orace Phone : le tiroir d'applications est partage -->
+<div id="overview">
+  <input id="ov-search" placeholder="Tapez pour rechercher ou une commande…" aria-label="Rechercher ou exécuter une commande">
+  <div id="ov-hint">Essayez <kbd>contact</kbd>, <kbd>projects</kbd>, <kbd>about</kbd> — <kbd>Échap</kbd> pour fermer</div>
+  <div id="ov-grid"></div>
+</div>
+
+<!-- ============ ORACE PHONE (mode natif, écrans < 768px) — Android / One UI ============ -->
 <div id="phone-shell" hidden>
   <div id="ph-wallpaper"></div>
 
@@ -246,13 +248,38 @@
   </div>
 
   <div id="ph-home">
-    <div id="ph-profile">
-      <div class="ph-avatar">OH</div>
-      <div class="ph-name">Orace Honfin</div>
-      <div class="ph-role">Dev IA &amp; Fullstack</div>
-      <div class="ph-avail"><span class="dot"></span>Disponible — freelance / temps plein / co-fondation</div>
+    <!-- widget meteo : valeur representative pour Cotonou, pas d'API externe —
+         seul l'horodatage "mis a jour" est reel (horloge du systeme) -->
+    <div id="ph-weather">
+      <span class="pw-icon" id="pw-icon"></span>
+      <div class="pw-main">
+        <span class="pw-temp">29°</span>
+        <div class="pw-city">Cotonou</div>
+        <div class="pw-meta">
+          <span class="pw-cond">Ensoleillé</span><span class="pw-sep">·</span><span id="pw-updated">--:--</span>
+          <button id="pw-refresh" type="button" aria-label="Actualiser la météo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 11A8 8 0 105.5 16M4 11V6m0 5h5"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- pilule de recherche : ouvre le meme tiroir d'applications que le bureau -->
+    <button id="ph-search-pill" type="button" aria-label="Rechercher une application ou une commande">
+      <span class="pill-mark">O</span>
+      <span class="pill-text">Rechercher</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2a5 5 0 0 1 5 5v4a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5Z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v4"/></svg>
+    </button>
+
     <div id="ph-grid"></div>
+  </div>
+
+  <div id="ph-dock-area">
+    <div id="ph-dots">
+      <span class="dot on"></span>
+      <button class="dot" id="ph-dot-more" type="button" aria-label="Toutes les applications"></button>
+    </div>
+    <div id="ph-dock"></div>
   </div>
 
   <div id="ph-appview" hidden>
@@ -264,10 +291,20 @@
       </div>
     </div>
     <div class="ph-appview-body"></div>
-    <div class="ph-swipebar" id="ph-swipebar" role="button" tabindex="0" aria-label="Fermer et revenir à l’accueil"><span class="ph-handle"></span></div>
   </div>
 
-  <div id="ph-dock"></div>
+  <!-- barre de navigation systeme Android a 3 boutons -->
+  <div id="ph-navbar">
+    <button class="ph-nav-btn" id="ph-nav-recents" type="button" aria-label="Applications récentes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <button class="ph-nav-btn" id="ph-nav-home" type="button" aria-label="Accueil">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>
+    </button>
+    <button class="ph-nav-btn" id="ph-nav-back" type="button" aria-label="Retour">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+  </div>
 </div>
 
 <script src="orace-os.js"></script>
