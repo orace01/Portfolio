@@ -39,10 +39,7 @@
   html,body{height:100%;overflow:hidden;background:var(--bg);}
   /* L'interface garde exactement la mise en page du PC : sur petit écran on ne
      réorganise rien, on met l'ensemble à l'échelle (--ui-scale, calculé en JS). */
-  body{
-    font-family:var(--ui);color:var(--text);-webkit-font-smoothing:antialiased;
-    zoom:var(--ui-scale,1);
-  }
+  body{font-family:var(--ui);color:var(--text);-webkit-font-smoothing:antialiased;}
   ::selection{background:var(--violet);color:#fff;}
   button{font-family:inherit;background:none;border:none;color:inherit;cursor:pointer;}
   input{font-family:inherit;}
@@ -71,7 +68,8 @@
   #boot-skip{margin-top:20px;font-family:var(--mono);font-size:11px;color:#6d6588;}
 
   /* ================= DESKTOP / WALLPAPER ================= */
-  #desktop{position:fixed;inset:0;overflow:hidden;}
+  /* le zoom ne s'applique qu'au bureau : Orace Phone reste à l'échelle native */
+  #desktop{position:fixed;inset:0;overflow:hidden;zoom:var(--ui-scale,1);}
   /* fond : noir + tissage carbone fin (comme la référence) */
   #wallpaper{
     position:absolute;inset:0;
@@ -818,35 +816,96 @@
 :root[data-theme="light"] .maps-card{background:rgba(20,16,32,.85);}
 :root[data-theme="light"] .maps-title{color:#f5f2ff;}
 
-/* ================= INVITATION À PIVOTER (téléphone en portrait) ================= */
-/* L'interface reproduit un bureau : elle exige de la largeur. En portrait sur un
-   appareil tactile, on demande de tourner l'appareil plutôt que de dégrader la mise en page. */
-#rotate-gate{
-  position:fixed;inset:0;z-index:1000;display:none;
-  flex-direction:column;align-items:center;justify-content:center;gap:26px;
-  background:#0d0a16;color:var(--text);text-align:center;padding:32px;
-}
-#rotate-gate .rg-phone{
-  width:96px;height:150px;border:3px solid var(--text);border-radius:14px;position:relative;
-  animation:rg-turn 2.6s ease-in-out infinite;
-}
-#rotate-gate .rg-phone::after{
-  content:'';position:absolute;left:50%;bottom:9px;transform:translateX(-50%);
-  width:34px;height:4px;border-radius:3px;background:var(--text);opacity:.6;
-}
-@keyframes rg-turn{
-  0%,30%{transform:rotate(0deg);}
-  55%,85%{transform:rotate(-90deg);}
-  100%{transform:rotate(0deg);}
-}
-#rotate-gate .rg-title{font-size:22px;font-weight:600;}
-#rotate-gate .rg-text{font-size:15px;line-height:1.6;color:var(--text-dim);max-width:34ch;}
-#rotate-gate .rg-brand{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--violet);text-transform:uppercase;}
 
-@media (orientation:portrait) and (pointer:coarse){
-  #rotate-gate{display:flex;}
+/* ================= ORACE PHONE (mode natif, écrans < 768px) ================= */
+/* Interface distincte, pas une réduction du bureau : icônes, dock et écran
+   d'accueil pensés pour du tactile à taille native (pas de --ui-scale ici). */
+#phone-shell{
+  position:fixed;inset:0;z-index:2;display:flex;flex-direction:column;
+  height:100dvh;background:var(--bg);color:var(--text);overflow:hidden;
 }
-/* l'animation se fige si l'utilisateur a demandé moins de mouvement */
+#phone-shell[hidden]{display:none;}
+#ph-wallpaper{position:absolute;inset:0;background:var(--bg) center/cover no-repeat;z-index:-1;}
+
+/* -- barre d'état -- */
+#ph-statusbar{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  padding:max(env(safe-area-inset-top),12px) 22px 6px;
+  font-family:var(--mono);font-size:14px;font-weight:600;color:var(--text);
+}
+.ph-status-icons{display:flex;align-items:center;gap:7px;}
+.ph-status-icons svg{width:16px;height:16px;}
+.ph-status-icons .battery-pct{font-size:11.5px;font-weight:500;color:var(--text-dim);}
+
+/* -- écran d'accueil -- */
+#ph-home{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 20px 20px;}
+#ph-profile{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;padding:16px 0 26px;}
+.ph-avatar{
+  width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(155deg,var(--violet),var(--violet-deep));color:#fff;font-weight:700;font-size:21px;
+  box-shadow:0 10px 24px rgba(108,59,255,.35);
+}
+.ph-name{font-size:18px;font-weight:600;}
+.ph-role{font-size:13px;color:var(--text-dim);}
+.ph-avail{
+  display:inline-flex;align-items:center;gap:7px;margin-top:4px;padding:6px 13px;border-radius:20px;
+  background:var(--surface-2);border:1px solid var(--panel-border);font-size:11.5px;color:var(--text-dim);
+}
+.ph-avail .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok);flex-shrink:0;}
+
+#ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px 6px;}
+.ph-app{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;padding:2px;}
+.ph-app .glyph{width:56px;height:56px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-app .glyph svg{width:56px;height:56px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
+.ph-app span{
+  font-size:10.5px;color:var(--text);text-align:center;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.ph-app:active .glyph{transform:scale(.9);}
+
+/* -- dock (4 applications principales) -- */
+#ph-dock{
+  flex-shrink:0;display:flex;justify-content:space-around;align-items:center;
+  margin:0 16px max(env(safe-area-inset-bottom),14px);padding:10px 16px;
+  background:var(--glass);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  border:1px solid var(--panel-border);border-radius:24px;box-shadow:0 16px 40px rgba(0,0,0,.4);
+}
+.ph-dock-btn{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-dock-btn svg{width:44px;height:44px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4));}
+.ph-dock-btn:active{transform:scale(.9);}
+
+/* -- vue plein écran d'une application (glissée depuis le bas) -- */
+#ph-appview{
+  position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;
+  background:var(--win-bg);transform:translateY(100%);transition:transform .32s cubic-bezier(.16,1,.3,1);
+}
+#ph-appview.show{transform:translateY(0);}
+#ph-appview[hidden]{display:none;}
+.ph-appview-head{
+  flex-shrink:0;display:flex;align-items:center;gap:12px;
+  padding:calc(max(env(safe-area-inset-top),10px) + 4px) 20px 14px;border-bottom:1px solid var(--win-border);
+}
+.ph-appview-icon{width:30px;height:30px;flex-shrink:0;}
+.ph-appview-icon svg{width:30px;height:30px;}
+.ph-appview-titles{flex:1;min-width:0;}
+.ph-appview-title{font-size:16px;font-weight:600;color:var(--text);}
+.ph-appview-status{font-size:11.5px;color:var(--text-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ph-appview-body{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch;}
+.ph-swipebar{flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:14px 0 max(env(safe-area-inset-bottom),12px);}
+.ph-handle{width:120px;height:5px;border-radius:3px;background:var(--hairline);transition:background .12s ease;}
+.ph-swipebar:active .ph-handle{background:var(--violet);}
+
+/* -- applications réutilisées : adaptations propres au format téléphone -- */
+#phone-shell .skills-grid{grid-template-columns:1fr;gap:14px;padding:18px;}
+#phone-shell .texted{flex-direction:column;}
+#phone-shell .te-side{width:auto;flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--win-border);}
+#phone-shell .cl-zones{grid-template-columns:1fr;}
+#phone-shell .sm-proc-head,#phone-shell .sm-proc-row{grid-template-columns:52px 1fr 56px 56px;font-size:11.5px;}
+#phone-shell .files-sidebar,#phone-shell .settings-sidebar{width:112px;padding:12px 6px;}
+#phone-shell .settings-app,#phone-shell .files-app{flex-direction:row;}
+/* la saisie du terminal reste à 16px : sous cette taille, iOS Safari zoome au focus */
+#phone-shell .term-input-row input{font-size:16px;}
+
 @media (prefers-reduced-motion:reduce){
-  #rotate-gate .rg-phone{animation:none;transform:rotate(-90deg);}
+  #ph-appview{transition:none;}
 }
