@@ -2,13 +2,14 @@
 
   /* ================= DATA (contenu réel du site) ================= */
   const SITE = { email:"orace.honfin@epitech.eu", phone:"+229 01 50 78 46 60", linkedin:"https://linkedin.com/in/oracehonfin" };
-  const BIO = "Je suis Orace Honfin, ingénieur logiciel fullstack et cofondateur de Webspace. Je conçois des produits numériques de bout en bout, de l'architecture technique jusqu'à la mise en production. Mon travail se situe à la croisée du développement web et mobile, des systèmes, de l'intelligence artificielle et de la cybersécurité.";
+  const BIO = "Je suis Orace Honfin, ingénieur logiciel fullstack et développeur freelance. Particulièrement passionné par l'intelligence artificielle, j'accompagne les entreprises et créateurs dans la conception de produits numériques sur mesure de bout en bout — de l'architecture technique à la mise en production. Mon expertise se situe à la croisée du développement web/mobile performant, de l'intégration d'IA avancée et des systèmes.";
+  const STATUT_TEXT = "Disponible — Missions Freelance & Projets IA";
   const INFO = [
-    ["Cofondateur","Webspace"],
+    ["Activité","Freelance / Développeur Indépendant"],
     ["Localisation","Cotonou, Bénin (GMT+1)"],
     ["Formation","Epitech — Expert en Informatique"],
-    ["Focus","Systèmes, IA & ingénierie créative"],
-    ["Statut","Ouvert — freelance / temps plein / co-fondation"],
+    ["Focus","Intelligence Artificielle, Web Architecture & Systèmes"],
+    ["Statut", STATUT_TEXT],
   ];
   const SPECIALTIES = ["Systèmes bas niveau","Intelligence Artificielle","Sécurité applicative","Fullstack Web & Mobile"];
   const PROJECTS = [
@@ -22,26 +23,26 @@
       problem:"Les startups en incubation avaient besoin d'un seul endroit pour passer du concept initial à un produit livré, plutôt que des outils épars.",
       approach:"Conception et développement d'une plateforme web et mobile fullstack de bout en bout, couvrant tout le parcours d'incubation.",
       outcome:"Une plateforme qui accompagne activement des startups dans leur construction et leur lancement."},
+    {slug:"closeby",title:"CloseBy",category:"Web App / Produit Fullstack",icon:"web",tags:["React","Next.js","Web","Géolocalisation"],status:"ONLINE",demo:"https://close-by-nine.vercel.app/",github:null,
+      role:"Conception et développement solo — agent IA, recherche géolocalisée et automatisation d'envoi.",
+      problem:"Prospecter des entreprises locales à la main — trouver les contacts, vérifier les informations et rédiger des messages personnalisés — prend un temps disproportionné pour les indépendants et petites équipes.",
+      approach:"Développement d'un agent IA qui identifie les entreprises dans un rayon géographique donné, relève des faits vérifiables (horaires, présence en ligne, réservation) avec leur source et leur date, puis rédige un message personnalisé — jamais envoyé sans validation explicite de l'utilisateur.",
+      outcome:"Une application qui transforme une prospection locale chronophage en une liste de contacts qualifiés et de messages prêts à valider, envoyés depuis la propre boîte Gmail/Outlook de l'utilisateur."},
+    {slug:"sheetly",title:"sheetly",category:"SaaS / Productivité",icon:"web",tags:["SaaS","TypeScript","UI/UX"],status:"ONLINE",demo:"https://sheetly-eight.vercel.app/",github:null,
+      role:"Conception et développement solo — extraction de documents, vérification et export.",
+      problem:"Ressaisir manuellement des factures, reçus et relevés bancaires dans un tableur est lent et source d'erreurs, surtout en volume.",
+      approach:"Développement d'une application qui extrait par OCR/vision les champs clés de documents comptables envoyés en lot, les affiche en vis-à-vis de l'original pour validation, vérifie automatiquement la cohérence HT/TVA/TTC et détecte les doublons avant export.",
+      outcome:"Des documents comptables transformés en tableur Excel/CSV propre en quelques secondes, compatible avec les logiciels de comptabilité du marché."},
+    {slug:"subflow",title:"SubFlow",category:"Application Web / Automatisation",icon:"web",tags:["Workflow","React","Tailwind"],status:"ONLINE",demo:"https://sub-flow-one.vercel.app/",github:null,
+      role:"Conception et développement solo — détection, alertes et tableau de bord.",
+      problem:"Les abonnements récurrents (mensuels, annuels, irréguliers) s'accumulent et passent inaperçus jusqu'à l'augmentation de prix ou le prélèvement oublié.",
+      approach:"Développement d'une application qui détecte automatiquement les abonnements à partir des emails, alerte avant chaque échéance et en cas de hausse de prix, et centralise les dépenses par période et catégorie dans un tableau de bord.",
+      outcome:"Une vue centralisée des abonnements actifs, avec alertes préventives par email, Telegram ou SMS pour éviter les dépenses oubliées."},
     {slug:"game-engine",title:"Moteur de Jeu & RPG Maison",category:"Moteur & Jeu",icon:"game",tags:["C","C++","Moteur"],status:"BETA",demo:null,github:null,
       role:"Conception et développement solo du moteur et des jeux.",
       problem:"Utiliser un moteur de jeu tout fait cache exactement ce qu'on cherche à apprendre.",
       approach:"Construction d'un moteur de jeu complet de zéro en C/C++ — architecture, rendu, boucle de jeu — puis livraison de jeux façon RPG, Hunter et Sokoban.",
       outcome:"Un moteur maison fonctionnel, avec deux jeux jouables construits directement dessus."},
-    {slug:"haskell-lang",title:"Langage de Programmation Maison",category:"Langage & Compilateur",icon:"lang",tags:["Haskell","Compilateur"],status:"BETA",demo:null,github:null,
-      role:"Conception et implémentation solo — parseur, typage, interprète.",
-      problem:"Utiliser des langages existants ne dit rien sur ce qui se passe réellement entre le code source et son exécution.",
-      approach:"Conception et implémentation d'un langage complet en Haskell — analyse lexicale, parsing, vérification de types et interprétation.",
-      outcome:"Un langage fonctionnel avec son propre parseur, typeur et interprète."},
-    {slug:"security-audits",title:"Audits de Sécurité Applicative",category:"Sécurité",icon:"sec",tags:["Pentest","Hardening"],status:"ONLINE",demo:null,github:null,
-      role:"Audit, test d'intrusion et recommandations de correction.",
-      problem:"Des applications mises en production sans revue de sécurité dédiée exposent des failles évitables.",
-      approach:"Conduite d'audits de sécurité et de tests d'intrusion, puis durcissement des points faibles identifiés.",
-      outcome:"Des applications plus robustes, avec des recommandations de correction priorisées."},
-    {slug:"ia-sport",title:"Trophée IA & Sport",category:"Innovation",icon:"trophy",tags:["IA","Innovation"],status:"ONLINE",demo:null,github:null,
-      role:"Lauréat — conception et présentation du projet gagnant.",
-      problem:"Le concours proposait de repenser l'apport de l'IA à la performance sportive, en temps limité.",
-      approach:"Conception d'un projet combinant intelligence artificielle et analyse de performance sportive, présenté devant un jury.",
-      outcome:"Premier prix du concours, récompensant l'approche technique et sa présentation."},
   ];
   const SKILLS = [
     {name:"Langages",icon:'lang',level:"Usage quotidien",desc:"Bas niveau et haut niveau, du système au script.",tags:["C","C++","Python","Haskell"]},
@@ -710,7 +711,7 @@
     main.innerHTML = `
       <div class="settings-logo"><span>OH</span></div>
       <h2>Orace Honfin</h2>
-      <div class="role">Ingénieur Logiciel Fullstack</div>
+      <div class="role">Ingénieur Logiciel Fullstack &amp; Freelance IA</div>
       <p class="bio">${BIO}</p>
       <div class="spec-tags">${SPECIALTIES.map(s=>`<span class="chip">${s}</span>`).join('')}</div>
     `;
@@ -848,7 +849,7 @@
   function buildContactApp(){
     const wrap = el('div','app-pad');
     wrap.appendChild(el('div','app-h','Écrire à Orace'));
-    wrap.appendChild(el('div','app-sub','Ouvert — freelance / temps plein / co-fondation'));
+    wrap.appendChild(el('div','app-sub', STATUT_TEXT));
     const links = el('div','contact-links');
     links.innerHTML = `
       <a href="mailto:${SITE.email}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>${SITE.email}</a>
@@ -869,7 +870,7 @@
     const ia = SKILLS.find(x=>x.name.startsWith('IA')) || {tags:[]};
     const notebooks = [
       {p: PROJECTS.find(x=>x.slug==='trading-bot'), file:'trading-bot-predictor.ipynb', kernel:'Python 3'},
-      {p: PROJECTS.find(x=>x.slug==='ia-sport'),    file:'sport-performance.ipynb',     kernel:'Python 3'},
+      {p: PROJECTS.find(x=>x.slug==='closeby'),     file:'closeby-agent.ipynb',         kernel:'Python 3'},
     ].filter(n=>n.p);
     wrap.appendChild(el('div','app-h','AI Models'));
     wrap.appendChild(el('div','app-sub','~/notebooks — machine learning appliqué'));
@@ -990,7 +991,7 @@
     const lc = cmd.toLowerCase();
     if(lc === '') return;
     if(lc === 'help') printLine(out, ['help','whoami','about','projects','skills','contact','clear','sudo hire-me'].map(c=>`<span class="accent">${c}</span>`).join('<br>'));
-    else if(lc === 'whoami') printLine(out, 'Orace Honfin — Ingénieur Logiciel Fullstack, cofondateur de Webspace.');
+    else if(lc === 'whoami') printLine(out, 'Orace Honfin — Ingénieur Logiciel Fullstack &amp; Freelance IA.');
     else if(lc === 'about') printLine(out, BIO);
     else if(lc === 'projects' || lc === 'ls') PROJECTS.forEach(p=> printLine(out, `<span class="accent">${p.status==='ONLINE'?'●':'○'}</span> ${p.title} <span class="dim">[${p.tags.join(', ')}]</span>`));
     else if(lc === 'skills') SKILLS.forEach(s=> printLine(out, `<span class="accent">${s.name}</span> — ${s.tags.join(', ')}`));
